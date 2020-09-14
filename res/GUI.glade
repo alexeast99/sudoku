@@ -2,16 +2,16 @@
 <!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkWindow">
+  <object class="GtkWindow" id="application_window">
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="menu_screen_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="homogeneous">True</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="game_title">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Sudoku</property>
@@ -32,12 +32,12 @@
             <property name="orientation">vertical</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="fastest_time_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="fastest_single_board_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Fastest Single-Board: 0.00 Minutes</property>
@@ -52,7 +52,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="fastest_multi_board_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Fastest Multi-Board: 0.00 Minutes</property>
@@ -74,7 +74,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="how_to_play_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -82,7 +82,7 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkButton" id="how_to_play">
+                  <object class="GtkButton" id="how_to_play_button">
                     <property name="label" translatable="yes">How to Play</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -105,7 +105,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="game_type_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -125,7 +125,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="board_switch">
+                  <object class="GtkSwitch" id="game_type_switch">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -165,7 +165,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkGrid" id="begin_grid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
