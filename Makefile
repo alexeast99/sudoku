@@ -1,2 +1,2 @@
 @all:
-	g++ `pkg-config --cflags gtk+-3.0` hello.c -o hello `pkg-config --libs gtk+-3.0`
+	g++ `pkg-config --cflags gtk+-3.0` src/sudoku.cpp -o sudoku `pkg-config --libs gtk+-3.0`
