@@ -1,2 +1,2 @@
 @all:
-	g++ -rdynamic `pkg-config --cflags gtk+-3.0` src/sudoku.cpp -o sudoku `pkg-config --libs gtk+-3.0`
+	g++ src/sudoku.cpp -o sudoku `pkg-config gtkmm-3.0 --cflags --libs` 
