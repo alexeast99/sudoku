@@ -28,7 +28,8 @@ Glib::RefPtr<Gtk::Builder> builder;
 
 // Opens the game window for single-board games
 // TODO: Generate game board before displaying (i.e. initialize game state)
-void open_game_single()
+void
+open_game_single (void)
 {
   Gtk::Window* window;
   builder -> get_widget ("game_window_single", window);
@@ -38,7 +39,8 @@ void open_game_single()
 
 // Closes the game window for single-board games
 // TODO: Clear game board after closing (i.e. reset game state)
-void close_game_single()
+void
+close_game_single (void)
 {
   Gtk::Window* window;
   builder -> get_widget ("game_window_single", window);
@@ -47,7 +49,8 @@ void close_game_single()
 }
 
 // Deselects opposite toggle button on main menu when one is clicked
-void change_game_type()
+void
+change_game_type (void)
 {
   Gtk::ToggleButton*  multi_board_toggle;
   Gtk::ToggleButton* single_board_toggle;
@@ -63,7 +66,8 @@ void change_game_type()
 
 
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
 
   // Required. Initialize gtkmm, checks command line arguments, initializes variabes.
