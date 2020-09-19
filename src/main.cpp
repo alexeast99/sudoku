@@ -20,6 +20,7 @@ void close_game ();
 void open_instructions ();
 void close_instructions ();
 void initalize_board ();
+void reset_board();
 
 Glib::RefPtr<Gtk::Builder> builder;
 
@@ -93,11 +94,32 @@ initialize_board (void)
         for (j=1; j<10; j++) {
             char cell_name[30];
             sprintf(cell_name, "board_%d_%d", i, j);
+
             Gtk::Entry*  cell;
             builder -> get_widget (cell_name, cell);
+
             cell -> set_alignment (0.5);
         }
     }
+}
+
+// Set every entry back to blank when reset button is hit. Excludes buttons set by the game.
+// TODO: Exclude buttons set by the game.
+void
+reset_board (void)
+{
+    int i, j;
+    for (i=1; i<10; i++) {
+        for (j=1; j<10; j++) {
+            char cell_name[30];
+            sprintf(cell_name, "board_%d_%d", i, j);
+
+            Gtk::Entry*  cell;
+            builder -> get_widget (cell_name, cell);
+
+           cell -> set_text(""); 
+        }
+   }
 }
 
 
@@ -112,19 +134,23 @@ main(int argc, char **argv)
 
   // Declare pointers for widgets to be loaded from builder
   Gtk::Window* window;
+  
   Gtk::Button* begin_button;
   Gtk::Button* done_button;
   Gtk::Button* how_to_play_button;
   Gtk::Button* got_it_button;
+  Gtk::Button* reset_button;
 
 
   // Create builder from Glade file. Load necessary widgets.
   builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
   builder -> get_widget ("application_window", window);
+
   builder -> get_widget ("begin_button", begin_button);
   builder -> get_widget ("done_button", done_button);
   builder -> get_widget ("how_to_play_button", how_to_play_button);
   builder -> get_widget ("got_it_button", got_it_button);
+  builder -> get_widget ("reset_button", reset_button);
 
   // Connect signals
   // sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility
@@ -132,6 +158,7 @@ main(int argc, char **argv)
   done_button  -> signal_clicked().connect(sigc::ptr_fun(&close_game));
   how_to_play_button -> signal_clicked().connect(sigc::ptr_fun(&open_instructions));
   got_it_button -> signal_clicked().connect(sigc::ptr_fun(&close_instructions));
+  reset_button -> signal_clicked().connect(sigc::ptr_fun(&reset_board));
 
   // Set everything up before opening the game
   write_instructions();
