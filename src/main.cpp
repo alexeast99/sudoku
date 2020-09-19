@@ -19,6 +19,7 @@ void open_game ();
 void close_game ();
 void open_instructions ();
 void close_instructions ();
+void initalize_board ();
 
 Glib::RefPtr<Gtk::Builder> builder;
 
@@ -69,6 +70,7 @@ close_instructions (void)
         instructions_dialog -> hide();
 }
 
+// Write the text buffer that holds the instructions for the 'How to Play' dialog
 void
 write_instructions (void)
 {
@@ -79,6 +81,23 @@ write_instructions (void)
     if (instructions_text_view)
         instructions_text_buffer = instructions_text_view -> get_buffer();
     instructions_text_buffer -> set_text ("Success!");
+}
+
+// Set the alignments of all cells to 0.5 so that text is centered.
+// TODO: Font size? Font? Set reserved. If reserved, set un-editable.
+void
+initialize_board (void)
+{
+    int i, j;
+    for (i=1; i<10; i++) {
+        for (j=1; j<10; j++) {
+            char cell_name[30];
+            sprintf(cell_name, "board_%d_%d", i, j);
+            Gtk::Entry*  cell;
+            builder -> get_widget (cell_name, cell);
+            cell -> set_alignment (0.5);
+        }
+    }
 }
 
 
@@ -114,7 +133,9 @@ main(int argc, char **argv)
   how_to_play_button -> signal_clicked().connect(sigc::ptr_fun(&open_instructions));
   got_it_button -> signal_clicked().connect(sigc::ptr_fun(&close_instructions));
 
+  // Set everything up before opening the game
   write_instructions();
+  initialize_board();
 
   // Ensure window is not null. Show window and enter gtkmm main loop
   if (window)
