@@ -16,6 +16,8 @@
 //Declare functions
 void open_game ();
 void close_game ();
+void open_instructions ();
+void close_instructions ();
 
 Glib::RefPtr<Gtk::Builder> builder;
 
@@ -46,6 +48,38 @@ close_game (void)
     window -> hide();
 }
 
+// Open the 'How to Play' dialog
+void
+open_instructions (void)
+{
+    Gtk::Dialog* instructions_dialog;
+    builder -> get_widget ("how_to_play_dialog", instructions_dialog);
+    if (instructions_dialog)
+        instructions_dialog -> show();
+}
+
+// Close the 'How to Play' dialog
+void
+close_instructions (void)
+{
+    Gtk::Dialog* instructions_dialog;
+    builder -> get_widget ("how_to_play_dialog", instructions_dialog);
+    if (instructions_dialog)
+        instructions_dialog -> hide();
+}
+
+void
+write_instructions (void)
+{
+    Gtk::TextView* instructions_text_view;
+    Glib::RefPtr<Gtk::TextBuffer> instructions_text_buffer;
+
+    builder -> get_widget ("how_to_play_text_view", instructions_text_view);
+    if (instructions_text_view)
+        instructions_text_buffer = instructions_text_view -> get_buffer();
+    instructions_text_buffer -> set_text ("Success!");
+}
+
 
 
 
@@ -60,6 +94,8 @@ main(int argc, char **argv)
   Gtk::Window* window;
   Gtk::Button* begin_button;
   Gtk::Button* done_button;
+  Gtk::Button* how_to_play_button;
+  Gtk::Button* got_it_button;
 
 
   // Create builder from Glade file. Load necessary widgets.
@@ -67,10 +103,17 @@ main(int argc, char **argv)
   builder -> get_widget ("application_window", window);
   builder -> get_widget ("begin_button", begin_button);
   builder -> get_widget ("done_button", done_button);
+  builder -> get_widget ("how_to_play_button", how_to_play_button);
+  builder -> get_widget ("got_it_button", got_it_button);
 
   // Connect signals
+  // sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility
   begin_button -> signal_clicked().connect(sigc::ptr_fun(&open_game));
   done_button  -> signal_clicked().connect(sigc::ptr_fun(&close_game));
+  how_to_play_button -> signal_clicked().connect(sigc::ptr_fun(&open_instructions));
+  got_it_button -> signal_clicked().connect(sigc::ptr_fun(&close_instructions));
+
+  write_instructions();
 
   // Ensure window is not null. Show window and enter gtkmm main loop
   if (window)
