@@ -10,7 +10,7 @@
 /*
 *  User-defined headers
 */
-#include "include/board.h"
+#include "board.h"
 
 /*
 *  Declare functions
