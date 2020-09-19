@@ -1,3 +1,8 @@
+# Last Updated: 09/19/2020
+# Author: Alex Eastman
+# Contact: alexeast@buffalo.edu
+
+
 # --cflags causes pkg-config to output a list of include directories
 # --libs requests lists of libraries for compiler to link with
 

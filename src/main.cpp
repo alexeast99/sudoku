@@ -1,6 +1,7 @@
 /*
-* Date: 09/15/20
+* Last Modified: 09/19/20
 * Author: Alex Eastman
+* Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
 */
 

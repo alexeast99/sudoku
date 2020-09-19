@@ -1,9 +1,8 @@
 /*
-* Date: 09/14/2020
+* Last Modified: 09/14/2020
 * Author: Alex Eastman
-* Summary: Contains definition of board class for sudoku game. Boards are single-
-*          unit, 3x3 collections of squares. A sudoku game can be made up of one
-*          or 3 boards. Each square holds exactly one number.
+* Contact: alexeast@buffalo.edu
+* Summary: Board class with function prototypes and intializer. 
 */
 
 using namespace std;

@@ -1,3 +1,9 @@
+<!-- Last Modified: 09/19/2020
+ Author: Alex Eastman
+ Contact: alexeast@buffalo.edu
+ Summary: XML to be parsed by GTK builder. Created using Glade.
+-->
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.36.0 -->
 <interface>
