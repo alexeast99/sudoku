@@ -6,25 +6,26 @@
 #			...
 #			...
 
-# -c 	  --> Don't run linked. Output is object files. 
+# -c 	  --> Don't run linker. Output is object files. 
 # -o file --> Place output in file
 
 shell   = /bin/sh
-objects = main.o board.o
-cc	= g++
+cc		= g++
 src 	= src
-inc	= include
-include	= $(inc) $(src)
+inc		= inc
+obj		= objs
+cflags  = `pkg-config gtkmm-3.0 --cflags --libs`
+objects = $(obj)/main.o $(obj)/board.o
 
-sudoku: $(OBJECTS)
-	$(cc) -o sudoku $(OBJECTS) `pkg-config gtkmm-3.0 --cflags --libs` -I $(include)
+sudoku: $(objects)
+	$(cc) -o $@ $(objects) $(cflags) -I$(inc)
 
-main.o: $(src)/main.cpp $(inc)/board.h
-	$(cc) -c $(src)/main.cpp `pkg-config gtkmm-3.0 --cflags --libs` -I $(include)
+$(obj)/main.o: $(src)/main.cpp $(inc)/board.h
+	$(cc) -c $(src)/main.cpp -o $@ $(cflags) -I$(inc)
 
-#board.o: $(src)/board.cpp $(inc)/board.h
-#	$(cc) -c board.cpp -I $(include)
+$(obj)/board.o: $(src)/board.cpp $(inc)/board.h
+	$(cc) -c $(src)/board.cpp -o $@ -I$(inc)
 
 .PHONY: clean
 clean:
-	-rm *.o sudoku
+	-rm objs/* sudoku

@@ -12,27 +12,25 @@
 */
 #include "board.h"
 
-/*
-*  Declare functions
-*/
-void open_game_single ();
-void close_game_single ();
-void change_game_type ();
+
+//Declare functions
+void open_game ();
+void close_game ();
 
 Glib::RefPtr<Gtk::Builder> builder;
 
 
-/*
+/************************
 *  User-defined functions
-*/
+************************/
 
 // Opens the game window for single-board games
 // TODO: Generate game board before displaying (i.e. initialize game state)
 void
-open_game_single (void)
+open_game (void)
 {
   Gtk::Window* window;
-  builder -> get_widget ("game_window_single", window);
+  builder -> get_widget ("game_window", window);
   if (window)
     window -> show();
 }
@@ -40,28 +38,13 @@ open_game_single (void)
 // Closes the game window for single-board games
 // TODO: Clear game board after closing (i.e. reset game state)
 void
-close_game_single (void)
+close_game (void)
 {
   Gtk::Window* window;
-  builder -> get_widget ("game_window_single", window);
+  builder -> get_widget ("game_window", window);
   if (window)
     window -> hide();
 }
-
-// Deselects opposite toggle button on main menu when one is clicked
-void
-change_game_type (void)
-{
-  Gtk::ToggleButton*  multi_board_toggle;
-  Gtk::ToggleButton* single_board_toggle;
-
-  builder -> get_widget ("multi_board_toggle", multi_board_toggle);
-  builder -> get_widget ("single_board_toggle", single_board_toggle);
-
-
-
-}
-
 
 
 
@@ -76,23 +59,18 @@ main(int argc, char **argv)
   // Declare pointers for widgets to be loaded from builder
   Gtk::Window* window;
   Gtk::Button* begin_button;
-  Gtk::Button* single_done_button;
-  Gtk::ToggleButton* multi_board_toggle;
-  Gtk::ToggleButton* single_board_toggle;
+  Gtk::Button* done_button;
+
 
   // Create builder from Glade file. Load necessary widgets.
   builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
   builder -> get_widget ("application_window", window);
   builder -> get_widget ("begin_button", begin_button);
-  builder -> get_widget ("single_done_button", single_done_button);
-  builder -> get_widget ("multi_board_toggle", multi_board_toggle);
-  builder -> get_widget ("single_board_toggle", single_board_toggle);
+  builder -> get_widget ("done_button", done_button);
 
   // Connect signals
-  begin_button        -> signal_clicked().connect(sigc::ptr_fun(&open_game_single));
-  single_done_button  -> signal_clicked().connect(sigc::ptr_fun(&close_game_single));
-  multi_board_toggle  -> signal_clicked().connect(sigc::ptr_fun(&change_game_type));
-  single_board_toggle -> signal_clicked().connect(sigc::ptr_fun(&change_game_type));
+  begin_button -> signal_clicked().connect(sigc::ptr_fun(&open_game));
+  done_button  -> signal_clicked().connect(sigc::ptr_fun(&close_game));
 
   // Ensure window is not null. Show window and enter gtkmm main loop
   if (window)
