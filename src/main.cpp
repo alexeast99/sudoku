@@ -182,6 +182,13 @@ main(int argc, char **argv)
     how_to_play_button -> signal_clicked().connect( sigc::ptr_fun(&open_instructions));
 
     
+    /* CSS for styling
+     *
+     */
+    auto css = Gtk::CssProvider::create();
+    css -> load_from_file("../res/styles.css");
+
+    
     /* Initial setup
      *
      */
