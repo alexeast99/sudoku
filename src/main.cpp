@@ -86,7 +86,7 @@ write_instructions (void)
     instructions_text_buffer -> set_text ("Success!");
 }
 
-// Set the alignments of all cells to 0.5 so that text is centered.
+// Customize TextView for each cell on the board 
 // TODO: Font size? Font? Set reserved. If reserved, set un-editable.
 void
 initialize_board (void)
@@ -132,8 +132,8 @@ main(int argc, char **argv)
     // Required. Initialize gtkmm, checks command line arguments, initializes variabes.
     auto app = Gtk::Application::create (argc, argv, "alexeast.sudoku");
 
-    /*
-     * Pointers for widgets to be loaded from builder
+    /* Pointers for widgets to be loaded from builder
+     *
      */
 
     // Window pointers
@@ -149,8 +149,8 @@ main(int argc, char **argv)
 
   
 
-    /*
-     * Create builder from Glade file. Load necessary widgets.
+    /* Create builder from Glade file. Load necessary widgets.
+     *
      */
 
     // Window widgets
@@ -166,8 +166,8 @@ main(int argc, char **argv)
     builder -> get_widget ("reset_button", reset_button);
 
 
-    /* 
-     * Connect signals. sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility
+    /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility 
+     *
      */
 
     // Window signals
@@ -182,8 +182,8 @@ main(int argc, char **argv)
     how_to_play_button -> signal_clicked().connect( sigc::ptr_fun(&open_instructions));
 
     
-    /*
-     * Initial setup
+    /* Initial setup
+     *
      */
 
     write_instructions();
