@@ -5,8 +5,6 @@
 * Summary: Board class with function prototypes and intializer. 
 */
 
-using namespace std;
-
 class Board {
 
   private:
@@ -24,15 +22,14 @@ class Board {
     */
     int reserved[10];
 
-    /*
-     * The starting time.
+    /* The starting time.
+     * 
      */
     long start_time;
 
     
-    /* Total game time. On 'Finish Later', time is calculated and stored here.
-     * Upon starting again, the same process repeats except that total time is
-     * no longer zero.
+    /* Total game time.
+     *
      */
     long total_time;
 

@@ -11,17 +11,17 @@
 
 void Board::set_number (int number, int outer, int inner)
 {
-  game_board[outer][inner] = number;
+    game_board[outer][inner] = number;
 }
 
 int Board::get_number (int outer, int inner)
 {
-  return game_board[outer][inner];
+    return game_board[outer][inner];
 }
 
 bool Board::check_reserved (int outer, int inner)
 {
-  return (reserved[outer] == inner) ? true : false;
+    return (reserved[outer] == inner) ? true : false;
 }
 
 void Board::start (void)
