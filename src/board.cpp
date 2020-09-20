@@ -6,6 +6,8 @@
 
 
 #include "board.h"
+#include "time.h"
+#include "iostream"
 
 void Board::set_number (int number, int outer, int inner)
 {
@@ -22,3 +24,22 @@ bool Board::check_reserved (int outer, int inner)
   return (reserved[outer] == inner) ? true : false;
 }
 
+void Board::start (void)
+{
+    time_t current_time;
+    current_time = time(NULL);
+    start_time = current_time;
+    std::cout << "Starting at time: " << start_time << "\n";
+}
+
+long Board::get_total_time (void)
+{
+    return total_time;
+}
+
+void Board::set_total_time (void)
+{
+    time_t current_time;
+    current_time = time(NULL);
+    total_time = current_time - start_time;
+}

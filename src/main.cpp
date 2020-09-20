@@ -1,12 +1,12 @@
 /*
 * Last Modified: 09/19/20
 * Author: Alex Eastman
-* Contact: alexeast@buffalo.edu
-* Summary: Main program file for Sudoku
+* Contact: alexeast@buffalo.edu * Summary: Main program file for Sudoku
 */
 
 #include <gtkmm.h>
 #include <iostream>
+#include <time.h>
 
 /*
 *  User-defined headers
@@ -14,7 +14,7 @@
 #include "board.h"
 
 
-//Declare functions
+// Funciton prototypes
 void open_game ();
 void close_game ();
 void open_instructions ();
@@ -23,6 +23,7 @@ void initalize_board ();
 void reset_board();
 
 Glib::RefPtr<Gtk::Builder> builder;
+Board board;
 
 
 /************************
@@ -47,6 +48,7 @@ close_game (void)
 {
   Gtk::Window* window;
   builder -> get_widget ("game_window", window);
+  board.set_total_time();
   if (window)
     window -> hide();
 }
@@ -124,7 +126,6 @@ reset_board (void)
 
 
 
-
 int
 main(int argc, char **argv)
 {
@@ -141,10 +142,12 @@ main(int argc, char **argv)
   Gtk::Button* got_it_button;
   Gtk::Button* reset_button;
 
+  Gtk::Window* game_window;
 
   // Create builder from Glade file. Load necessary widgets.
   builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
   builder -> get_widget ("application_window", window);
+  builder -> get_widget ("game_window", game_window);
 
   builder -> get_widget ("begin_button", begin_button);
   builder -> get_widget ("done_button", done_button);
@@ -154,11 +157,17 @@ main(int argc, char **argv)
 
   // Connect signals
   // sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility
-  begin_button -> signal_clicked().connect(sigc::ptr_fun(&open_game));
-  done_button  -> signal_clicked().connect(sigc::ptr_fun(&close_game));
-  how_to_play_button -> signal_clicked().connect(sigc::ptr_fun(&open_instructions));
-  got_it_button -> signal_clicked().connect(sigc::ptr_fun(&close_instructions));
-  reset_button -> signal_clicked().connect(sigc::ptr_fun(&reset_board));
+
+  // Button signals
+  begin_button  -> signal_clicked().connect( sigc::ptr_fun(&open_game));
+  begin_button  -> signal_clicked().connect( sigc::mem_fun(board, &Board::start) );
+  done_button   -> signal_clicked().connect( sigc::ptr_fun(&close_game));
+  got_it_button -> signal_clicked().connect( sigc::ptr_fun(&close_instructions));
+  reset_button  -> signal_clicked().connect( sigc::ptr_fun(&reset_board));
+  how_to_play_button -> signal_clicked().connect( sigc::ptr_fun(&open_instructions));
+
+  // Window signals
+  game_window -> signal_hide().connect( sigc::mem_fun(board, &Board::set_total_time));
 
   // Set everything up before opening the game
   write_instructions();
@@ -168,6 +177,7 @@ main(int argc, char **argv)
   if (window)
     app -> run(*window);
 
+  std::cout << "Spent " << board.get_total_time() / 60 << " minutes and " << board.get_total_time() << " seconds in the Gulag.\n";
   delete window;
 
   return 0;

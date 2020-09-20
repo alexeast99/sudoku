@@ -20,8 +20,21 @@ class Board {
     /* Contains the positions of numbers that were set by the game, and are
     *  therefore un-changeable. The index is the position in the outer array,
     *  and the value at that index is the position in the inner array.
+    *  Contains IF a space is reserved, not WHAT is there. 
     */
-    int reserved[9];
+    int reserved[10];
+
+    /*
+     * The starting time.
+     */
+    long start_time;
+
+    
+    /* Total game time. On 'Finish Later', time is calculated and stored here.
+     * Upon starting again, the same process repeats except that total time is
+     * no longer zero.
+     */
+    long total_time;
 
   public:
 
@@ -43,4 +56,18 @@ class Board {
     */
     bool check_reserved (int, int);
 
+    /*
+     * Returns the number in total_time.
+     */
+    long get_total_time (void);
+
+    /*
+     * Calculates the time from start_time to the current time. Stores in total_time.
+     */
+    void set_total_time (void);
+
+    /*
+     * Stores the current time in start_time.
+     */
+    void start (void);
 };
