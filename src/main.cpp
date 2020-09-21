@@ -147,6 +147,10 @@ main(int argc, char **argv)
     Gtk::Button* got_it_button;
     Gtk::Button* reset_button;
 
+    // Style context pointers
+    auto css_provider = Gtk::CssProvider::create();
+    Gtk::StyleContext* style_context;
+
   
 
     /* Create builder from Glade file. Load necessary widgets.
@@ -166,6 +170,7 @@ main(int argc, char **argv)
     builder -> get_widget ("reset_button", reset_button);
 
 
+
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility 
      *
      */
@@ -182,13 +187,14 @@ main(int argc, char **argv)
     how_to_play_button -> signal_clicked().connect( sigc::ptr_fun(&open_instructions));
 
     
+
     /* CSS for styling
      *
      */
-    auto css = Gtk::CssProvider::create();
-    css -> load_from_file("../res/styles.css");
-
+    css_provider -> load_from_resource("../res/styles.css");
+    style_context -> add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
     
+
     /* Initial setup
      *
      */
