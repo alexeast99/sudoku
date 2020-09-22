@@ -19,7 +19,7 @@ cc	= g++
 src 	= src
 inc	= inc
 obj	= objs
-cflags  = `pkg-config gtkmm-3.0 --cflags --libs`
+cflags  = `pkg-config gtkmm-3.0 --cflags --libs` -Wall -Werror
 objects = $(obj)/main.o $(obj)/board.o
 
 sudoku: $(objects)

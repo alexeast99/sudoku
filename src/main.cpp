@@ -1,5 +1,5 @@
 /*
-* Last Modified: 09/19/20
+* Last Modified: 09/22/20
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu * Summary: Main program file for Sudoku
 */
@@ -147,11 +147,7 @@ main(int argc, char **argv)
     Gtk::Button* got_it_button;
     Gtk::Button* reset_button;
 
-    // Style context pointers
-    auto css_provider = Gtk::CssProvider::create();
-    Gtk::StyleContext* style_context;
-
-  
+      
 
     /* Create builder from Glade file. Load necessary widgets.
      *
@@ -191,9 +187,14 @@ main(int argc, char **argv)
     /* CSS for styling
      *
      */
-    css_provider -> load_from_resource("../res/styles.css");
+    auto css_provider = Gtk::CssProvider::create();
+    css_provider -> load_from_path("res/styles.css");
+
+    auto style_context = begin_button -> get_style_context();
     style_context -> add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+    style_context -> add_class("begin_button");
     
+
 
     /* Initial setup
      *
