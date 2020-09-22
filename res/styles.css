@@ -1,4 +1,11 @@
-.begin_button {
+.primary_button {
     border-radius: 10px;
     border-color: blue;
+    font-size: 18px;
+}
+
+.secondary_button {
+    border-radius: 10px;
+    border-color: #3399ff;
+    font-size: 14px;
 }

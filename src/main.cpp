@@ -192,7 +192,6 @@ main(int argc, char **argv)
 
     auto style_context = begin_button -> get_style_context();
     style_context -> add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-    style_context -> add_class("begin_button");
     
 
 

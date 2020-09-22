@@ -70,20 +70,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="number_9_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">9</property>
-                <attributes>
-                  <attribute name="scale" value="2"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="fastest_single_board_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -116,54 +102,74 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButtonBox">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="layout_style">center</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">26</property>
                 <child>
-                  <object class="GtkButton" id="begin_button">
-                    <property name="label" translatable="yes">Begin</property>
-                    <property name="width_request">200</property>
-                    <property name="height_request">50</property>
+                  <object class="GtkButtonBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="open_game_single" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <property name="layout_style">center</property>
+                    <child>
+                      <object class="GtkButton" id="begin_button">
+                        <property name="label" translatable="yes">Begin</property>
+                        <property name="name">begin_button</property>
+                        <property name="width_request">200</property>
+                        <property name="height_request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="open_game_single" swapped="no"/>
+                        <style>
+                          <class name="primary_button"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButtonBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="layout_style">center</property>
                 <child>
-                  <object class="GtkButton" id="how_to_play_button">
-                    <property name="label" translatable="yes">How to Play</property>
+                  <object class="GtkButtonBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="margin_left">20</property>
-                    <property name="margin_right">20</property>
-                    <property name="margin_start">20</property>
-                    <property name="margin_end">20</property>
-                    <property name="margin_top">65</property>
-                    <property name="margin_bottom">65</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">start</property>
+                    <property name="layout_style">center</property>
+                    <child>
+                      <object class="GtkButton" id="how_to_play_button">
+                        <property name="label" translatable="yes">How to Play</property>
+                        <property name="name">how_to_play_button</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin_start">20</property>
+                        <property name="margin_end">20</property>
+                        <style>
+                          <class name="secondary_button"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -171,9 +177,6 @@
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <placeholder/>
