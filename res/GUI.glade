@@ -4,8 +4,6 @@
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="application_window">
     <property name="can_focus">False</property>
-    <property name="default_width">750</property>
-    <property name="default_height">750</property>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -41,66 +39,6 @@
             <property name="column_spacing">5</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
-            <child>
-              <object class="GtkLabel" id="number_3_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">3</property>
-                <attributes>
-                  <attribute name="scale" value="2"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="number_8_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">8</property>
-                <attributes>
-                  <attribute name="scale" value="2"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="fastest_single_board_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Fastest Single Board
-	0.00 Minutes</property>
-                <property name="wrap">True</property>
-                <attributes>
-                  <attribute name="scale" value="1.25"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="fastest_multi_board_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Fastest Multi Board
-	0.00 Minutes</property>
-                <property name="wrap">True</property>
-                <attributes>
-                  <attribute name="scale" value="1.25"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -177,6 +115,57 @@
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="fastest_single_board_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Fastest Single Board
+	0.00 Minutes</property>
+                <property name="wrap">True</property>
+                <attributes>
+                  <attribute name="scale" value="1.25"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="fastest_multi_board_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Fastest Multi Board
+	0.00 Minutes</property>
+                <property name="wrap">True</property>
+                <attributes>
+                  <attribute name="scale" value="1.25"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">70</property>
+                <property name="label" translatable="yes">https://github.com/alexeast-99</property>
+                <property name="justify">center</property>
+                <attributes>
+                  <attribute name="scale" value="0.65000000000000002"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
