@@ -189,14 +189,16 @@
       <object class="GtkGrid" id="board_container_grid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
         <property name="margin_start">10</property>
         <property name="margin_end">10</property>
         <property name="margin_top">10</property>
         <property name="margin_bottom">10</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="row_spacing">10</property>
         <property name="column_spacing">10</property>
-        <property name="row_homogeneous">True</property>
-        <property name="column_homogeneous">True</property>
         <child>
           <object class="GtkGrid" id="board_1">
             <property name="width_request">250</property>
@@ -1440,35 +1442,81 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="reset_button">
-            <property name="label" translatable="yes">Reset</property>
-            <property name="width_request">150</property>
-            <property name="height_request">75</property>
+          <object class="GtkButtonBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="finish_later_button">
-            <property name="label" translatable="yes">Finish Later</property>
-            <property name="width_request">150</property>
-            <property name="height_request">75</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">10</property>
+            <property name="layout_style">center</property>
+            <child>
+              <object class="GtkButton" id="done_button">
+                <property name="label" translatable="yes">Done</property>
+                <property name="name">done_button</property>
+                <property name="width_request">150</property>
+                <property name="height_request">45</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="game_button"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="finish_later_button">
+                <property name="label" translatable="yes">Finish Later</property>
+                <property name="name">finish_later_button</property>
+                <property name="width_request">150</property>
+                <property name="height_request">45</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="game_button"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="reset_button">
+                <property name="label" translatable="yes">Reset</property>
+                <property name="name">reset_button</property>
+                <property name="width_request">150</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="game_button"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -1476,29 +1524,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="done_button">
-            <property name="label" translatable="yes">Done</property>
-            <property name="width_request">150</property>
-            <property name="height_request">75</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">2</property>
-          </packing>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
   </object>
   <object class="GtkDialog" id="how_to_play_dialog">
-    <property name="width_request">750</property>
-    <property name="height_request">750</property>
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
     <child type="titlebar">

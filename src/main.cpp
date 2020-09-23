@@ -1,5 +1,5 @@
 /*
-* Last Modified: 09/22/20
+* Last Modified: 09/23/20
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu * Summary: Main program file for Sudoku
 */
@@ -146,6 +146,7 @@ main(int argc, char **argv)
     Gtk::Button* how_to_play_button;
     Gtk::Button* got_it_button;
     Gtk::Button* reset_button;
+    Gtk::Button* finish_later_button;
 
       
 
@@ -164,6 +165,7 @@ main(int argc, char **argv)
     builder -> get_widget ("how_to_play_button", how_to_play_button);
     builder -> get_widget ("got_it_button", got_it_button);
     builder -> get_widget ("reset_button", reset_button);
+    builder -> get_widget ("finish_later_button", finish_later_button);
 
 
 
@@ -187,13 +189,28 @@ main(int argc, char **argv)
     /* CSS for styling
      *
      */
+
+    // Css provider from CSS file in res directory
     auto css_provider = Gtk::CssProvider::create();
     css_provider -> load_from_path("res/styles.css");
 
-    auto style_context = begin_button -> get_style_context();
-    style_context -> add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-    
+    // Add stylesheet to buttons
+    begin_button -> get_style_context() -> 
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER); 
+    how_to_play_button -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+    done_button -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+    finish_later_button -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+    reset_button -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
+    // Add stylesheet to windows
+    window -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+    game_window -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* Initial setup
      *

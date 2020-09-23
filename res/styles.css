@@ -1,11 +1,26 @@
+window {
+    background: white;
+}
+
 .primary_button {
     border-radius: 10px;
-    border-color: blue;
+    border: none;
+    box-shadow: 3px 3px 3px gray;
+    background: #4d4dff;
     font-size: 18px;
+    color: white;
 }
 
 .secondary_button {
-    border-radius: 10px;
-    border-color: #3399ff;
+    border-radius: 6px;
+    border: none;
+    box-shadow: 1px 1px 3px gray;
+    background: #6c757d;
     font-size: 14px;
+    color: white;
+}
+
+.game_button {
+    border-radius: 6px;
+    border: none;
 }
