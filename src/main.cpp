@@ -21,6 +21,8 @@ void open_instructions ();
 void close_instructions ();
 void initalize_board ();
 void reset_board();
+void set_pointer();
+void restore_pointer();
 
 Glib::RefPtr<Gtk::Builder> builder;
 Board board;
@@ -128,6 +130,27 @@ reset_board (void)
    }
 }
 
+// Set cursor to pointer when over button
+void
+set_pointer (void)
+{
+    Gtk::Button* begin_button;
+    builder -> get_widget ("begin_button", begin_button);
+    auto window = begin_button -> get_window();
+    auto cursor = Gdk::Cursor::create (Gdk::HAND2);
+    window -> set_cursor (cursor);
+}
+
+// Set cursor to default when leaving button
+void
+restore_pointer (void)
+{
+    Gtk::Button* begin_button;
+    builder -> get_widget ("begin_button", begin_button);
+    auto window = begin_button -> get_window();
+    auto cursor = Gdk::Cursor::create (Gdk::LEFT_PTR);
+    window -> set_cursor (cursor);
+}
 
 
 int
@@ -189,6 +212,8 @@ main(int argc, char **argv)
     // Button signals
     begin_button  -> signal_clicked().connect( sigc::ptr_fun(&open_game));
     begin_button  -> signal_clicked().connect( sigc::mem_fun(board, &Board::start) );
+    begin_button  -> signal_enter().connect( sigc::ptr_fun(&set_pointer));
+    begin_button  -> signal_leave().connect( sigc::ptr_fun(&restore_pointer));
     done_button   -> signal_clicked().connect( sigc::ptr_fun(&close_game));
     got_it_button -> signal_clicked().connect( sigc::ptr_fun(&close_instructions));
     reset_button  -> signal_clicked().connect( sigc::ptr_fun(&reset_board));
