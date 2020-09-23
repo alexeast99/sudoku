@@ -1,5 +1,5 @@
 /*
-* Last Modified: 09/14/2020
+* Last Modified: 09/23/2020
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer. 
@@ -53,18 +53,23 @@ class Board {
     */
     bool check_reserved (int, int);
 
-    /*
-     * Returns the number in total_time.
+    /* Returns the number in total_time.
+     * 
      */
     long get_total_time (void);
 
-    /*
-     * Calculates the time from start_time to the current time. Stores in total_time.
+    /* Calculates the time from start_time to the current time. Stores in total_time.
+     *
      */
     void set_total_time (void);
 
-    /*
-     * Stores the current time in start_time.
+    /* Stores the current time in start_time.
+     *
      */
     void start (void);
+
+    /* Initialize with start_time = 0 to signify a game has not yet been started.
+     *
+     */
+    Board (void);
 };

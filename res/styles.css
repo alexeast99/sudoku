@@ -1,13 +1,20 @@
 window {
     background: white;
+    padding: 0;
+    margin: 0;
 }
+
+entry {
+    border-radius: 0;
+}
+
+
 
 .primary_button {
     border-radius: 10px;
     border: none;
     box-shadow: 3px 3px 3px gray;
     background: #4d4dff;
-    font-size: 18px;
     color: white;
 }
 
@@ -16,11 +23,38 @@ window {
     border: none;
     box-shadow: 1px 1px 3px gray;
     background: #6c757d;
-    font-size: 14px;
     color: white;
 }
 
-.game_button {
-    border-radius: 6px;
+.danger_button {
+    background: red;
     border: none;
+    box-shadow: 1px 1px 3px gray;
+    color: white;
+}
+
+
+
+#begin_button {
+    font-size: 18px;
+}
+
+#how_to_play_button {
+    font-size: 14px;
+}
+
+#done_button {
+    font-size: 18px;
+}
+
+#finish_later_button {
+    font-size: 14px;
+}
+
+#reset_button {
+    font-size: 14px;
+}
+
+#board_container_grid {
+    margin: 0;
 }

@@ -100,7 +100,12 @@ initialize_board (void)
             Gtk::Entry*  cell;
             builder -> get_widget (cell_name, cell);
 
+            auto css_provider = Gtk::CssProvider::create();
+            css_provider -> load_from_path ("res/styles.css");
+
             cell -> set_alignment (0.5);
+            cell -> get_style_context() ->
+                add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
         }
     }
 }
@@ -148,6 +153,9 @@ main(int argc, char **argv)
     Gtk::Button* reset_button;
     Gtk::Button* finish_later_button;
 
+    // Grid points
+    Gtk::Grid* board_container_grid;
+
       
 
     /* Create builder from Glade file. Load necessary widgets.
@@ -167,6 +175,8 @@ main(int argc, char **argv)
     builder -> get_widget ("reset_button", reset_button);
     builder -> get_widget ("finish_later_button", finish_later_button);
 
+    // Grid widgets
+    builder -> get_widget ("board_container_grid", board_container_grid);
 
 
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility 
@@ -210,6 +220,10 @@ main(int argc, char **argv)
     window -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
     game_window -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    // Add stylesheet to grids
+    board_container_grid -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* Initial setup

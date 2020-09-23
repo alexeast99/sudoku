@@ -182,21 +182,24 @@
   </object>
   <object class="GtkWindow" id="game_window">
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">0</property>
     <child type="titlebar">
       <placeholder/>
     </child>
     <child>
       <object class="GtkGrid" id="board_container_grid">
+        <property name="name">board_container_grid</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="margin_start">10</property>
         <property name="margin_end">10</property>
-        <property name="margin_top">10</property>
-        <property name="margin_bottom">10</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="border_width">0</property>
         <property name="row_spacing">10</property>
         <property name="column_spacing">10</property>
         <child>
@@ -207,8 +210,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -351,8 +354,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -495,8 +498,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -639,8 +642,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -774,8 +777,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -909,8 +912,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -1044,8 +1047,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -1179,8 +1182,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -1314,8 +1317,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">False</property>
-            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
@@ -1445,9 +1448,34 @@
           <object class="GtkButtonBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
+            <property name="margin_bottom">10</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">False</property>
             <property name="spacing">10</property>
             <property name="layout_style">center</property>
+            <child>
+              <object class="GtkButton" id="finish_later_button">
+                <property name="label" translatable="yes">Finish Later</property>
+                <property name="name">finish_later_button</property>
+                <property name="width_request">125</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="secondary_button"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkButton" id="done_button">
                 <property name="label" translatable="yes">Done</property>
@@ -1463,29 +1491,7 @@
                 <property name="vexpand">False</property>
                 <style>
                   <class name="game_button"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="finish_later_button">
-                <property name="label" translatable="yes">Finish Later</property>
-                <property name="name">finish_later_button</property>
-                <property name="width_request">150</property>
-                <property name="height_request">45</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="hexpand">False</property>
-                <property name="vexpand">False</property>
-                <style>
-                  <class name="game_button"/>
+                  <class name="primary_button"/>
                 </style>
               </object>
               <packing>
@@ -1498,7 +1504,7 @@
               <object class="GtkButton" id="reset_button">
                 <property name="label" translatable="yes">Reset</property>
                 <property name="name">reset_button</property>
-                <property name="width_request">150</property>
+                <property name="width_request">125</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -1508,7 +1514,7 @@
                 <property name="hexpand">False</property>
                 <property name="vexpand">False</property>
                 <style>
-                  <class name="game_button"/>
+                  <class name="danger_button"/>
                 </style>
               </object>
               <packing>
@@ -1519,15 +1525,10 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">3</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
