@@ -7,6 +7,7 @@
 #include <gtkmm.h>
 #include <iostream>
 #include <time.h>
+#include <string.h>
 
 /*
 *  User-defined headers
@@ -26,6 +27,8 @@ void reset_board ();
 
 void set_pointer (Glib::ustring);
 void restore_pointer (Glib::ustring);
+
+void check_if_number (Glib::ustring);
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -112,6 +115,7 @@ initialize_board (void)
             cell -> set_alignment (0.5);
             cell -> get_style_context() ->
                 add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+            cell -> get_buffer() -> signal_inserted_text().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&check_if_number), cell_name) );
         }
     }
 }
@@ -152,6 +156,19 @@ restore_pointer (Glib::ustring widget)
     Gtk::Button* button;
     builder -> get_widget (widget, button);
     button -> get_window() -> set_cursor (normal_cursor);
+}
+
+// Only allow numbers to be entered on sudoku
+void
+check_if_number (Glib::ustring widget)
+{
+  Gtk::Entry* entry;
+  builder -> get_widget (widget, entry);
+  Glib::ustring entered = entry -> get_buffer() -> get_text();
+  if (isdigit(entered[0])) {
+    entry -> get_buffer() -> set_text("");
+  }
+  return;
 }
 
 
