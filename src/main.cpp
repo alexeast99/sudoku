@@ -24,23 +24,8 @@ void close_instructions ();
 void initalize_board ();
 void reset_board ();
 
-void done_button_set_pointer ();
-void done_button_restore_pointer ();
-
-void reset_button_set_pointer ();
-void reset_button_restore_pointer();
-
-void begin_button_set_pointer ();
-void begin_button_restore_pointer ();
-
-void got_it_button_set_pointer ();
-void got_it_button_restore_pointer ();
-
-void how_to_play_button_set_pointer ();
-void how_to_play_button_restore_pointer ();
-
-void finish_later_button_set_pointer ();
-void finish_later_button_restore_pointer ();
+void set_pointer (Glib::ustring);
+void restore_pointer (Glib::ustring);
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -151,119 +136,28 @@ reset_board (void)
 
 // Set cursor to pointer when over button
 void
-begin_button_set_pointer (void)
+set_pointer (Glib::ustring widget)
 {
     auto clickable_cursor = Gdk::Cursor::create (Gdk::HAND2);
-    Gtk::Button* begin_button;
-    builder -> get_widget ("begin_button", begin_button);
-    begin_button -> get_window() -> set_cursor (clickable_cursor);
+    Gtk::Button* button;
+    builder -> get_widget (widget, button);
+    button -> get_window() -> set_cursor (clickable_cursor);
 }
 
 // Set cursor to default when leaving button
 void
-begin_button_restore_pointer (void)
+restore_pointer (Glib::ustring widget)
 {
-    auto normal_cursor    = Gdk::Cursor::create (Gdk::LEFT_PTR);
-    Gtk::Button* begin_button;
-    builder -> get_widget ("begin_button", begin_button);
-    begin_button -> get_window() -> set_cursor (normal_cursor);
-}
-
-void
-how_to_play_button_set_pointer (void)
-{
-  auto clickable_cursor = Gdk::Cursor::create (Gdk::HAND2);
-  Gtk::Button* how_to_play_button;
-  builder -> get_widget ("how_to_play_button", how_to_play_button);
-  how_to_play_button -> get_window() -> set_cursor (clickable_cursor);
-}
-
-void
-how_to_play_button_restore_pointer (void)
-{
-    auto normal_cursor    = Gdk::Cursor::create (Gdk::LEFT_PTR);
-    Gtk::Button* how_to_play_button;
-    builder -> get_widget ("how_to_play_button", how_to_play_button);
-    how_to_play_button -> get_window() -> set_cursor (normal_cursor);
-}
-
-void
-done_button_set_pointer (void)
-{
-  auto clickable_cursor = Gdk::Cursor::create (Gdk::HAND2);
-  Gtk::Button* done_button;
-  builder -> get_widget ("done_button", done_button);
-  done_button -> get_window() -> set_cursor (clickable_cursor);
-}
-
-void
-done_button_restore_pointer (void)
-{
-    auto normal_cursor    = Gdk::Cursor::create (Gdk::LEFT_PTR);
-    Gtk::Button* done_button;
-    builder -> get_widget ("done_button", done_button);
-    done_button -> get_window() -> set_cursor (normal_cursor);
-}
-
-void
-finish_later_button_set_pointer (void)
-{
-  auto clickable_cursor = Gdk::Cursor::create (Gdk::HAND2);
-  Gtk::Button* finish_later_button;
-  builder -> get_widget ("finish_later_button", finish_later_button);
-  finish_later_button -> get_window() -> set_cursor (clickable_cursor);
-}
-
-void
-finish_later_button_restore_pointer (void)
-{
-    auto normal_cursor    = Gdk::Cursor::create (Gdk::LEFT_PTR);
-    Gtk::Button* finish_later_button;
-    builder -> get_widget ("finish_later_button", finish_later_button);
-    finish_later_button -> get_window() -> set_cursor (normal_cursor);
-}
-
-void
-reset_button_set_pointer (void)
-{
-  auto clickable_cursor = Gdk::Cursor::create (Gdk::HAND2);
-  Gtk::Button* reset_button;
-  builder -> get_widget ("reset_button", reset_button);
-  reset_button -> get_window() -> set_cursor (clickable_cursor);
-}
-
-void
-reset_button_restore_pointer (void)
-{
-    auto normal_cursor    = Gdk::Cursor::create (Gdk::LEFT_PTR);
-    Gtk::Button* reset_button;
-    builder -> get_widget ("reset_button", reset_button);
-    reset_button -> get_window() -> set_cursor (normal_cursor);
-}
-
-void
-got_it_button_set_pointer (void)
-{
-  auto clickable_cursor = Gdk::Cursor::create (Gdk::HAND2);
-  Gtk::Button* got_it_button;
-  builder -> get_widget ("got_it_button", got_it_button);
-  got_it_button -> get_window() -> set_cursor (clickable_cursor);
-}
-
-void
-got_it_button_restore_pointer (void)
-{
-    auto normal_cursor    = Gdk::Cursor::create (Gdk::LEFT_PTR);
-    Gtk::Button* got_it_button;
-    builder -> get_widget ("got_it_button", got_it_button);
-    got_it_button -> get_window() -> set_cursor (normal_cursor);
+    auto normal_cursor = Gdk::Cursor::create (Gdk::LEFT_PTR);
+    Gtk::Button* button;
+    builder -> get_widget (widget, button);
+    button -> get_window() -> set_cursor (normal_cursor);
 }
 
 
 int
 main(int argc, char **argv)
 {
-
     // Required. Initialize gtkmm, checks command line arguments, initializes variabes.
     auto app = Gtk::Application::create (argc, argv, "alexeast.sudoku");
 
@@ -316,27 +210,27 @@ main(int argc, char **argv)
     // Button signals
     begin_button  -> signal_clicked().connect( sigc::ptr_fun(&open_game));
     begin_button  -> signal_clicked().connect( sigc::mem_fun(board, &Board::start) );
-    begin_button  -> signal_enter().connect( sigc::ptr_fun(&begin_button_set_pointer));
-    begin_button  -> signal_leave().connect( sigc::ptr_fun(&begin_button_restore_pointer));
+    begin_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "begin_button") );
+    begin_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "begin_button") );
 
     how_to_play_button -> signal_clicked().connect( sigc::ptr_fun(&open_instructions));
-    how_to_play_button -> signal_enter().connect( sigc::ptr_fun(&how_to_play_button_set_pointer));
-    how_to_play_button -> signal_leave().connect( sigc::ptr_fun(&how_to_play_button_restore_pointer));
+    how_to_play_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "how_to_play_button") );
+    how_to_play_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "how_to_play_button") );
 
     done_button   -> signal_clicked().connect( sigc::ptr_fun(&close_game));
-    done_button -> signal_enter().connect( sigc::ptr_fun(&done_button_set_pointer));
-    done_button -> signal_leave().connect( sigc::ptr_fun(&done_button_restore_pointer));
+    done_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "done_button") );
+    done_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "done_button") );
 
     got_it_button -> signal_clicked().connect( sigc::ptr_fun(&close_instructions));
-    got_it_button -> signal_enter().connect( sigc::ptr_fun(&got_it_button_set_pointer));
-    got_it_button -> signal_leave().connect( sigc::ptr_fun(&got_it_button_restore_pointer));
+    got_it_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "got_it_button") );
+    got_it_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "got_it_button") );
 
     reset_button  -> signal_clicked().connect( sigc::ptr_fun(&reset_board));
-    reset_button -> signal_enter().connect( sigc::ptr_fun(&reset_button_set_pointer));
-    reset_button -> signal_leave().connect( sigc::ptr_fun(&reset_button_restore_pointer));
+    reset_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "reset_button") );
+    reset_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "reset_button") );
 
-    finish_later_button -> signal_enter().connect( sigc::ptr_fun(&finish_later_button_set_pointer));
-    finish_later_button -> signal_leave().connect( sigc::ptr_fun(&finish_later_button_restore_pointer));
+    finish_later_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "finish_later_button") );
+    finish_later_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button") );
 
     /* CSS for styling
      *
