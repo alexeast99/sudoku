@@ -1,4 +1,4 @@
-/* Last Modified: 09/19/2020
+/* Last Modified: 09/23/2020
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h
