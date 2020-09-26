@@ -28,7 +28,7 @@ void reset_board ();
 void set_pointer (Glib::ustring);
 void restore_pointer (Glib::ustring);
 
-void check_if_number (Glib::ustring);
+void check_if_number (guint, const char*, guint, Glib::RefPtr< Gtk::EntryBuffer >);
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -103,11 +103,14 @@ initialize_board (void)
     int i, j;
     for (i=1; i<10; i++) {
         for (j=1; j<10; j++) {
-            char cell_name[30];
-            sprintf(cell_name, "board_%d_%d", i, j);
+
+            gchar* cell_name = (gchar *) g_malloc(31);
+            g_snprintf(cell_name, 31,"board_%d_%d", i, j);
 
             Gtk::Entry*  cell;
+            Glib::RefPtr< Gtk::EntryBuffer > buffer;
             builder -> get_widget (cell_name, cell);
+            buffer = cell -> get_buffer();
 
             auto css_provider = Gtk::CssProvider::create();
             css_provider -> load_from_path ("res/styles.css");
@@ -115,7 +118,7 @@ initialize_board (void)
             cell -> set_alignment (0.5);
             cell -> get_style_context() ->
                 add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-            cell -> get_buffer() -> signal_inserted_text().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&check_if_number), cell_name) );
+            cell -> get_buffer() -> signal_inserted_text().connect( sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >( sigc::ptr_fun(&check_if_number), buffer) );
         }
     }
 }
@@ -133,7 +136,7 @@ reset_board (void)
             Gtk::Entry*  cell;
             builder -> get_widget (cell_name, cell);
 
-           cell -> set_text("");
+            cell -> set_text("");
         }
    }
 }
@@ -160,15 +163,10 @@ restore_pointer (Glib::ustring widget)
 
 // Only allow numbers to be entered on sudoku
 void
-check_if_number (Glib::ustring widget)
+check_if_number (guint position, const gchar* chars, guint n_chars, Glib::RefPtr< Gtk::EntryBuffer > buffer)
 {
-  Gtk::Entry* entry;
-  builder -> get_widget (widget, entry);
-  Glib::ustring entered = entry -> get_buffer() -> get_text();
-  if (isdigit(entered[0])) {
-    entry -> get_buffer() -> set_text("");
-  }
-  return;
+  gchar inserted = *chars;
+  if (inserted > 57 || inserted < 48) buffer -> delete_text(0, 1);
 }
 
 
