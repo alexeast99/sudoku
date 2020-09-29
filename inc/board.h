@@ -1,5 +1,5 @@
 /*
-* Last Modified: 09/23/2020
+* Last Modified: 09/28/2020
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer.
@@ -32,6 +32,11 @@ class Board {
      *
      */
     long total_time;
+
+    /* The fastest time for a game. This must rely on external factors
+     *
+     */
+    long fastest_time;
 
   public:
 
@@ -77,4 +82,14 @@ class Board {
      * no row or column has any digit 1-9 more than once.
      */
      bool is_win (void);
+
+     /* Check if the current time is faster than the last fastest time
+      *
+      */
+     bool new_record (void);
+
+     /* Gets the fastest time. Used for setting the fastest time in the GUI
+      *
+      */
+      long get_fastest_time (void);
 };

@@ -1,5 +1,5 @@
 /*
-* Last Modified: 09/28/20
+* Last Modified: 09/29/20
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -30,6 +30,8 @@ void set_pointer (Glib::ustring);
 void restore_pointer (Glib::ustring);
 
 void check_if_number (guint, const char*, guint, Glib::RefPtr< Gtk::EntryBuffer >);
+
+void check_win (void);
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -172,12 +174,34 @@ restore_pointer (Glib::ustring widget)
     button -> get_window() -> set_cursor (normal_cursor);
 }
 
-// Only allow numbers to be entered on sudoku
+// Only allow numbers 1-9 to be entered on sudoku
 void
 check_if_number (guint position, const gchar* chars, guint n_chars, Glib::RefPtr< Gtk::EntryBuffer > buffer)
 {
   gchar inserted = *chars;
-  if (inserted > 57 || inserted < 48) buffer -> delete_text(0, 1);
+  if (inserted > '9' || inserted < '1') buffer -> delete_text(0, 1);
+}
+
+// Check if a board is a win. If it is, check if this is the fastest score and
+// show a congratulatory dialog. If it is not, show a dialog saying it's not, and
+// give the option to continue
+void
+check_win (void)
+{
+  board.set_total_time();  // Stop time while performing checks
+  // TODO: Make sure every entry has a non-null value BEFORE calling is_win
+  bool winner = board.is_win();
+  if (winner) {
+    bool new_record = board.new_record();
+    if (new_record) {
+      Gtk::Label *fastest_time_label;
+      builder -> get_widget ("fastest_time_label", fastest_time_label);
+      fastest_time_label -> set_text("Fastest Time:\n" + board.get_fastest_time());
+    }
+
+  } else {
+    // Show dialog asking if they want to continue
+  }
 }
 
 
@@ -226,37 +250,75 @@ main(int argc, char **argv)
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
 
-    /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor. Helps with compatibility
-     *
+    /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor.
+     * Helps with compatibility
      */
 
-    // Window signals
-    game_window -> signal_hide().connect( sigc::mem_fun(board, &Board::set_total_time));
-
     // Button signals
-    begin_button  -> signal_clicked().connect( sigc::ptr_fun(&open_game));
-    begin_button  -> signal_clicked().connect( sigc::mem_fun(board, &Board::start) );
-    begin_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "begin_button") );
-    begin_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "begin_button") );
+    begin_button  -> signal_clicked().connect(
+      sigc::ptr_fun(&open_game)
+    );
+    begin_button  -> signal_clicked().connect(
+      sigc::mem_fun(board, &Board::start)
+    );
+    begin_button  -> signal_enter().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "begin_button")
+    );
+    begin_button  -> signal_leave().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "begin_button")
+    );
 
-    how_to_play_button -> signal_clicked().connect( sigc::ptr_fun(&open_instructions));
-    how_to_play_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "how_to_play_button") );
-    how_to_play_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "how_to_play_button") );
+    how_to_play_button  -> signal_clicked().connect(
+      sigc::ptr_fun(&open_instructions)
+    );
+    how_to_play_button  -> signal_enter().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "how_to_play_button")
+    );
+    how_to_play_button  -> signal_leave().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "how_to_play_button")
+    );
 
-    done_button   -> signal_clicked().connect( sigc::ptr_fun(&close_game));
-    done_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "done_button") );
-    done_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "done_button") );
+    // Must pause time while checking game. Dialog to resume?
+    done_button  -> signal_clicked().connect(
+      sigc::ptr_fun(&close_game)
+    );
+    done_button  -> signal_clicked().connect(
+      sigc::ptr_fun(&check_win)
+    );
+    done_button  -> signal_enter().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "done_button")
+    );
+    done_button  -> signal_leave().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "done_button")
+    );
 
-    got_it_button -> signal_clicked().connect( sigc::ptr_fun(&close_instructions));
-    got_it_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "got_it_button") );
-    got_it_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "got_it_button") );
+    got_it_button  -> signal_clicked().connect(
+      sigc::ptr_fun(&close_instructions)
+    );
+    got_it_button  -> signal_enter().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "got_it_button")
+    );
+    got_it_button  -> signal_leave().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "got_it_button")
+    );
 
-    reset_button  -> signal_clicked().connect( sigc::ptr_fun(&reset_board));
-    reset_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "reset_button") );
-    reset_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "reset_button") );
+    // Decision: Reset time or not?
+    reset_button  -> signal_clicked().connect(
+      sigc::ptr_fun(&reset_board)
+    );
+    reset_button  -> signal_leave().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "reset_button")
+    );
+    reset_button  -> signal_enter().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "reset_button")
+    );
 
-    finish_later_button  -> signal_leave().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "finish_later_button") );
-    finish_later_button  -> signal_enter().connect( sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button") );
+    finish_later_button  -> signal_leave().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "finish_later_button")
+    );
+    finish_later_button  -> signal_enter().connect(
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button")
+    );
 
     /* CSS for styling
      *
@@ -289,7 +351,7 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* Initial setup
-     *
+     * TODO: Set fastest time on menu when game starts
      */
 
     write_instructions();

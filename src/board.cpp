@@ -1,4 +1,4 @@
-/* Last Modified: 09/23/2020
+/* Last Modified: 09/29/2020
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -7,12 +7,14 @@
 
 
 #include "board.h"
-#include "time.h"
-#include "iostream"
+#include <time.h>
+#include <iostream>
+#include <vector>
 
 Board::Board (void)
 {
     start_time = 0;
+    fastest_time = 0; // TODO: get this from external source
 }
 
 void Board::set_number (int number, int outer, int inner)
@@ -53,8 +55,39 @@ void Board::set_total_time (void)
     start_time = 0;  // Set start time to 0 to signify that a game is not open
 }
 
-// TODO implement this.
 bool Board::is_win (void)
 {
+  int i, j;
+  int *row;
+  std::vector< std::vector<int> > sorted(9, std::vector<int>(9));
+
+  // Iterate over entries in game_board. Add entry to inner vector in sorted based
+  // on entry's value. Row is used to reduce computation on inner for loop
+  for (i=0; i<9; i++) {
+    row = game_board[i];
+    for (j=0; j<9; j++) {
+      int current = row[j];
+      sorted.at(current - 1).push_back(current);
+    }
+  }
+
+  // There should be exactly 9 of every number on the board
+  for (i=0; i<9; i++) {
+    if (sorted.at(i).size() != 9) return false;
+  }
+
   return true;
+}
+
+bool Board::new_record (void)
+{
+  bool record = total_time < fastest_time;
+  if (record)
+    fastest_time = total_time;
+  return record;
+}
+
+long Board::get_fastest_time (void)
+{
+  return fastest_time;
 }
