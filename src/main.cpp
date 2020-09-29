@@ -52,7 +52,7 @@ open_game (void)
 }
 
 // Closes the game window for single-board games
-// TODO: Reset board state after closing.
+// TODO: Reset board state after closing. Maybe different function?
 void
 close_game (void)
 {

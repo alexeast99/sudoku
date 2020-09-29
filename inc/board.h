@@ -2,7 +2,7 @@
 * Last Modified: 09/23/2020
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
-* Summary: Board class with function prototypes and intializer. 
+* Summary: Board class with function prototypes and intializer.
 */
 
 class Board {
@@ -18,22 +18,27 @@ class Board {
     /* Contains the positions of numbers that were set by the game, and are
     *  therefore un-changeable. The index is the position in the outer array,
     *  and the value at that index is the position in the inner array.
-    *  Contains IF a space is reserved, not WHAT is there. 
+    *  Contains IF a space is reserved, not WHAT is there.
     */
     int reserved[10];
 
     /* The starting time.
-     * 
+     *
      */
     long start_time;
 
-    
+
     /* Total game time.
      *
      */
     long total_time;
 
   public:
+
+    /* Initialize with start_time = 0 to signify a game has not yet been started.
+     * This is used so users cannot click "Begin" again to reset the start time.
+     */
+    Board (void);
 
     /* (number, outer, inner) Sets number in this board where outer specifies the
     *  position in the outer array and inner specifies the position in the inner
@@ -54,7 +59,7 @@ class Board {
     bool check_reserved (int, int);
 
     /* Returns the number in total_time.
-     * 
+     *
      */
     long get_total_time (void);
 
@@ -68,8 +73,8 @@ class Board {
      */
     void start (void);
 
-    /* Initialize with start_time = 0 to signify a game has not yet been started.
-     *
+    /* Check that the current board configuration is a valid win. This means that
+     * no row or column has any digit 1-9 more than once.
      */
-    Board (void);
+     bool is_win (void);
 };
