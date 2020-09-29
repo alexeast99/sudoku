@@ -1,7 +1,8 @@
 /*
-* Last Modified: 09/24/20
+* Last Modified: 09/28/20
 * Author: Alex Eastman
-* Contact: alexeast@buffalo.edu * Summary: Main program file for Sudoku
+* Contact: alexeast@buffalo.edu
+* Summary: Main program file for Sudoku
 */
 
 #include <gtkmm.h>
@@ -101,24 +102,31 @@ void
 initialize_board (void)
 {
     int i, j;
+
+    // Create CssProvider
+    auto css_provider = Gtk::CssProvider::create();
+    css_provider -> load_from_path ("res/styles.css");
+
     for (i=1; i<10; i++) {
         for (j=1; j<10; j++) {
-
+            // ID of Gtk::Entry based on position in matrix
             gchar* cell_name = (gchar *) g_malloc(31);
             g_snprintf(cell_name, 31,"board_%d_%d", i, j);
 
+            // Get current Gtk::Entry from the builder. Get the TextBuffer from the widget
             Gtk::Entry*  cell;
             Glib::RefPtr< Gtk::EntryBuffer > buffer;
             builder -> get_widget (cell_name, cell);
             buffer = cell -> get_buffer();
 
-            auto css_provider = Gtk::CssProvider::create();
-            css_provider -> load_from_path ("res/styles.css");
-
+            // Center characters. Add CSS. Assign signal handler to only allow digits
             cell -> set_alignment (0.5);
             cell -> get_style_context() ->
                 add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-            cell -> get_buffer() -> signal_inserted_text().connect( sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >( sigc::ptr_fun(&check_if_number), buffer) );
+
+            cell -> get_buffer() -> signal_inserted_text().connect(
+              sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
+                sigc::ptr_fun(&check_if_number), buffer));
         }
     }
 }
@@ -130,12 +138,15 @@ reset_board (void)
     int i, j;
     for (i=1; i<10; i++) {
         for (j=1; j<10 && !board.check_reserved(i, j); j++) {
-            char cell_name[30];
-            sprintf(cell_name, "board_%d_%d", i, j);
+            // ID of Gtk::Entry based on position in matrix
+            gchar* cell_name = (gchar *) g_malloc(31);
+            g_snprintf(cell_name, 31, "board_%d_%d", i, j);
 
+            // Get current Gtk::Entry from the builder
             Gtk::Entry*  cell;
             builder -> get_widget (cell_name, cell);
 
+            // Clear this Gtk::Entry's text
             cell -> set_text("");
         }
    }
