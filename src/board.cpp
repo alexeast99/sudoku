@@ -67,7 +67,7 @@ bool Board::is_win (void)
     std::vector<int> row = game_board.at(i);
     std::sort (row.begin(), row.end());
     row.erase( std::unique(row.begin(), row.end()), row.end());
-    if (row.size() != 9)
+    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) == row.end())
       return false;
 
     // Create new vector with value at the j'th row at the i'th column and repeat above
@@ -77,7 +77,7 @@ bool Board::is_win (void)
     }
     std::sort (column.begin(), column.end());
     column.erase( std::unique(row.begin(), row.end()), row.end());
-    if (column.size() != 9)
+    if (column.size() != 9 && std::find(column.begin(), column.end(), 0) == column.end())
       return false;
   }
 
