@@ -208,7 +208,7 @@ check_win (void)
 int
 main(int argc, char **argv)
 {
-    // Required. Initialize gtkmm, checks command line arguments, initializes variabes.
+    // Required. Initialize gtkmm, check command line arguments, initialize variabes.
     auto app = Gtk::Application::create (argc, argv, "alexeast.sudoku");
 
     /* Pointers for widgets to be loaded from builder

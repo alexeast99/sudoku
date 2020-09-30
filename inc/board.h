@@ -1,9 +1,11 @@
 /*
-* Last Modified: 09/28/2020
+* Last Modified: 09/30/2020
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer.
 */
+
+#include <vector>
 
 class Board {
 
@@ -13,7 +15,33 @@ class Board {
     *  the inner array specifies the column, also starting at 0. The value is
     *  the number in the square at this position on the board.
     */
-    int game_board[9][9];
+    std::vector< std::vector<int> > game_board =
+      { {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0}
+      };
+
+    /* Represents each 9-cell block on the board. Each inner vector is one block.
+     * Blocks are numbered starting at 0 in the upper left, 3 directly below that,
+     * and 6 directly below 3. This is used to simplify checking board validity.
+     */
+    std::vector< std::vector<int> > blocks =
+      { {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0}
+      };
 
     /* Contains the positions of numbers that were set by the game, and are
     *  therefore un-changeable. The index is the position in the outer array,
