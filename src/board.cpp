@@ -1,4 +1,4 @@
-/* Last Modified: 09/30/2020
+/* Last Modified: 10/01/2020
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -20,7 +20,12 @@ Board::Board (void)
 
 void Board::set_number (int number, int outer, int inner)
 {
+    // Can't use push back bc want to set specific position
     game_board[outer][inner] = number;
+
+    // Don't care about position, place into correct block vector
+    int block = blocksLookup.at(outer/3).at(inner/3);
+    blocks.at(block).push_back(number);
 }
 
 int Board::get_number (int outer, int inner)
@@ -63,22 +68,31 @@ bool Board::is_win (void)
 
   for (i=0; i<9; i++) {
 
-    // Remove duplicates and check size. Wrong size means duplicate, therefore invalid.
-    std::vector<int> row = game_board.at(i);
-    std::sort (row.begin(), row.end());
-    row.erase( std::unique(row.begin(), row.end()), row.end());
-    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) == row.end())
-      return false;
-
-    // Create new vector with value at the j'th row at the i'th column and repeat above
     std::vector<int> column;
+    std::vector<int> row = game_board.at(i);
+    std::vector<int> block = blocks.at(i);
+
+    // Populate column with values at i'th column across all rows
     for (j=0; j<9; j++) {
       column.push_back(game_board.at(j).at(i));
     }
+
+    // Remove duplicates and check size. Wrong size means duplicate, therefore invalid.
+    std::sort (row.begin(), row.end());
+    row.erase ( std::unique(row.begin(), row.end()), row.end());
+    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) == row.end())
+      return false;
+
+    std::sort (block.begin(), block.end());
+    block.erase ( std::unique(block.begin(), block.end()), block.end());
+    if (block.size() != 9 && std::find(block.begin(), block.end(), 0) == block.end())
+      return false;
+
     std::sort (column.begin(), column.end());
-    column.erase( std::unique(row.begin(), row.end()), row.end());
+    column.erase( std::unique(column.begin(), column.end()), column.end());
     if (column.size() != 9 && std::find(column.begin(), column.end(), 0) == column.end())
       return false;
+
   }
 
   return true;

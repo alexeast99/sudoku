@@ -1,5 +1,5 @@
 /*
-* Last Modified: 09/30/2020
+* Last Modified: 10/01/2020
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer.
@@ -30,6 +30,7 @@ class Board {
     /* Represents each 9-cell block on the board. Each inner vector is one block.
      * Blocks are numbered starting at 0 in the upper left, 3 directly below that,
      * and 6 directly below 3. This is used to simplify checking board validity.
+     * Order in each block does not matter.
      */
     std::vector< std::vector<int> > blocks =
       { {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -42,6 +43,17 @@ class Board {
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0}
       };
+
+      /* A lookup table giving the index of the inner vector for the blocks
+       * variable. Since we don't care about the exact position in the block,
+       * having the blocks index is good enough
+       */
+       std::vector< std::vector<int> > blocksLookup =
+        {
+          {0, 1, 2},
+          {3, 4, 5},
+          {6, 7, 8}
+        };
 
     /* Contains the positions of numbers that were set by the game, and are
     *  therefore un-changeable. The index is the position in the outer array,
