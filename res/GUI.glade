@@ -321,7 +321,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_1_1">
+              <object class="GtkEntry" id="row_0_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -335,7 +335,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_2">
+              <object class="GtkEntry" id="row_0_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -349,7 +349,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_3">
+              <object class="GtkEntry" id="row_0_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -363,7 +363,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_4">
+              <object class="GtkEntry" id="row_1_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -377,7 +377,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_5">
+              <object class="GtkEntry" id="row_1_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -391,7 +391,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_6">
+              <object class="GtkEntry" id="row_1_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -405,7 +405,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_7">
+              <object class="GtkEntry" id="row_2_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -419,7 +419,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_8">
+              <object class="GtkEntry" id="row_2_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -433,7 +433,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_1_9">
+              <object class="GtkEntry" id="row_2_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -465,7 +465,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_2_1">
+              <object class="GtkEntry" id="row_0_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -479,7 +479,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_2">
+              <object class="GtkEntry" id="row_0_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -493,7 +493,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_3">
+              <object class="GtkEntry" id="row_0_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -507,7 +507,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_4">
+              <object class="GtkEntry" id="row_1_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -521,7 +521,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_5">
+              <object class="GtkEntry" id="row_1_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -535,7 +535,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_6">
+              <object class="GtkEntry" id="row_1_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -549,7 +549,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_7">
+              <object class="GtkEntry" id="row_2_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -563,7 +563,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_8">
+              <object class="GtkEntry" id="row_2_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -577,7 +577,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_2_9">
+              <object class="GtkEntry" id="row_2_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -609,7 +609,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_3_1">
+              <object class="GtkEntry" id="row_0_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -623,7 +623,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_2">
+              <object class="GtkEntry" id="row_0_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -637,7 +637,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_3">
+              <object class="GtkEntry" id="row_0_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -651,7 +651,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_4">
+              <object class="GtkEntry" id="row_1_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -665,7 +665,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_5">
+              <object class="GtkEntry" id="row_1_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -679,7 +679,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_6">
+              <object class="GtkEntry" id="row_1_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -693,7 +693,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_7">
+              <object class="GtkEntry" id="row_2_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -707,7 +707,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_8">
+              <object class="GtkEntry" id="row_2_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -721,7 +721,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_3_9">
+              <object class="GtkEntry" id="row_2_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -753,7 +753,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_4_1">
+              <object class="GtkEntry" id="row_3_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -766,7 +766,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_2">
+              <object class="GtkEntry" id="row_3_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -779,7 +779,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_3">
+              <object class="GtkEntry" id="row_3_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -792,7 +792,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_4">
+              <object class="GtkEntry" id="row_4_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -805,7 +805,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_5">
+              <object class="GtkEntry" id="row_4_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -818,7 +818,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_6">
+              <object class="GtkEntry" id="row_4_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -831,7 +831,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_7">
+              <object class="GtkEntry" id="row_5_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -844,7 +844,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_8">
+              <object class="GtkEntry" id="row_5_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -857,7 +857,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_4_9">
+              <object class="GtkEntry" id="row_5_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -888,7 +888,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_5_1">
+              <object class="GtkEntry" id="row_3_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -901,7 +901,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_2">
+              <object class="GtkEntry" id="row_3_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -914,7 +914,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_3">
+              <object class="GtkEntry" id="row_3_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -927,7 +927,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_4">
+              <object class="GtkEntry" id="row_4_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -940,7 +940,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_5">
+              <object class="GtkEntry" id="row_4_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -953,7 +953,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_6">
+              <object class="GtkEntry" id="row_4_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -966,7 +966,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_7">
+              <object class="GtkEntry" id="row_5_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -979,7 +979,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_8">
+              <object class="GtkEntry" id="row_5_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -992,7 +992,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_5_9">
+              <object class="GtkEntry" id="row_5_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1023,7 +1023,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_6_1">
+              <object class="GtkEntry" id="row_3_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1036,7 +1036,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_2">
+              <object class="GtkEntry" id="row_3_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1049,7 +1049,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_3">
+              <object class="GtkEntry" id="row_3_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1062,7 +1062,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_4">
+              <object class="GtkEntry" id="row_4_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1075,7 +1075,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_5">
+              <object class="GtkEntry" id="row_4_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1088,7 +1088,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_6">
+              <object class="GtkEntry" id="row_4_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1101,7 +1101,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_7">
+              <object class="GtkEntry" id="row_5_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1114,7 +1114,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_8">
+              <object class="GtkEntry" id="row_5_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1127,7 +1127,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_6_9">
+              <object class="GtkEntry" id="row_5_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1158,7 +1158,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_7_1">
+              <object class="GtkEntry" id="row_6_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1171,7 +1171,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_2">
+              <object class="GtkEntry" id="row_6_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1184,7 +1184,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_3">
+              <object class="GtkEntry" id="row_6_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1197,7 +1197,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_4">
+              <object class="GtkEntry" id="row_7_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1210,7 +1210,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_5">
+              <object class="GtkEntry" id="row_7_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1223,7 +1223,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_6">
+              <object class="GtkEntry" id="row_7_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1236,7 +1236,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_7">
+              <object class="GtkEntry" id="row_8_0">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1249,7 +1249,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_8">
+              <object class="GtkEntry" id="row_8_1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1262,7 +1262,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_7_9">
+              <object class="GtkEntry" id="row_8_2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1293,7 +1293,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_8_1">
+              <object class="GtkEntry" id="row_6_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1306,7 +1306,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_2">
+              <object class="GtkEntry" id="row_6_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1319,7 +1319,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_3">
+              <object class="GtkEntry" id="row_6_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1332,7 +1332,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_4">
+              <object class="GtkEntry" id="row_7_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1345,7 +1345,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_5">
+              <object class="GtkEntry" id="row_7_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1358,7 +1358,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_6">
+              <object class="GtkEntry" id="row_7_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1371,7 +1371,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_7">
+              <object class="GtkEntry" id="row_8_3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1384,7 +1384,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_8">
+              <object class="GtkEntry" id="row_8_4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1397,7 +1397,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_8_9">
+              <object class="GtkEntry" id="row_8_5">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1428,7 +1428,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="board_9_1">
+              <object class="GtkEntry" id="row_6_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1441,7 +1441,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_2">
+              <object class="GtkEntry" id="row_6_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1454,7 +1454,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_3">
+              <object class="GtkEntry" id="row_6_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1467,7 +1467,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_4">
+              <object class="GtkEntry" id="row_7_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1480,7 +1480,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_5">
+              <object class="GtkEntry" id="row_7_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1493,7 +1493,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_6">
+              <object class="GtkEntry" id="row_7_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1506,7 +1506,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_7">
+              <object class="GtkEntry" id="row_8_6">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1519,7 +1519,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_8">
+              <object class="GtkEntry" id="row_8_7">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>
@@ -1532,7 +1532,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="board_9_9">
+              <object class="GtkEntry" id="row_8_8">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">1</property>

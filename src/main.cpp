@@ -29,7 +29,9 @@ void reset_board ();
 void set_pointer (Glib::ustring);
 void restore_pointer (Glib::ustring);
 
-void check_if_number (guint, const char*, guint, Glib::RefPtr< Gtk::EntryBuffer >);
+bool check_if_number (char, Glib::RefPtr< Gtk::EntryBuffer >);
+void insert_to_board (char, int, int);
+void on_inserted (guint, const char*, guint, Glib::RefPtr< Gtk::EntryBuffer >, int, int);
 
 void check_win ();
 
@@ -115,11 +117,11 @@ initialize_board (void)
     auto css_provider = Gtk::CssProvider::create();
     css_provider -> load_from_path ("res/styles.css");
 
-    for (i=1; i<10; i++) {
-        for (j=1; j<10; j++) {
+    for (i=0; i<9; i++) {
+        for (j=0; j<9; j++) {
             // ID of Gtk::Entry based on position in matrix
             gchar* cell_name = (gchar *) g_malloc(31);
-            g_snprintf(cell_name, 31,"board_%d_%d", i, j);
+            g_snprintf(cell_name, 31,"row_%d_%d", i, j);
 
             // Get current Gtk::Entry from the builder. Get the TextBuffer from the widget
             Gtk::Entry*  cell;
@@ -134,7 +136,7 @@ initialize_board (void)
 
             cell -> get_buffer() -> signal_inserted_text().connect(
               sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
-                sigc::ptr_fun(&check_if_number), buffer));
+                sigc::ptr_fun(&on_inserted), buffer, i, j));
         }
     }
 }
@@ -144,11 +146,11 @@ void
 reset_board (void)
 {
     int i, j;
-    for (i=1; i<10; i++) {
-        for (j=1; j<10 && !board.check_reserved(i, j); j++) {
+    for (i=0; i<9; i++) {
+        for (j=0; j<9 && !board.check_reserved(i, j); j++) {
             // ID of Gtk::Entry based on position in matrix
             gchar* cell_name = (gchar *) g_malloc(31);
-            g_snprintf(cell_name, 31, "board_%d_%d", i, j);
+            g_snprintf(cell_name, 31, "row_%d_%d", i, j);
 
             // Get current Gtk::Entry from the builder
             Gtk::Entry*  cell;
@@ -181,11 +183,32 @@ restore_pointer (Glib::ustring widget)
 }
 
 // Only allow numbers 1-9 to be entered on sudoku
-void
-check_if_number (guint position, const gchar* chars, guint n_chars, Glib::RefPtr< Gtk::EntryBuffer > buffer)
+bool
+check_if_number (char inserted, Glib::RefPtr< Gtk::EntryBuffer > buffer)
 {
-  gchar inserted = *chars;
-  if (inserted > '9' || inserted < '1') buffer -> delete_text(0, 1);
+  if (inserted > '9' || inserted < '1') {
+    buffer -> delete_text(0, 1);
+    return false;
+  }
+  return true;
+}
+
+// When text is entered, must store in internal board
+void
+insert_to_board (char inserted, int outer, int inner)
+{
+  board.set_number(inserted - '0', outer, inner);
+}
+
+// Call this every time a number is inserted on the board
+void
+on_inserted (guint position, const gchar* chars, guint n_chars,
+  Glib::RefPtr< Gtk::EntryBuffer > buffer, int outer, int inner)
+{
+  char inserted = *chars;
+  if ( check_if_number(inserted, buffer)) {
+    insert_to_board (inserted, outer, inner);
+  }
 }
 
 // Check if a board is a win. If it is, check if this is the fastest score and

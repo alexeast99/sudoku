@@ -33,9 +33,11 @@ int Board::get_number (int outer, int inner)
     return game_board.at(outer).at(inner);
 }
 
+// TODO: this
 bool Board::check_reserved (int outer, int inner)
 {
-    return (reserved[outer] == inner) ? true : false;
+    return false;
+    // return (reserved[outer] == inner) ? true : false;
 }
 
 void Board::start (void)
@@ -80,14 +82,17 @@ bool Board::is_win (void)
     // Remove duplicates and check size. Wrong size means duplicate, therefore invalid.
     std::sort (row.begin(), row.end());
     row.erase ( std::unique(row.begin(), row.end()), row.end());
+    std::cout << "Failed at row\n";
     if (row.size() != 9 && std::find(row.begin(), row.end(), 0) != row.end())
       return false;
 
+    std::cout << "Failed at block\n";
     std::sort (block.begin(), block.end());
     block.erase ( std::unique(block.begin(), block.end()), block.end());
     if (block.size() != 9 && std::find(block.begin(), block.end(), 0) != block.end())
       return false;
 
+    std::cout << "Failed at column\n";
     std::sort (column.begin(), column.end());
     column.erase( std::unique(column.begin(), column.end()), column.end());
     if (column.size() != 9 && std::find(column.begin(), column.end(), 0) != column.end())
