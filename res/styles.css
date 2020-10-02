@@ -18,23 +18,23 @@ entry {
 
 
 .primary_button {
-    border-radius: 10px;
+    border-radius: 6px;
     border: none;
     box-shadow: 3px 3px 3px gray;
-    background: #4d4dff;
+    background: #6666ff;
     color: white;
 }
 
 .secondary_button {
     border-radius: 6px;
-    border: none;
+    border: 1px solid #b3b3b3;
     box-shadow: 1px 1px 3px gray;
-    background: #6c757d;
-    color: white;
+    color: #4d4d4d;
+    background: #F1F2F6;
 }
 
 .danger_button {
-    background: red;
+    background: #ff4d4d;
     border: none;
     box-shadow: 1px 1px 3px gray;
     color: white;
