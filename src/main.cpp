@@ -31,7 +31,13 @@ void restore_pointer (Glib::ustring);
 
 void check_if_number (guint, const char*, guint, Glib::RefPtr< Gtk::EntryBuffer >);
 
-void check_win (void);
+void check_win ();
+
+void open_sorry ();
+void close_sorry ();
+
+void open_congratulations ();
+void close_congratulations ();
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -196,12 +202,31 @@ check_win (void)
     if (new_record) {
       Gtk::Label *fastest_time_label;
       builder -> get_widget ("fastest_time_label", fastest_time_label);
+      std::cout << "FASTEST TIME: " << board.get_fastest_time() << "\n";
       fastest_time_label -> set_text("Fastest Time:\n" + board.get_fastest_time());
     }
 
   } else {
-    // Show dialog asking if they want to continue
+    open_sorry ();
   }
+}
+
+void
+open_sorry (void)
+{
+  Gtk::Dialog* sorry_dialog;
+  builder -> get_widget ("sorry_dialog", sorry_dialog);
+  if (sorry_dialog)
+    sorry_dialog -> show();
+}
+
+void
+close_sorry (void)
+{
+  Gtk::Dialog* sorry_dialog;
+  builder -> get_widget ("sorry_dialog", sorry_dialog);
+  if (sorry_dialog)
+    sorry_dialog -> hide();
 }
 
 
@@ -219,6 +244,9 @@ main(int argc, char **argv)
     Gtk::Window* game_window;
     Gtk::Window* window;
 
+    // Dialog pointers
+    Gtk::Dialog* sorry_dialog;
+
     // Button pointers
     Gtk::Button* begin_button;
     Gtk::Button* done_button;
@@ -226,6 +254,8 @@ main(int argc, char **argv)
     Gtk::Button* got_it_button;
     Gtk::Button* reset_button;
     Gtk::Button* finish_later_button;
+    Gtk::Button* hint_button;
+    Gtk::Button* continue_button;
 
     // Grid points
     Gtk::Grid* board_container_grid;
@@ -239,6 +269,9 @@ main(int argc, char **argv)
     builder -> get_widget ("application_window", window);
     builder -> get_widget ("game_window", game_window);
 
+    // Dialog widgets
+    builder -> get_widget ("sorry_dialog", sorry_dialog);
+
     // Button widgets
     builder -> get_widget ("begin_button", begin_button);
     builder -> get_widget ("done_button", done_button);
@@ -246,6 +279,8 @@ main(int argc, char **argv)
     builder -> get_widget ("got_it_button", got_it_button);
     builder -> get_widget ("reset_button", reset_button);
     builder -> get_widget ("finish_later_button", finish_later_button);
+    builder -> get_widget ("hint_button", hint_button);
+    builder -> get_widget ("continue_button", continue_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
@@ -279,9 +314,6 @@ main(int argc, char **argv)
     );
 
     // Must pause time while checking game. Dialog to resume?
-    done_button  -> signal_clicked().connect(
-      sigc::ptr_fun(&close_game)
-    );
     done_button  -> signal_clicked().connect(
       sigc::ptr_fun(&check_win)
     );
@@ -318,6 +350,10 @@ main(int argc, char **argv)
     );
     finish_later_button  -> signal_enter().connect(
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button")
+    );
+
+    continue_button -> signal_clicked().connect(
+      sigc::ptr_fun(&close_sorry)
     );
 
     /* CSS for styling

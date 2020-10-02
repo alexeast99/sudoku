@@ -80,17 +80,17 @@ bool Board::is_win (void)
     // Remove duplicates and check size. Wrong size means duplicate, therefore invalid.
     std::sort (row.begin(), row.end());
     row.erase ( std::unique(row.begin(), row.end()), row.end());
-    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) == row.end())
+    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) != row.end())
       return false;
 
     std::sort (block.begin(), block.end());
     block.erase ( std::unique(block.begin(), block.end()), block.end());
-    if (block.size() != 9 && std::find(block.begin(), block.end(), 0) == block.end())
+    if (block.size() != 9 && std::find(block.begin(), block.end(), 0) != block.end())
       return false;
 
     std::sort (column.begin(), column.end());
     column.erase( std::unique(column.begin(), column.end()), column.end());
-    if (column.size() != 9 && std::find(column.begin(), column.end(), 0) == column.end())
+    if (column.size() != 9 && std::find(column.begin(), column.end(), 0) != column.end())
       return false;
 
   }
