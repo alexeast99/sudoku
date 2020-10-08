@@ -218,19 +218,23 @@ void
 check_win (void)
 {
   board.set_total_time();  // Stop time while performing checks
-  // TODO: Make sure every entry has a non-null value BEFORE calling is_win
+
   bool winner = board.is_win();
+
   if (winner) {
     bool new_record = board.new_record();
+
     if (new_record) {
-      Gtk::Label *fastest_time_label;
-      builder -> get_widget ("fastest_time_label", fastest_time_label);
-      std::cout << "FASTEST TIME: " << board.get_fastest_time() << "\n";
-      fastest_time_label -> set_text("Fastest Time:\n" + board.get_fastest_time());
+      Gtk::Label *fastest_time_time_label;
+
+      builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
+
+      fastest_time_time_label -> set_text( board.get_fastest_time());
     }
+    // TODO: show dialog saying they won. Username?
 
   } else {
-    open_sorry ();
+    open_sorry ();  // Show dialog saying it was not a win
   }
 }
 
@@ -313,70 +317,73 @@ main(int argc, char **argv)
      */
 
     // Button signals
-    begin_button  -> signal_clicked().connect(
+    begin_button  -> signal_clicked().connect(  // Begin button opens game
       sigc::ptr_fun(&open_game)
     );
-    begin_button  -> signal_clicked().connect(
+    begin_button  -> signal_clicked().connect(  // Start internal clock
       sigc::mem_fun(board, &Board::start)
     );
-    begin_button  -> signal_enter().connect(
+    begin_button  -> signal_enter().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "begin_button")
     );
-    begin_button  -> signal_leave().connect(
+    begin_button  -> signal_leave().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "begin_button")
     );
 
-    how_to_play_button  -> signal_clicked().connect(
+    how_to_play_button  -> signal_clicked().connect(  // Show instructions
       sigc::ptr_fun(&open_instructions)
     );
-    how_to_play_button  -> signal_enter().connect(
+    how_to_play_button  -> signal_enter().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "how_to_play_button")
     );
-    how_to_play_button  -> signal_leave().connect(
+    how_to_play_button  -> signal_leave().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "how_to_play_button")
     );
 
     // Must pause time while checking game. Dialog to resume?
-    done_button  -> signal_clicked().connect(
+    done_button  -> signal_clicked().connect(   // Check if win on done
       sigc::ptr_fun(&check_win)
     );
-    done_button  -> signal_enter().connect(
+    done_button  -> signal_enter().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "done_button")
     );
-    done_button  -> signal_leave().connect(
+    done_button  -> signal_leave().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "done_button")
     );
 
-    got_it_button  -> signal_clicked().connect(
+    got_it_button  -> signal_clicked().connect(  // Close instructions
       sigc::ptr_fun(&close_instructions)
     );
-    got_it_button  -> signal_enter().connect(
+    got_it_button  -> signal_enter().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "got_it_button")
     );
-    got_it_button  -> signal_leave().connect(
+    got_it_button  -> signal_leave().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "got_it_button")
     );
 
     // Decision: Reset time or not?
-    reset_button  -> signal_clicked().connect(
+    reset_button  -> signal_clicked().connect(  // Clear all entries on reset
       sigc::ptr_fun(&reset_board)
     );
-    reset_button  -> signal_leave().connect(
+    reset_button  -> signal_leave().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "reset_button")
     );
-    reset_button  -> signal_enter().connect(
+    reset_button  -> signal_enter().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "reset_button")
     );
 
-    finish_later_button  -> signal_leave().connect(
+    finish_later_button  -> signal_leave().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "finish_later_button")
     );
-    finish_later_button  -> signal_enter().connect(
+    finish_later_button  -> signal_enter().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button")
     );
 
-    continue_button -> signal_clicked().connect(
+    continue_button -> signal_clicked().connect(  // Close 'almost there' dialog
       sigc::ptr_fun(&close_sorry)
+    );
+    continue_button -> signal_clicked().connect(  // Start time when back to game
+      sigc::mem_fun(board, &Board::start)
     );
 
     /* CSS for styling

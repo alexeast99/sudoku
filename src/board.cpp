@@ -15,7 +15,8 @@
 Board::Board (void)
 {
     start_time = 0;
-    fastest_time = 0; // TODO: get this from external source
+    total_time = 0;
+    fastest_time = 9999999999; // TODO: get this from external source
 }
 
 void Board::set_number (int number, int outer, int inner)
@@ -63,7 +64,7 @@ void Board::set_total_time (void)
 {
     time_t current_time;
     current_time = time(NULL);  // Gets the current time
-    total_time = current_time - start_time;
+    total_time = total_time + (current_time - start_time);  // Add old time if game was paused
     start_time = 0;  // Set start time to 0 to signify that a game is not open
 }
 
@@ -118,7 +119,22 @@ bool Board::new_record (void)
   return record;
 }
 
-long Board::get_fastest_time (void)
+std::string Board::get_fastest_time (void)
 {
-  return fastest_time;
+  // Fastest time already in seconds. Get minutes the subtract to get remaining seconds
+  int minutes = fastest_time / 60;
+  int seconds = fastest_time - minutes * 60;
+
+  std::string minutes_string;
+  std::string seconds_string;
+
+  if (seconds >= 10) {  // Want seconds to be two digits
+    seconds_string = std::to_string(seconds) + " Seconds";
+  } else {
+    seconds_string = "0" + std::to_string(seconds) + " Seconds";
+  }
+
+  minutes_string = std::to_string(minutes) + " Minutes";
+  return minutes_string + " " + seconds_string;
+
 }

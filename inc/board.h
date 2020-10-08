@@ -6,6 +6,7 @@
 */
 
 #include <vector>
+#include <string>
 
 class Board {
 
@@ -128,8 +129,8 @@ class Board {
       */
      bool new_record (void);
 
-     /* Gets the fastest time. Used for setting the fastest time in the GUI
-      *
+     /* Gets the fastest time. Used for setting the fastest time in the GUI.
+      * Time returned as XX minutes XX seconds
       */
-      long get_fastest_time (void);
+      std::string get_fastest_time (void);
 };
