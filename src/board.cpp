@@ -23,9 +23,13 @@ void Board::set_number (int number, int outer, int inner)
     // Can't use push back bc want to set specific position
     game_board[outer][inner] = number;
 
-    // Don't care about position, place into correct block vector
-    int block = blocksLookup.at(outer/3).at(inner/3);
-    blocks.at(block).push_back(number);
+    // Get the block to insert into. Get position within block to insert into
+    int blockIndex = blocksLookup.at(outer/3).at(inner/3);
+    int blockPosition = blocksLookup.at(outer%3).at(inner%3);
+
+    // Insert into block
+    blocks[blockIndex][blockPosition] = number;
+
 }
 
 int Board::get_number (int outer, int inner)
@@ -82,21 +86,24 @@ bool Board::is_win (void)
     // Remove duplicates and check size. Wrong size means duplicate, therefore invalid.
     std::sort (row.begin(), row.end());
     row.erase ( std::unique(row.begin(), row.end()), row.end());
-    std::cout << "Failed at row\n";
-    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) != row.end())
+    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) != row.end()) {
+      printf("Failed at row\n");
       return false;
+    }
 
-    std::cout << "Failed at block\n";
     std::sort (block.begin(), block.end());
     block.erase ( std::unique(block.begin(), block.end()), block.end());
-    if (block.size() != 9 && std::find(block.begin(), block.end(), 0) != block.end())
+    if (block.size() != 9 && std::find(block.begin(), block.end(), 0) != block.end()) {
+      printf("Failed at block\n");
       return false;
+    }
 
-    std::cout << "Failed at column\n";
     std::sort (column.begin(), column.end());
     column.erase( std::unique(column.begin(), column.end()), column.end());
-    if (column.size() != 9 && std::find(column.begin(), column.end(), 0) != column.end())
+    if (column.size() != 9 && std::find(column.begin(), column.end(), 0) != column.end()) {
+      printf("Failed at column\n");
       return false;
+    }
 
   }
 
