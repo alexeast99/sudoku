@@ -41,6 +41,8 @@ void close_sorry ();
 void open_congratulations ();
 void close_congratulations ();
 
+bool timeout_handler ();
+
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
 Board board;
@@ -59,6 +61,9 @@ open_game (void)
     builder -> get_widget ("game_window", window);
     if (window)
         window -> show();
+    Glib::signal_timeout().connect_seconds(  // Updates counter in game screen
+      sigc::ptr_fun(&timeout_handler), 1
+    );
 }
 
 // Closes the game window for single-board games
@@ -254,6 +259,17 @@ close_sorry (void)
   builder -> get_widget ("sorry_dialog", sorry_dialog);
   if (sorry_dialog)
     sorry_dialog -> hide();
+}
+
+// Wrapper for boards timeout handler to match handler for Glib::signal_timeout
+bool
+timeout_handler (void)
+{
+  Gtk::Label* current_time_time_label;
+  builder -> get_widget ("current_time_time_label", current_time_time_label);
+
+  current_time_time_label -> set_text( board.timeout_handler_helper());
+  return true;
 }
 
 

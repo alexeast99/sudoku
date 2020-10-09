@@ -11,7 +11,7 @@
 #			...
 #			...
 
-# -c 	  --> Don't run linker. Output is object files. 
+# -c 	  --> Don't run linker. Output is object files.
 # -o file --> Place output in file
 
 shell	= /bin/sh

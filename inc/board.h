@@ -45,16 +45,16 @@ class Board {
         {0, 0, 0, 0, 0, 0, 0, 0, 0}
       };
 
-      /* A lookup table giving the index of the inner vector for the blocks
-       * variable. Since we don't care about the exact position in the block,
-       * having the blocks index is good enough
-       */
-       std::vector< std::vector<int> > blocksLookup =
-        {
-          {0, 1, 2},
-          {3, 4, 5},
-          {6, 7, 8}
-        };
+    /* A lookup table giving the index of the inner vector for the blocks
+     * variable. Since we don't care about the exact position in the block,
+     * having the blocks index is good enough
+     */
+     std::vector< std::vector<int> > blocksLookup =
+      {
+        {0, 1, 2},
+        {3, 4, 5},
+        {6, 7, 8}
+      };
 
     /* Contains the positions of numbers that were set by the game, and are
     *  therefore un-changeable. The index is the position in the outer array,
@@ -78,6 +78,11 @@ class Board {
      *
      */
     long fastest_time;
+
+    /* Helper function to return a formatted time as XX Minutes YY Seconds. Accepts
+     * the time in seconds
+     */
+     std::string formatted_time (long);
 
   public:
 
@@ -133,4 +138,9 @@ class Board {
       * Time returned as XX minutes XX seconds
       */
       std::string get_fastest_time (void);
+
+      /* Called from main.cpp in timeout_handler. Returns a time as XX Minutes
+       * YY Seconds. timeout_handler updates GUI
+       */
+       std::string timeout_handler_helper (void);
 };

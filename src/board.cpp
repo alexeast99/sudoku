@@ -47,12 +47,12 @@ bool Board::check_reserved (int outer, int inner)
 
 void Board::start (void)
 {
-    if (start_time != 0)  // Hitting begin while a game is open should not do anything
-        return;
-    time_t current_time;
-    current_time = time(NULL);  // Gets the current time
-    start_time = current_time;
-    std::cout << "Starting at time: " << start_time << "\n";
+  if (start_time != 0)  // Hitting begin while a game is open should not do anything
+      return;
+  time_t current_time;
+  current_time = time(NULL);  // Gets the current time
+  start_time = current_time;
+  std::cout << "Starting at time: " << start_time << "\n";
 }
 
 long Board::get_total_time (void)
@@ -119,22 +119,33 @@ bool Board::new_record (void)
   return record;
 }
 
-std::string Board::get_fastest_time (void)
+std::string Board::formatted_time (long t)
 {
-  // Fastest time already in seconds. Get minutes the subtract to get remaining seconds
-  int minutes = fastest_time / 60;
-  int seconds = fastest_time - minutes * 60;
+  // Time already in seconds. Get minutes then subtract to get seconds
+  int minutes = t / 60;
+  int seconds = t - (minutes * 60);
 
   std::string minutes_string;
   std::string seconds_string;
 
-  if (seconds >= 10) {  // Want seconds to be two digits
-    seconds_string = std::to_string(seconds) + " Seconds";
-  } else {
-    seconds_string = "0" + std::to_string(seconds) + " Seconds";
-  }
+  if (seconds < 10)
+    seconds_string = "0" + std::to_string(seconds);
+  else
+    seconds_string = std::to_string(seconds);
+  minutes_string = std::to_string(minutes);
 
-  minutes_string = std::to_string(minutes) + " Minutes";
-  return minutes_string + " " + seconds_string;
+  return minutes_string + " Minutes " + seconds_string + " Seconds";
 
+}
+
+std::string Board::get_fastest_time (void)
+{
+  return formatted_time (fastest_time);
+}
+
+std::string Board::timeout_handler_helper (void)
+{
+  time_t current_time;
+  current_time = time(NULL);
+  return formatted_time (current_time - start_time);
 }
