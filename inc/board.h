@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 class Board {
 
@@ -84,6 +85,16 @@ class Board {
      */
      std::string formatted_time (long);
 
+	/* File stream for reading from and writing to the save file for this user
+	 *
+	 */
+	 std::fstream saved_info;
+
+	 /* The username of whoever is currently playing
+	  *
+	  */
+	 std::string username;
+
   public:
 
     /* Initialize with start_time = 0 to signify a game has not yet been started.
@@ -134,13 +145,13 @@ class Board {
       */
      bool new_record (void);
 
-     /* Gets the fastest time. Used for setting the fastest time in the GUI.
-      * Time returned as XX minutes XX seconds
-      */
-      std::string get_fastest_time (void);
+    /* Gets the fastest time. Used for setting the fastest time in the GUI.
+     * Time returned as XX minutes XX seconds
+     */
+  	std::string get_fastest_time (void);
 
-      /* Called from main.cpp in timeout_handler. Returns a time as XX Minutes
-       * YY Seconds. timeout_handler updates GUI
-       */
-       std::string timeout_handler_helper (void);
+	/* Called from main.cpp in timeout_handler. Returns a time as XX Minutes
+	 * YY Seconds. timeout_handler updates GUI
+	 */
+   	std::string timeout_handler_helper (void);
 };

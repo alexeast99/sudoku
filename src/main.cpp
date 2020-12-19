@@ -284,6 +284,7 @@ main(int argc, char **argv)
      */
 
     // Window pointers
+	Gtk::Window* player_info_window;
     Gtk::Window* game_window;
     Gtk::Window* window;
 
@@ -299,6 +300,7 @@ main(int argc, char **argv)
     Gtk::Button* finish_later_button;
     Gtk::Button* hint_button;
     Gtk::Button* continue_button;
+	Gtk::Button* lets_go_button;
 
     // Grid points
     Gtk::Grid* board_container_grid;
@@ -311,6 +313,7 @@ main(int argc, char **argv)
     builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
     builder -> get_widget ("application_window", window);
     builder -> get_widget ("game_window", game_window);
+	builder -> get_widget ("player_info_window", player_info_window);
 
     // Dialog widgets
     builder -> get_widget ("sorry_dialog", sorry_dialog);
@@ -324,6 +327,7 @@ main(int argc, char **argv)
     builder -> get_widget ("finish_later_button", finish_later_button);
     builder -> get_widget ("hint_button", hint_button);
     builder -> get_widget ("continue_button", continue_button);
+	builder -> get_widget ("lets_go_button", lets_go_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
@@ -421,12 +425,16 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
     reset_button -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	lets_go_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to windows
     window -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
     game_window -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	player_info_window -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to grids
     board_container_grid -> get_style_context() ->
@@ -440,7 +448,7 @@ main(int argc, char **argv)
     initialize_board();
 
     if (window)
-        app -> run(*window);
+        app -> run(*player_info_window);
 
     delete window;
 

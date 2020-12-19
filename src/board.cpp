@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 
+// Initializes the board
 Board::Board (void)
 {
     start_time = 0;
