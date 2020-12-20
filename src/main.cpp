@@ -45,7 +45,6 @@ void close_congratulations ();
 
 bool timeout_handler ();
 
-bool check_for_user ();
 void handle_user ();
 
 // Global references
@@ -62,11 +61,6 @@ Board board;
 void
 open_game (void)
 {
-	// Make sure there's a username before starting the game
-	bool valid_user = check_for_user();
-	if (!valid_user) {
-		return;
-	}
 
     Gtk::Window* game_window;
 	builder -> get_widget ("game_window", game_window);
@@ -328,55 +322,40 @@ timeout_handler (void)
   return true;
 }
 
-// Checks to see if a username has been entered already. If it hasn't, it spawns
-// the dialog to enter the username
-bool
-check_for_user (void)
-{
-	Gtk::Dialog* player_info_dialog;
-	Glib::ustring user = board.get_username();
-	builder -> get_widget ("player_info_dialog", player_info_dialog);
-
-	if ( !user.length()) {  // If there is not a user set up yet
-		int result = player_info_dialog -> run();  // Blocks for user input
-		if (result == Gtk::RESPONSE_ACCEPT) {  // User entered name
-			player_info_dialog -> hide();
-			return true;
-		}
-		return false;  // Something went wrong or user didn't enter name
-	}
-
-	return true;  // User already entered name
-}
-
 // Called when the "lets go" button is clicked after entering a username
 void
 handle_user (void)
 {
 	Gtk::Entry* username_entry;
-	Gtk::Dialog* player_info_dialog;
 	Gtk::Label* welcome_label;
 	Gtk::Label* fastest_time_time_label;
+	Gtk::Box* menu_screen_box;
+	Gtk::Stack* application_stack;
 
 	builder -> get_widget ("username_entry", username_entry);
-	builder -> get_widget ("player_info_dialog", player_info_dialog);
 	builder -> get_widget ("welcome_label", welcome_label);
 	builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
+	builder -> get_widget ("menu_screen_box", menu_screen_box);
+	builder -> get_widget ("application_stack", application_stack);
 
-	if ( username_entry -> get_text_length()) {  // If user has entered a name
-
-		// Set username in board and signal to dialog
-		player_info_dialog -> response(Gtk::RESPONSE_ACCEPT);  // Signal to dialog
-		Glib::ustring username = username_entry -> get_text();
-		board.set_username(username);
-		Glib::ustring user_fastest = board.get_fastest_time();
-		fastest_time_time_label -> set_text(user_fastest);
-
-		// Set welcome message on main menu
-		gchar* welcome_message = (gchar *) g_malloc(120);
-		g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
-		welcome_label -> set_text(welcome_message);
+	// User must enter a name to continue
+	if ( !username_entry -> get_text_length()) {
+		return;
 	}
+
+	// Set username in board and signal to dialog
+	Glib::ustring username = username_entry -> get_text();
+	board.set_username(username);
+	Glib::ustring user_fastest = board.get_fastest_time();
+	fastest_time_time_label -> set_text(user_fastest);
+
+	// Set welcome message on main menu
+	gchar* welcome_message = (gchar *) g_malloc(120);
+	g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
+	welcome_label -> set_text(welcome_message);
+
+	// Switch stack page to main menu
+	application_stack -> set_visible_child("Main Menu");
 
 	return;
 }
@@ -398,7 +377,6 @@ main(int argc, char **argv)
 
     // Dialog pointers
     Gtk::Dialog* sorry_dialog;
-	Gtk::Dialog* player_info_dialog;
 
     // Button pointers
     Gtk::Button* begin_button;
@@ -425,7 +403,6 @@ main(int argc, char **argv)
 
     // Dialog widgets
     builder -> get_widget ("sorry_dialog", sorry_dialog);
-	builder -> get_widget ("player_info_dialog", player_info_dialog);
 
     // Button widgets
     builder -> get_widget ("begin_button", begin_button);
@@ -564,10 +541,6 @@ main(int argc, char **argv)
     // Add stylesheet to grids
     board_container_grid -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-	// Add stylesheet to dialogs
-	player_info_dialog -> get_style_context() ->
-		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* Initial setup
      * TODO: Set fastest time on menu when game starts
