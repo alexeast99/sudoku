@@ -356,10 +356,12 @@ handle_user (void)
 	Gtk::Entry* username_entry;
 	Gtk::Dialog* player_info_dialog;
 	Gtk::Label* welcome_label;
+	Gtk::Label* fastest_time_time_label;
 
 	builder -> get_widget ("username_entry", username_entry);
 	builder -> get_widget ("player_info_dialog", player_info_dialog);
 	builder -> get_widget ("welcome_label", welcome_label);
+	builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
 
 	if ( username_entry -> get_text_length()) {  // If user has entered a name
 
@@ -367,6 +369,8 @@ handle_user (void)
 		player_info_dialog -> response(Gtk::RESPONSE_ACCEPT);  // Signal to dialog
 		Glib::ustring username = username_entry -> get_text();
 		board.set_username(username);
+		Glib::ustring user_fastest = board.get_fastest_time();
+		fastest_time_time_label -> set_text(user_fastest);
 
 		// Set welcome message on main menu
 		gchar* welcome_message = (gchar *) g_malloc(120);

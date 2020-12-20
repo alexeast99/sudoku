@@ -5,6 +5,7 @@
   <!-- interface-css-provider-path styles.css -->
   <object class="GtkWindow" id="application_window">
     <property name="can_focus">False</property>
+    <property name="window_position">center</property>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -278,6 +279,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">0</property>
+    <property name="window_position">center-on-parent</property>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -1768,7 +1770,9 @@
   <object class="GtkDialog" id="player_info_dialog">
     <property name="width_request">640</property>
     <property name="height_request">360</property>
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <child type="titlebar">
       <placeholder/>
