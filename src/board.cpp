@@ -126,14 +126,14 @@ bool Board::new_record (void)
   return record;
 }
 
-std::string Board::formatted_time (long t)
+Glib::ustring Board::formatted_time (long t)
 {
   // Time already in seconds. Get minutes then subtract to get seconds
   int minutes = t / 60;
   int seconds = t - (minutes * 60);
 
-  std::string minutes_string;
-  std::string seconds_string;
+  Glib::ustring minutes_string;
+  Glib::ustring seconds_string;
 
   if (seconds < 10)
     seconds_string = "0" + std::to_string(seconds);
@@ -145,12 +145,12 @@ std::string Board::formatted_time (long t)
 
 }
 
-std::string Board::get_fastest_time (void)
+Glib::ustring Board::get_fastest_time (void)
 {
   return formatted_time (fastest_time);
 }
 
-std::string Board::timeout_handler_helper (void)
+Glib::ustring Board::timeout_handler_helper (void)
 {
   time_t current_time;
   current_time = time(NULL);

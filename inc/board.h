@@ -84,7 +84,7 @@ class Board {
     /* Helper function to return a formatted time as XX Minutes YY Seconds. Accepts
      * the time in seconds
      */
-     std::string formatted_time (long);
+     Glib::ustring formatted_time (long);
 
 	/* File stream for reading from and writing to the save file for this user
 	 *
@@ -94,7 +94,7 @@ class Board {
 	 /* The username of whoever is currently playing
 	  *
 	  */
-	 std::string username;
+	 Glib::ustring username;
 
   public:
 
@@ -149,12 +149,12 @@ class Board {
     /* Gets the fastest time. Used for setting the fastest time in the GUI.
      * Time returned as XX minutes XX seconds
      */
-  	std::string get_fastest_time (void);
+  	Glib::ustring get_fastest_time (void);
 
 	/* Called from main.cpp in timeout_handler. Returns a time as XX Minutes
 	 * YY Seconds. timeout_handler updates GUI
 	 */
-   	std::string timeout_handler_helper (void);
+   	Glib::ustring timeout_handler_helper (void);
 
 	/* Get the current username
 	 *
