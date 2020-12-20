@@ -1,4 +1,4 @@
-/* Last Modified: 10/08/2020
+/* Last Modified: 12/20/2020
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -17,8 +17,9 @@ Board::Board (void)
 {
     start_time = 0;
     total_time = 0;
-    fastest_time = 9999999999; // TODO: get this from external source
+    fastest_time = 0; // This is retrieved from keyfile based on username
 	username = "";
+	user_data.load_from_file("data/user_data.txt");
 }
 
 void Board::set_number (int number, int outer, int inner)
@@ -121,12 +122,12 @@ bool Board::is_win (void)
 bool Board::new_record (void)
 {
   bool record = total_time < fastest_time;
-  if (record)
+  if (record || fastest_time == 0)
     fastest_time = total_time;
   return record;
 }
 
-Glib::ustring Board::formatted_time (long t)
+Glib::ustring Board::formatted_time (double t)
 {
   // Time already in seconds. Get minutes then subtract to get seconds
   int minutes = t / 60;
@@ -165,5 +166,18 @@ Glib::ustring Board::get_username (void)
 void Board::set_username (Glib::ustring name)
 {
 	username = name;
+	if (user_data.has_group(name)) {  // If this user has played before
+		if (user_data.has_key(name, "fastest_time")) {  // User has a fastest time
+			fastest_time = user_data.get_double(name, "fastest_time");
+		}
+	} else {
+		user_data.set_double(name, "fastest_time", 0);
+	}
+	return;
+}
+
+void Board::save_data (void)
+{
+	user_data.save_to_file("data/user_data.txt");
 	return;
 }

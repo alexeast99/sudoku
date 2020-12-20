@@ -1,5 +1,5 @@
 /*
-* Last Modified: 10/08/2020
+* Last Modified: 12/20/2020
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer.
@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include <glibmm/ustring.h>
+#include <glibmm/keyfile.h>
 
 class Board {
 
@@ -79,17 +80,18 @@ class Board {
     /* The fastest time for a game. This must rely on external factors
      *
      */
-    long fastest_time;
+    double fastest_time;
 
     /* Helper function to return a formatted time as XX Minutes YY Seconds. Accepts
      * the time in seconds
      */
-     Glib::ustring formatted_time (long);
+     Glib::ustring formatted_time (double);
 
-	/* File stream for reading from and writing to the save file for this user
-	 *
-	 */
-	 std::fstream saved_info;
+	 /* A keyfile for reading and writing user data. Initialized in the
+	  * instantiation of the board object. Each user has a group in the keyfile,
+	  * and therefore only one keyfile is needed for all users.
+	  */
+	 Glib::KeyFile user_data;
 
 	 /* The username of whoever is currently playing
 	  *
@@ -139,12 +141,12 @@ class Board {
     /* Check that the current board configuration is a valid win. This means that
      * no row or column has any digit 1-9 more than once.
      */
-     bool is_win (void);
+    bool is_win (void);
 
      /* Check if the current time is faster than the last fastest time
       *
       */
-     bool new_record (void);
+    bool new_record (void);
 
     /* Gets the fastest time. Used for setting the fastest time in the GUI.
      * Time returned as XX minutes XX seconds
@@ -154,7 +156,7 @@ class Board {
 	/* Called from main.cpp in timeout_handler. Returns a time as XX Minutes
 	 * YY Seconds. timeout_handler updates GUI
 	 */
-   	Glib::ustring timeout_handler_helper (void);
+   	 Glib::ustring timeout_handler_helper (void);
 
 	/* Get the current username
 	 *
@@ -164,5 +166,10 @@ class Board {
 	 /* Set the username for this session
 	  *
 	  */
-	  void set_username (Glib::ustring);
+	 void set_username (Glib::ustring);
+
+	 /* Save the data in the private keyfile variable to the text file. This is
+	  * called when the game is exited.
+	  */
+	 void save_data (void);
 };

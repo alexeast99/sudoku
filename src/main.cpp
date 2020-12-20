@@ -1,5 +1,5 @@
 /*
-* Last Modified: 12/19/20
+* Last Modified: 12/20/20
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -19,6 +19,8 @@
 // Funciton prototypes
 void open_game ();
 void close_game ();
+
+bool quit (GdkEventAny*, Glib::RefPtr<Gtk::Application>);
 
 void open_instructions ();
 void close_instructions ();
@@ -92,6 +94,16 @@ close_game (void)
 	}
 
 	return;
+}
+
+// Callback used when the "X" is hit on the main menu window. This ensures that
+// the users data is saved, and then calls quit on the application to quit the game
+bool
+quit (GdkEventAny* event, Glib::RefPtr<Gtk::Application> app)
+{
+	board.save_data();
+	app -> quit();
+	return true;
 }
 
 // Open the 'How to Play' dialog
@@ -419,6 +431,14 @@ main(int argc, char **argv)
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor.
      * Helps with compatibility
      */
+
+	// Window signals
+	// Callback to ensure that user data is saved and application is properly
+	// quit when user hits "X" on main menu window. App referenced is app that
+	// was created at the top of this function
+	window -> signal_delete_event().connect(
+		sigc::bind<Glib::RefPtr<Gtk::Application>>( sigc::ptr_fun(&quit), app)
+	);
 
     // Button signals
     begin_button  -> signal_clicked().connect(  // Begin button opens game
