@@ -157,12 +157,12 @@ std::string Board::timeout_handler_helper (void)
   return formatted_time (current_time - start_time);
 }
 
-std::string Board::get_username (void)
+Glib::ustring Board::get_username (void)
 {
 	return username;
 }
 
-void Board::set_username (std::string name)
+void Board::set_username (Glib::ustring name)
 {
 	username = name;
 	return;

@@ -15,21 +15,23 @@
 # -o file --> Place output in file
 
 shell	= /bin/sh
-cc	= g++
+cc		= g++
 src 	= src
-inc	= inc
-obj	= objs
-cflags  = `pkg-config gtkmm-3.0 --cflags --libs` -Wall -Werror
+inc		= inc
+obj		= objs
+gtkflags  = `pkg-config gtkmm-3.0 --cflags --libs` -Wall -Werror
+glibflags = `pkg-config glibmm-2.4 --cflags --libs` -Wall -Werror
 objects = $(obj)/main.o $(obj)/board.o
 
 sudoku: $(objects)
-	$(cc) -o $@ $(objects) $(cflags) -I$(inc)
+	$(cc) -o $@ $(objects) $(gtkflags) -I$(inc)
 
 $(obj)/main.o: $(src)/main.cpp $(inc)/board.h
-	$(cc) -c $(src)/main.cpp -o $@ $(cflags) -I$(inc)
+	$(cc) -c $(src)/main.cpp -o $@ $(gtkflags) -I$(inc)
 
 $(obj)/board.o: $(src)/board.cpp $(inc)/board.h
-	$(cc) -c $(src)/board.cpp -o $@ -I$(inc)
+	$(cc) -c $(src)/board.cpp -o $@ $(glibflags) -I$(inc)
+
 
 .PHONY: clean
 clean:

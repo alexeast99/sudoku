@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <glibmm/ustring.h>
 
 class Board {
 
@@ -158,10 +159,10 @@ class Board {
 	/* Get the current username
 	 *
 	 */
-	 std::string get_username (void);
+	 Glib::ustring get_username (void);
 
 	 /* Set the username for this session
 	  *
 	  */
-	  void set_username (std::string);
+	  void set_username (Glib::ustring);
 };

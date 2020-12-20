@@ -322,24 +322,36 @@ bool
 check_for_user (void)
 {
 	Gtk::Dialog* player_info_dialog;
-	std::string user = board.get_username();
+	Glib::ustring user = board.get_username();
 	builder -> get_widget ("player_info_dialog", player_info_dialog);
 
-	if ( !user.compare("")) {  // If there is not a user set up yet
+	if ( !user.length()) {  // If there is not a user set up yet
 		int result = player_info_dialog -> run();  // Blocks for user input
-		if (result == Gtk::RESPONSE_NONE) {  // User exited dialog
-			return false;
+		if (result == Gtk::RESPONSE_ACCEPT) {  // User entered name
+			player_info_dialog -> hide();
+			return true;
 		}
-		// TODO: Make sure the "lets go" button sends a signal to this dialog to close it
+		return false;  // Something went wrong or user didn't enter name
 	}
 
-	return true;
+	return true;  // User already entered name
 }
 
 // Called when the "lets go" button is clicked after entering a username
 void
 handle_user (void)
 {
+	Gtk::Entry* username_entry;
+	Gtk::Dialog* player_info_dialog;
+
+	builder -> get_widget ("username_entry", username_entry);
+	builder -> get_widget ("player_info_dialog", player_info_dialog);
+
+	if ( username_entry -> get_text_length()) {  // If user has entered a name
+		player_info_dialog -> response(Gtk::RESPONSE_ACCEPT);  // Signal to dialog
+		Glib::ustring username = username_entry -> get_text();
+		board.set_username(username);
+	}
 
 	return;
 }
