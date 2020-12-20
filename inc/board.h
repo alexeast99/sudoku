@@ -154,4 +154,14 @@ class Board {
 	 * YY Seconds. timeout_handler updates GUI
 	 */
    	std::string timeout_handler_helper (void);
+
+	/* Get the current username
+	 *
+	 */
+	 std::string get_username (void);
+
+	 /* Set the username for this session
+	  *
+	  */
+	  void set_username (std::string);
 };

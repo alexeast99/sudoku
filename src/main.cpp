@@ -1,5 +1,5 @@
 /*
-* Last Modified: 10/08/20
+* Last Modified: 12/19/20
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -43,6 +43,9 @@ void close_congratulations ();
 
 bool timeout_handler ();
 
+bool check_for_user ();
+void handle_user ();
+
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
 Board board;
@@ -52,18 +55,28 @@ Board board;
 *  User-defined functions
 ************************/
 
-// Opens the game window for single-board games
+// Opens the game window for single-board games. Gets users name
 // TODO: Generate game board before displaying (i.e. initialize game state)
 void
 open_game (void)
 {
-    Gtk::Window* window;
-    builder -> get_widget ("game_window", window);
-    if (window)
-        window -> show();
+	// Make sure there's a username before starting the game
+	bool valid_user = check_for_user();
+	if (!valid_user) {
+		return;
+	}
+
+    Gtk::Window* game_window;
+	builder -> get_widget ("game_window", game_window);
+    if (game_window) {
+		game_window -> show();
+	}
+
     Glib::signal_timeout().connect_seconds(  // Updates counter in game screen
       sigc::ptr_fun(&timeout_handler), 1
     );
+
+	return;
 }
 
 // Closes the game window for single-board games
@@ -71,11 +84,14 @@ open_game (void)
 void
 close_game (void)
 {
-    Gtk::Window* window;
-    builder -> get_widget ("game_window", window);
+    Gtk::Window* game_window;
+    builder -> get_widget ("game_window", game_window);
     board.set_total_time();
-    if (window)
-        window -> hide();
+    if (game_window) {
+		game_window -> hide();
+	}
+
+	return;
 }
 
 // Open the 'How to Play' dialog
@@ -84,8 +100,11 @@ open_instructions (void)
 {
     Gtk::Dialog* instructions_dialog;
     builder -> get_widget ("how_to_play_dialog", instructions_dialog);
-    if (instructions_dialog)
-        instructions_dialog -> show();
+    if (instructions_dialog) {
+		instructions_dialog -> show();
+	}
+
+	return;
 }
 
 // Close the 'How to Play' dialog
@@ -94,8 +113,11 @@ close_instructions (void)
 {
     Gtk::Dialog* instructions_dialog;
     builder -> get_widget ("how_to_play_dialog", instructions_dialog);
-    if (instructions_dialog)
-        instructions_dialog -> hide();
+    if (instructions_dialog) {
+		instructions_dialog -> hide();
+	}
+
+	return;
 }
 
 // Write the text buffer that holds the instructions for the 'How to Play' dialog
@@ -106,9 +128,12 @@ write_instructions (void)
     Glib::RefPtr<Gtk::TextBuffer> instructions_text_buffer;
 
     builder -> get_widget ("how_to_play_text_view", instructions_text_view);
-    if (instructions_text_view)
-        instructions_text_buffer = instructions_text_view -> get_buffer();
+    if (instructions_text_view) {
+		instructions_text_buffer = instructions_text_view -> get_buffer();
+	}
     instructions_text_buffer -> set_text ("Success!");
+
+	return;
 }
 
 // Customize TextView for each cell on the board
@@ -144,6 +169,8 @@ initialize_board (void)
                 sigc::ptr_fun(&on_inserted), buffer, i, j));
         }
     }
+
+	return;
 }
 
 // Set every entry back to blank when reset button is hit. Excludes buttons set by the game.
@@ -165,6 +192,8 @@ reset_board (void)
             cell -> set_text("");
         }
    }
+
+   return;
 }
 
 // Set cursor to pointer when over button
@@ -175,6 +204,8 @@ set_pointer (Glib::ustring widget)
     Gtk::Button* button;
     builder -> get_widget (widget, button);
     button -> get_window() -> set_cursor (clickable_cursor);
+
+	return;
 }
 
 // Set cursor to default when leaving button
@@ -185,6 +216,8 @@ restore_pointer (Glib::ustring widget)
     Gtk::Button* button;
     builder -> get_widget (widget, button);
     button -> get_window() -> set_cursor (normal_cursor);
+
+	return;
 }
 
 // Only allow numbers 1-9 to be entered on sudoku
@@ -203,6 +236,7 @@ void
 insert_to_board (char inserted, int outer, int inner)
 {
   board.set_number(inserted - '0', outer, inner);
+  return;
 }
 
 // Call this every time a number is inserted on the board
@@ -214,6 +248,8 @@ on_inserted (guint position, const gchar* chars, guint n_chars,
   if ( check_if_number(inserted, buffer)) {
     insert_to_board (inserted, outer, inner);
   }
+
+  return;
 }
 
 // Check if a board is a win. If it is, check if this is the fastest score and
@@ -241,6 +277,8 @@ check_win (void)
   } else {
     open_sorry ();  // Show dialog saying it was not a win
   }
+
+  return;
 }
 
 void
@@ -248,8 +286,11 @@ open_sorry (void)
 {
   Gtk::Dialog* sorry_dialog;
   builder -> get_widget ("sorry_dialog", sorry_dialog);
-  if (sorry_dialog)
-    sorry_dialog -> show();
+  if (sorry_dialog) {
+  	sorry_dialog -> show();
+  }
+
+  return;
 }
 
 void
@@ -257,8 +298,11 @@ close_sorry (void)
 {
   Gtk::Dialog* sorry_dialog;
   builder -> get_widget ("sorry_dialog", sorry_dialog);
-  if (sorry_dialog)
-    sorry_dialog -> hide();
+  if (sorry_dialog) {
+  	sorry_dialog -> hide();
+  }
+
+  return;
 }
 
 // Wrapper for boards timeout handler to match handler for Glib::signal_timeout
@@ -272,11 +316,39 @@ timeout_handler (void)
   return true;
 }
 
+// Checks to see if a username has been entered already. If it hasn't, it spawns
+// the dialog to enter the username
+bool
+check_for_user (void)
+{
+	Gtk::Dialog* player_info_dialog;
+	std::string user = board.get_username();
+	builder -> get_widget ("player_info_dialog", player_info_dialog);
+
+	if ( !user.compare("")) {  // If there is not a user set up yet
+		int result = player_info_dialog -> run();  // Blocks for user input
+		if (result == Gtk::RESPONSE_NONE) {  // User exited dialog
+			return false;
+		}
+		// TODO: Make sure the "lets go" button sends a signal to this dialog to close it
+	}
+
+	return true;
+}
+
+// Called when the "lets go" button is clicked after entering a username
+void
+handle_user (void)
+{
+
+	return;
+}
+
 
 int
 main(int argc, char **argv)
 {
-    // Required. Initialize gtkmm, check command line arguments, initialize variabes.
+    // Required. Initialize gtkmm, check command line arguments, initialize variables
     auto app = Gtk::Application::create (argc, argv, "alexeast.sudoku");
 
     /* Pointers for widgets to be loaded from builder
@@ -284,12 +356,12 @@ main(int argc, char **argv)
      */
 
     // Window pointers
-	Gtk::Window* player_info_window;
     Gtk::Window* game_window;
     Gtk::Window* window;
 
     // Dialog pointers
     Gtk::Dialog* sorry_dialog;
+	Gtk::Dialog* player_info_dialog;
 
     // Button pointers
     Gtk::Button* begin_button;
@@ -313,10 +385,10 @@ main(int argc, char **argv)
     builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
     builder -> get_widget ("application_window", window);
     builder -> get_widget ("game_window", game_window);
-	builder -> get_widget ("player_info_window", player_info_window);
 
     // Dialog widgets
     builder -> get_widget ("sorry_dialog", sorry_dialog);
+	builder -> get_widget ("player_info_dialog", player_info_dialog);
 
     // Button widgets
     builder -> get_widget ("begin_button", begin_button);
@@ -385,17 +457,17 @@ main(int argc, char **argv)
     reset_button  -> signal_clicked().connect(  // Clear all entries on reset
       sigc::ptr_fun(&reset_board)
     );
-    reset_button  -> signal_leave().connect(  // Cursor pointer
+    reset_button  -> signal_leave().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "reset_button")
     );
-    reset_button  -> signal_enter().connect(  // Cursor normal
+    reset_button  -> signal_enter().connect(  // Cursor clickable
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "reset_button")
     );
 
-    finish_later_button  -> signal_leave().connect(  // Cursor pointer
+    finish_later_button  -> signal_leave().connect(  // Cursor normal
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "finish_later_button")
     );
-    finish_later_button  -> signal_enter().connect(  // Cursor normal
+    finish_later_button  -> signal_enter().connect(  // Cursor clickable
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button")
     );
 
@@ -405,6 +477,16 @@ main(int argc, char **argv)
     continue_button -> signal_clicked().connect(  // Start time when back to game
       sigc::mem_fun(board, &Board::start)
     );
+
+	lets_go_button -> signal_clicked().connect(  // After username, main menu
+		sigc::ptr_fun(&handle_user)
+	);
+	lets_go_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "lets_go_button")
+	);
+	lets_go_button -> signal_leave().connect(  // Cursor normal
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "lets_go_button")
+	);
 
     /* CSS for styling
      *
@@ -433,12 +515,14 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
     game_window -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-	player_info_window -> get_style_context() ->
-		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to grids
     board_container_grid -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to dialogs
+	player_info_dialog -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* Initial setup
      * TODO: Set fastest time on menu when game starts
@@ -447,8 +531,10 @@ main(int argc, char **argv)
     write_instructions();
     initialize_board();
 
-    if (window)
-        app -> run(*player_info_window);
+    if (window) {
+		app -> run(*window);
+	}
+
 
     delete window;
 

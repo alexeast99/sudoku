@@ -18,6 +18,7 @@ Board::Board (void)
     start_time = 0;
     total_time = 0;
     fastest_time = 9999999999; // TODO: get this from external source
+	username = "";
 }
 
 void Board::set_number (int number, int outer, int inner)
@@ -32,6 +33,7 @@ void Board::set_number (int number, int outer, int inner)
     // Insert into block
     blocks[blockIndex][blockPosition] = number;
 
+	return;
 }
 
 int Board::get_number (int outer, int inner)
@@ -54,6 +56,8 @@ void Board::start (void)
   current_time = time(NULL);  // Gets the current time
   start_time = current_time;
   std::cout << "Starting at time: " << start_time << "\n";
+
+  return;
 }
 
 long Board::get_total_time (void)
@@ -67,6 +71,8 @@ void Board::set_total_time (void)
     current_time = time(NULL);  // Gets the current time
     total_time = total_time + (current_time - start_time);  // Add old time if game was paused
     start_time = 0;  // Set start time to 0 to signify that a game is not open
+
+	return;
 }
 
 bool Board::is_win (void)
@@ -149,4 +155,15 @@ std::string Board::timeout_handler_helper (void)
   time_t current_time;
   current_time = time(NULL);
   return formatted_time (current_time - start_time);
+}
+
+std::string Board::get_username (void)
+{
+	return username;
+}
+
+void Board::set_username (std::string name)
+{
+	username = name;
+	return;
 }
