@@ -355,14 +355,23 @@ handle_user (void)
 {
 	Gtk::Entry* username_entry;
 	Gtk::Dialog* player_info_dialog;
+	Gtk::Label* welcome_label;
 
 	builder -> get_widget ("username_entry", username_entry);
 	builder -> get_widget ("player_info_dialog", player_info_dialog);
+	builder -> get_widget ("welcome_label", welcome_label);
 
 	if ( username_entry -> get_text_length()) {  // If user has entered a name
+
+		// Set username in board and signal to dialog
 		player_info_dialog -> response(Gtk::RESPONSE_ACCEPT);  // Signal to dialog
 		Glib::ustring username = username_entry -> get_text();
 		board.set_username(username);
+
+		// Set welcome message on main menu
+		gchar* welcome_message = (gchar *) g_malloc(120);
+		g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
+		welcome_label -> set_text(welcome_message);
 	}
 
 	return;
