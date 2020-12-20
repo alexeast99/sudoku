@@ -61,12 +61,14 @@ Board board;
 void
 open_game (void)
 {
+    Gtk::Stack* application_stack;
+	Gtk::Grid* board_container_grid;
 
-    Gtk::Window* game_window;
-	builder -> get_widget ("game_window", game_window);
-    if (game_window) {
-		game_window -> show();
-	}
+	builder -> get_widget ("application_stack", application_stack);
+	builder -> get_widget ("board_container_grid", board_container_grid);
+
+	board_container_grid -> show();
+	application_stack -> set_visible_child("Game Board");
 
     Glib::signal_timeout().connect_seconds(  // Updates counter in game screen
       sigc::ptr_fun(&timeout_handler), 1
@@ -80,12 +82,16 @@ open_game (void)
 void
 close_game (void)
 {
-    Gtk::Window* game_window;
-    builder -> get_widget ("game_window", game_window);
+    Gtk::Stack* application_stack;
+	Gtk::Grid* board_container_grid;
+
+    builder -> get_widget ("application_stack", application_stack);
+	builder -> get_widget ("board_container_grid", board_container_grid);
+
     board.set_total_time();
-    if (game_window) {
-		game_window -> hide();
-	}
+
+    application_stack -> set_visible_child("Main Menu");
+	board_container_grid -> hide();
 
 	return;
 }
@@ -372,7 +378,6 @@ main(int argc, char **argv)
      */
 
     // Window pointers
-    Gtk::Window* game_window;
     Gtk::Window* window;
 
     // Dialog pointers
@@ -399,7 +404,6 @@ main(int argc, char **argv)
     // Window widgets
     builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
     builder -> get_widget ("application_window", window);
-    builder -> get_widget ("game_window", game_window);
 
     // Dialog widgets
     builder -> get_widget ("sorry_dialog", sorry_dialog);
@@ -534,8 +538,6 @@ main(int argc, char **argv)
 
     // Add stylesheet to windows
     window -> get_style_context() ->
-        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-    game_window -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to grids
