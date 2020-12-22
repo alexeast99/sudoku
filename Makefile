@@ -1,3 +1,8 @@
+# Last Updated: 09/19/2020
+# Author: Alex Eastman
+# Contact: alexeast@buffalo.edu
+
+
 # --cflags causes pkg-config to output a list of include directories
 # --libs requests lists of libraries for compiler to link with
 
@@ -6,22 +11,28 @@
 #			...
 #			...
 
-shell   = /bin/sh
-objects = main.o board.o
-cc			= gcc
-src 		= src
-include = include
-other 	= $(include) $(src)
+# -c 	  --> Don't run linker. Output is object files.
+# -o file --> Place output in file
 
-sudoku: $(OBJECTS)
-	$(cc) -o sudoku $(OBJECTS) `pkg-config gtkmm-3.0 --cflags --libs`
+shell	= /bin/sh
+cc		= g++
+src 	= src
+inc		= inc
+obj		= objs
+gtkflags  = `pkg-config gtkmm-3.0 --cflags --libs` -Wall -Werror
+glibflags = `pkg-config glibmm-2.4 --cflags --libs` -Wall -Werror
+objects = $(obj)/main.o $(obj)/board.o
 
-main.o: $(src)/main.cpp $(include)/board.h
-	$(cc) main.cpp `pkg-config gtkmm-3.0 --cflags --libs` -I $(other)
+sudoku: $(objects)
+	$(cc) -o $@ $(objects) $(gtkflags) -I$(inc)
 
-board.o: $(src)/board.cpp $(include)/board.h
-	$(cc) board.cpp -I $(other)
+$(obj)/main.o: $(src)/main.cpp $(inc)/board.h
+	$(cc) -c $(src)/main.cpp -o $@ $(gtkflags) -I$(inc)
+
+$(obj)/board.o: $(src)/board.cpp $(inc)/board.h
+	$(cc) -c $(src)/board.cpp -o $@ $(glibflags) -I$(inc)
+
 
 .PHONY: clean
 clean:
-	-rm *.o sudoku
+	-rm objs/* sudoku

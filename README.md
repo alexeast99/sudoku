@@ -1,5 +1,5 @@
 # sudoku
 
-Work in Progress.
+Work in Progress. Note: Development is slow during the semester.
 
-Classic sudoku game. Built using GTK+-3.0, the official C++ interface gtkmm for GTK, and C++.
+Standard sudoku game. Built using GTK+-3.0, the official C++ interface gtkmm for GTK, and C++.
