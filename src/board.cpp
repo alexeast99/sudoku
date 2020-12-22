@@ -1,4 +1,4 @@
-/* Last Modified: 12/20/2020
+/* Last Modified: 12/21/2020
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -172,10 +172,12 @@ Glib::ustring Board::get_username (void)
 void Board::set_username (Glib::ustring name)
 {
 	username = name;
-	bool has_fastest = user_data.has_key(name, "fastest_time");
-	bool mid_game = user_data.has_key(name, "paused_time");
 
 	if (user_data.has_group(name)) {  // If this user has played before
+		
+		bool has_fastest = user_data.has_key(name, "fastest_time");
+		bool mid_game = user_data.has_key(name, "paused_time");
+
 		if (has_fastest) {  // User has a fastest time
 			fastest_time = user_data.get_double(name, "fastest_time");
 		}

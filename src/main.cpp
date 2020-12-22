@@ -1,5 +1,5 @@
 /*
-* Last Modified: 12/20/20
+* Last Modified: 12/21/20
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -84,16 +84,18 @@ open_game (void)
 void
 close_game (void)
 {
+	Gtk::Window* application_window;
     Gtk::Stack* application_stack;
 	Gtk::Grid* board_container_grid;
 
     builder -> get_widget ("application_stack", application_stack);
 	builder -> get_widget ("board_container_grid", board_container_grid);
+	builder -> get_widget ("application_window", application_window);
 
     board.set_total_time();
 
-	board_container_grid -> hide();
     application_stack -> set_visible_child("Main Menu");
+	board_container_grid -> hide();
 
 	return;
 }
@@ -423,8 +425,11 @@ main(int argc, char **argv)
 	Gtk::Button* lets_go_button;
 	Gtk::Button* new_game_button;
 
-    // Grid points
+    // Grid pointers
     Gtk::Grid* board_container_grid;
+
+	// Entry pointers
+	Gtk::Entry* username_entry;
 
     /* Create builder from Glade file. Load necessary widgets.
      *
@@ -451,6 +456,9 @@ main(int argc, char **argv)
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
+
+	// Entry widgets
+	builder -> get_widget ("username_entry", username_entry);
 
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor.
      * Helps with compatibility
@@ -552,6 +560,13 @@ main(int argc, char **argv)
 	);
 	new_game_button -> signal_leave().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
+	);
+
+	// Entry signals
+
+	// Hitting enter is the same as clicking lets go button
+	username_entry -> signal_activate().connect(
+		sigc::ptr_fun(&handle_user)
 	);
 
     /* CSS for styling
