@@ -47,6 +47,8 @@ bool timeout_handler ();
 
 void handle_user ();
 
+void finish_later ();
+
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
 Board board;
@@ -90,8 +92,8 @@ close_game (void)
 
     board.set_total_time();
 
-    application_stack -> set_visible_child("Main Menu");
 	board_container_grid -> hide();
+    application_stack -> set_visible_child("Main Menu");
 
 	return;
 }
@@ -366,6 +368,13 @@ handle_user (void)
 	return;
 }
 
+// Handler for finish later button on game board page
+void
+finish_later (void)
+{
+	close_game();
+}
+
 
 int
 main(int argc, char **argv)
@@ -496,6 +505,9 @@ main(int argc, char **argv)
     finish_later_button  -> signal_enter().connect(  // Cursor clickable
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button")
     );
+	finish_later_button -> signal_clicked().connect(  // Save time and return to menu
+		sigc::ptr_fun(&finish_later)
+	);
 
     continue_button -> signal_clicked().connect(  // Close 'almost there' dialog
       sigc::ptr_fun(&close_sorry)

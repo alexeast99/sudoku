@@ -75,7 +75,7 @@ class Board {
     /* Total game time.
      *
      */
-    long total_time;
+    double total_time;
 
     /* The fastest time for a game. This must rely on external factors
      *
@@ -143,8 +143,8 @@ class Board {
      */
     bool is_win (void);
 
-     /* Check if the current time is faster than the last fastest time
-      *
+     /* Check if the current time is faster than the last fastest time. If it is,
+      * return true and set the fastest time in the keyfile
       */
     bool new_record (void);
 
@@ -172,4 +172,5 @@ class Board {
 	  * called when the game is exited.
 	  */
 	 void save_data (void);
+
 };

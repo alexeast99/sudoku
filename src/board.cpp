@@ -56,7 +56,6 @@ void Board::start (void)
   time_t current_time;
   current_time = time(NULL);  // Gets the current time
   start_time = current_time;
-  std::cout << "Starting at time: " << start_time << "\n";
 
   return;
 }
@@ -70,8 +69,13 @@ void Board::set_total_time (void)
 {
     time_t current_time;
     current_time = time(NULL);  // Gets the current time
-    total_time = total_time + (current_time - start_time);  // Add old time if game was paused
+
+	// Add old time if game was paused
+    total_time = total_time + (current_time - start_time);
     start_time = 0;  // Set start time to 0 to signify that a game is not open
+
+	std::cout << "Total time: " << total_time << "\n";
+	user_data.set_double(username, "paused_time", total_time);
 
 	return;
 }
@@ -122,8 +126,10 @@ bool Board::is_win (void)
 bool Board::new_record (void)
 {
   bool record = total_time < fastest_time;
-  if (record || fastest_time == 0)
-    fastest_time = total_time;
+  if (record || fastest_time == 0) {
+	  fastest_time = total_time;
+	  user_data.set_double(username, "fastest_time", total_time);
+  }
   return record;
 }
 
@@ -155,7 +161,7 @@ Glib::ustring Board::timeout_handler_helper (void)
 {
   time_t current_time;
   current_time = time(NULL);
-  return formatted_time (current_time - start_time);
+  return formatted_time (current_time - start_time + total_time);
 }
 
 Glib::ustring Board::get_username (void)
@@ -166,12 +172,20 @@ Glib::ustring Board::get_username (void)
 void Board::set_username (Glib::ustring name)
 {
 	username = name;
+	bool has_fastest = user_data.has_key(name, "fastest_time");
+	bool mid_game = user_data.has_key(name, "paused_time");
+
 	if (user_data.has_group(name)) {  // If this user has played before
-		if (user_data.has_key(name, "fastest_time")) {  // User has a fastest time
+		if (has_fastest) {  // User has a fastest time
 			fastest_time = user_data.get_double(name, "fastest_time");
 		}
+		if (mid_game) {  // If user is in the middle of a game
+			total_time = user_data.get_double(name, "paused_time");
+		}
+
 	} else {
 		user_data.set_double(name, "fastest_time", 0);
+		user_data.set_double(name, "paused_time", 0);
 	}
 	return;
 }
