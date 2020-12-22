@@ -144,22 +144,6 @@ close_instructions (void)
 	return;
 }
 
-// Write the text buffer that holds the instructions for the 'How to Play' dialog
-void
-write_instructions (void)
-{
-    Gtk::TextView* instructions_text_view;
-    Glib::RefPtr<Gtk::TextBuffer> instructions_text_buffer;
-
-    builder -> get_widget ("how_to_play_text_view", instructions_text_view);
-    if (instructions_text_view) {
-		instructions_text_buffer = instructions_text_view -> get_buffer();
-	}
-    instructions_text_buffer -> set_text ("Success!");
-
-	return;
-}
-
 // Customize TextView for each cell on the board
 // TODO: Font size? Font? Set reserved. If reserved, set un-editable.
 void
@@ -610,10 +594,9 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* Initial setup
-     * TODO: Set fastest time on menu when game starts
+     *
      */
 
-    write_instructions();
     initialize_board();
 
     if (window) {

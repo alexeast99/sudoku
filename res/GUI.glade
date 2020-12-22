@@ -1893,6 +1893,8 @@ will be created.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1908,14 +1910,25 @@ will be created.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="how_to_play_text_view">
+          <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="editable">False</property>
-            <property name="wrap_mode">word</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">10</property>
+            <property name="margin_right">10</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
+            <property name="label" translatable="yes">The purpose of sudoku is to fill out the large, 3x3 grid, consisting of 9 smaller 3x3 grids, with the numbers 1-9.
+		
+The smaller 3x3 grids must have exactly one of each number 1-9.
+	
+The larger grid must obey the following rules:
+	- Each column must have the numbers 1-9 (no repeats)
+	- Each row must have the numbers 1-9 (no repeats)
+
+When these conditions are satisfied, the game has been won!</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
