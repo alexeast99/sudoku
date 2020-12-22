@@ -65,13 +65,21 @@ open_game (void)
 {
     Gtk::Stack* application_stack;
 	Gtk::Grid* board_container_grid;
+	Gtk::Label* current_time_time_label;
 
 	builder -> get_widget ("application_stack", application_stack);
 	builder -> get_widget ("board_container_grid", board_container_grid);
+	builder -> get_widget ("current_time_time_label", current_time_time_label);
 
+	// Show game board
 	board_container_grid -> show();
 	application_stack -> set_visible_child("Game Board");
 
+	// Set correct time
+	Glib::ustring game_time = board.formatted_time( board.get_total_time());
+	current_time_time_label -> set_text( game_time);
+
+	// Update game time every second
     Glib::signal_timeout().connect_seconds(  // Updates counter in game screen
       sigc::ptr_fun(&timeout_handler), 1
     );

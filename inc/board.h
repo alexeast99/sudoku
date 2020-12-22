@@ -82,11 +82,6 @@ class Board {
      */
     double fastest_time;
 
-    /* Helper function to return a formatted time as XX Minutes YY Seconds. Accepts
-     * the time in seconds
-     */
-     Glib::ustring formatted_time (double);
-
 	 /* A keyfile for reading and writing user data. Initialized in the
 	  * instantiation of the board object. Each user has a group in the keyfile,
 	  * and therefore only one keyfile is needed for all users.
@@ -147,6 +142,11 @@ class Board {
       * return true and set the fastest time in the keyfile
       */
     bool new_record (void);
+
+	/* Helper function to return a formatted time as XX Minutes YY Seconds. Accepts
+     * the time in seconds
+     */
+     Glib::ustring formatted_time (double);
 
     /* Gets the fastest time. Used for setting the fastest time in the GUI.
      * Time returned as XX minutes XX seconds
