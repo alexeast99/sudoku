@@ -155,7 +155,7 @@ will be created.</property>
                 <property name="row_homogeneous">True</property>
                 <property name="column_homogeneous">True</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="button_box_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -164,6 +164,7 @@ will be created.</property>
                       <object class="GtkButtonBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="spacing">50</property>
                         <property name="baseline_position">bottom</property>
                         <property name="layout_style">center</property>
                         <child>
@@ -193,7 +194,7 @@ will be created.</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButtonBox">
+                      <object class="GtkButtonBox" id="how_to_play_button_box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
@@ -224,6 +225,40 @@ will be created.</property>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButtonBox" id="new_game_button_box">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="hexpand">False</property>
+                        <property name="layout_style">start</property>
+                        <child>
+                          <object class="GtkButton" id="new_game_button">
+                            <property name="label" translatable="yes">New Game</property>
+                            <property name="width_request">152</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="margin_left">20</property>
+                            <property name="margin_right">20</property>
+                            <property name="margin_start">20</property>
+                            <property name="margin_end">20</property>
+                            <style>
+                              <class name="danger_button"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>

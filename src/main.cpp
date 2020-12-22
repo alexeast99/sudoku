@@ -339,12 +339,22 @@ handle_user (void)
 	Gtk::Label* fastest_time_time_label;
 	Gtk::Box* menu_screen_box;
 	Gtk::Stack* application_stack;
+	Gtk::Button* begin_button;
+	Gtk::Button* new_game_button;
+	Gtk::Widget* new_game_button_box;
+	Gtk::Widget* how_to_play_button_box;
+	Gtk::Box* button_box_box;
 
 	builder -> get_widget ("username_entry", username_entry);
 	builder -> get_widget ("welcome_label", welcome_label);
 	builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
 	builder -> get_widget ("menu_screen_box", menu_screen_box);
 	builder -> get_widget ("application_stack", application_stack);
+	builder -> get_widget ("begin_button", begin_button);
+	builder -> get_widget ("new_game_button_box", new_game_button_box);
+	builder -> get_widget ("how_to_play_button_box", how_to_play_button_box);
+	builder -> get_widget ("button_box_box", button_box_box);
+	builder -> get_widget ("new_game_button", new_game_button);
 
 	// User must enter a name to continue
 	if ( !username_entry -> get_text_length()) {
@@ -361,6 +371,15 @@ handle_user (void)
 	gchar* welcome_message = (gchar *) g_malloc(120);
 	g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
 	welcome_label -> set_text(welcome_message);
+
+	// Change begin to resume, and add new game button, if there is a game in
+	// progress
+	if ( board.get_total_time() != 0) {
+		begin_button -> set_label("Resume Game");
+		button_box_box -> reorder_child(*how_to_play_button_box, 2);
+		button_box_box -> reorder_child(*new_game_button_box, 1);
+		new_game_button -> show();
+	}
 
 	// Switch stack page to main menu
 	application_stack -> set_visible_child("Main Menu");
@@ -402,6 +421,7 @@ main(int argc, char **argv)
     Gtk::Button* hint_button;
     Gtk::Button* continue_button;
 	Gtk::Button* lets_go_button;
+	Gtk::Button* new_game_button;
 
     // Grid points
     Gtk::Grid* board_container_grid;
@@ -427,6 +447,7 @@ main(int argc, char **argv)
     builder -> get_widget ("hint_button", hint_button);
     builder -> get_widget ("continue_button", continue_button);
 	builder -> get_widget ("lets_go_button", lets_go_button);
+	builder -> get_widget ("new_game_button", new_game_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
@@ -526,6 +547,13 @@ main(int argc, char **argv)
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "lets_go_button")
 	);
 
+	new_game_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "new_game_button")
+	);
+	new_game_button -> signal_leave().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
+	);
+
     /* CSS for styling
      *
      */
@@ -546,6 +574,8 @@ main(int argc, char **argv)
     reset_button -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	lets_go_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	new_game_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to windows
