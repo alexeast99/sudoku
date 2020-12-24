@@ -47,6 +47,8 @@ bool timeout_handler ();
 
 void handle_user ();
 
+void update_main_menu ();
+
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
 Board board;
@@ -100,12 +102,42 @@ close_game (void)
 
     board.set_total_time();
 
+	update_main_menu();
+
 	board_container_grid -> hide();
     application_stack -> set_visible_child("Main Menu");
-	application_stack -> queue_resize();
-	application_window -> queue_resize();
 
 	return;
+}
+
+// Called from close_game and handle_user to update the buttons on the main menu
+// based on whether or not a user has a paused game
+void
+update_main_menu (void)
+{
+	Gtk::Box* menu_screen_box;
+	Gtk::Button* begin_button;
+	Gtk::Button* new_game_button;
+	Gtk::Widget* new_game_button_box;
+	Gtk::Widget* how_to_play_button_box;
+	Gtk::Box* button_box_box;
+
+	builder -> get_widget ("menu_screen_box", menu_screen_box);
+	builder -> get_widget ("begin_button", begin_button);
+	builder -> get_widget ("new_game_button_box", new_game_button_box);
+	builder -> get_widget ("how_to_play_button_box", how_to_play_button_box);
+	builder -> get_widget ("button_box_box", button_box_box);
+	builder -> get_widget ("new_game_button", new_game_button);
+
+	// Change begin to resume, and add new game button, if there is a game in
+	// progress
+	if ( board.get_total_time() != 0) {
+		begin_button -> set_label("Resume Game");
+		button_box_box -> reorder_child(*how_to_play_button_box, 2);
+		button_box_box -> reorder_child(*new_game_button_box, 1);
+		new_game_button -> show();
+	}
+
 }
 
 // Callback used when the "X" is hit on the main menu window. This ensures that
@@ -331,24 +363,12 @@ handle_user (void)
 	Gtk::Entry* username_entry;
 	Gtk::Label* welcome_label;
 	Gtk::Label* fastest_time_time_label;
-	Gtk::Box* menu_screen_box;
 	Gtk::Stack* application_stack;
-	Gtk::Button* begin_button;
-	Gtk::Button* new_game_button;
-	Gtk::Widget* new_game_button_box;
-	Gtk::Widget* how_to_play_button_box;
-	Gtk::Box* button_box_box;
 
 	builder -> get_widget ("username_entry", username_entry);
 	builder -> get_widget ("welcome_label", welcome_label);
 	builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
-	builder -> get_widget ("menu_screen_box", menu_screen_box);
 	builder -> get_widget ("application_stack", application_stack);
-	builder -> get_widget ("begin_button", begin_button);
-	builder -> get_widget ("new_game_button_box", new_game_button_box);
-	builder -> get_widget ("how_to_play_button_box", how_to_play_button_box);
-	builder -> get_widget ("button_box_box", button_box_box);
-	builder -> get_widget ("new_game_button", new_game_button);
 
 	// User must enter a name to continue
 	if ( !username_entry -> get_text_length()) {
@@ -366,14 +386,7 @@ handle_user (void)
 	g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
 	welcome_label -> set_text(welcome_message);
 
-	// Change begin to resume, and add new game button, if there is a game in
-	// progress
-	if ( board.get_total_time() != 0) {
-		begin_button -> set_label("Resume Game");
-		button_box_box -> reorder_child(*how_to_play_button_box, 2);
-		button_box_box -> reorder_child(*new_game_button_box, 1);
-		new_game_button -> show();
-	}
+	update_main_menu();
 
 	// Switch stack page to main menu
 	application_stack -> set_visible_child("Main Menu");
