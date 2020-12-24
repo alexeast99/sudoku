@@ -46,6 +46,7 @@ void close_congratulations ();
 bool timeout_handler ();
 
 void handle_user ();
+void switch_user ();
 
 void update_main_menu ();
 
@@ -394,6 +395,14 @@ handle_user (void)
 	return;
 }
 
+void
+switch_user (void)
+{
+	Gtk::Stack* application_stack;
+	builder -> get_widget ("application_stack", application_stack);
+	application_stack -> set_visible_child("Player Info");
+}
+
 
 int
 main(int argc, char **argv)
@@ -422,6 +431,7 @@ main(int argc, char **argv)
     Gtk::Button* continue_button;
 	Gtk::Button* lets_go_button;
 	Gtk::Button* new_game_button;
+	Gtk::Button* switch_user_button;
 
     // Grid pointers
     Gtk::Grid* board_container_grid;
@@ -451,6 +461,7 @@ main(int argc, char **argv)
     builder -> get_widget ("continue_button", continue_button);
 	builder -> get_widget ("lets_go_button", lets_go_button);
 	builder -> get_widget ("new_game_button", new_game_button);
+	builder -> get_widget ("switch_user_button", switch_user_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
@@ -558,6 +569,16 @@ main(int argc, char **argv)
 	);
 	new_game_button -> signal_leave().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
+	);
+
+	switch_user_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "switch_user_button")
+	);
+	switch_user_button -> signal_leave().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "switch_user_button")
+	);
+	switch_user_button -> signal_clicked().connect(  // Switch to player info page
+		sigc::ptr_fun(&switch_user)
 	);
 
 	// Entry signals

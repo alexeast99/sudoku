@@ -177,7 +177,7 @@ will be created.</property>
                             <property name="width_request">200</property>
                             <property name="height_request">50</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <style>
                               <class name="primary_button"/>
@@ -207,7 +207,7 @@ will be created.</property>
                             <property name="label" translatable="yes">How to Play</property>
                             <property name="name">how_to_play_button</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">20</property>
                             <property name="margin_right">20</property>
@@ -241,7 +241,7 @@ will be created.</property>
                           <object class="GtkButton" id="new_game_button">
                             <property name="label" translatable="yes">New Game</property>
                             <property name="width_request">152</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">20</property>
                             <property name="margin_right">20</property>
@@ -297,9 +297,40 @@ will be created.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="welcome_label">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="welcome_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="switch_user_button">
+                        <property name="label" translatable="yes">Switch User</property>
+                        <property name="width_request">40</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <style>
+                          <class name="secondary_button"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
