@@ -153,6 +153,11 @@ class Board {
      */
   	Glib::ustring get_fastest_time (void);
 
+	/* Resets the time for starting a new game
+	 *
+	 */
+	 void reset_time (void);
+
 	/* Called from main.cpp in timeout_handler. Returns a time as XX Minutes
 	 * YY Seconds. timeout_handler updates GUI
 	 */

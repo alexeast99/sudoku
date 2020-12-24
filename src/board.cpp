@@ -157,6 +157,12 @@ Glib::ustring Board::get_fastest_time (void)
   return formatted_time (fastest_time);
 }
 
+void Board::reset_time (void)
+{
+	total_time = 0;
+	user_data.set_double(username, "paused_time", total_time);
+}
+
 Glib::ustring Board::timeout_handler_helper (void)
 {
   time_t current_time;
@@ -174,7 +180,7 @@ void Board::set_username (Glib::ustring name)
 	username = name;
 
 	if (user_data.has_group(name)) {  // If this user has played before
-		
+
 		bool has_fastest = user_data.has_key(name, "fastest_time");
 		bool mid_game = user_data.has_key(name, "paused_time");
 

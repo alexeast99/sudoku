@@ -16,9 +16,10 @@
 #include "board.h"
 
 
-// Funciton prototypes
+// Function prototypes
 void open_game ();
 void close_game ();
+void new_game ();
 
 bool quit (GdkEventAny*, Glib::RefPtr<Gtk::Application>);
 
@@ -111,6 +112,14 @@ close_game (void)
 	return;
 }
 
+// Resets the board time and the main menu for the current user.
+void
+new_game (void)
+{
+	board.reset_time();
+	update_main_menu();
+}
+
 // Called from close_game and handle_user to update the buttons on the main menu
 // based on whether or not a user has a paused game
 void
@@ -137,8 +146,13 @@ update_main_menu (void)
 		button_box_box -> reorder_child(*how_to_play_button_box, 2);
 		button_box_box -> reorder_child(*new_game_button_box, 1);
 		new_game_button -> show();
+	} else {
+		begin_button -> set_label("Begin");
+		new_game_button -> hide();
+		button_box_box -> reorder_child(*how_to_play_button_box, 1);
 	}
 
+	return;
 }
 
 // Callback used when the "X" is hit on the main menu window. This ensures that
@@ -401,6 +415,7 @@ switch_user (void)
 	Gtk::Stack* application_stack;
 	builder -> get_widget ("application_stack", application_stack);
 	application_stack -> set_visible_child("Player Info");
+	return;
 }
 
 
@@ -570,6 +585,9 @@ main(int argc, char **argv)
 	new_game_button -> signal_leave().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
 	);
+	new_game_button -> signal_clicked().connect(  // Reset time and update main menu
+		sigc::ptr_fun(&new_game)
+	);
 
 	switch_user_button -> signal_enter().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "switch_user_button")
@@ -610,6 +628,8 @@ main(int argc, char **argv)
 	lets_go_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	new_game_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	switch_user_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to windows
