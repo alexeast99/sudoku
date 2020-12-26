@@ -93,6 +93,11 @@ class Board {
 	  */
 	 Glib::ustring username;
 
+	 /* Used to stop time while the board is being checked
+	  *
+	  */
+	 bool checking_win;
+
   public:
 
     /* Initialize with start_time = 0 to signify a game has not yet been started.
@@ -177,5 +182,15 @@ class Board {
 	  * called when the game is exited.
 	  */
 	 void save_data (void);
+
+	 /* Used to check if the time is being updated so that the clock on the game
+	  * board doesn't get improperly updated
+	  */
+	 bool get_checking_win (void);
+
+	 /* Used to set if a win is being checked so that the time is not updated
+	  *
+	  */
+	 void set_checking_win (bool);
 
 };

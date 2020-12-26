@@ -73,8 +73,6 @@ void Board::set_total_time (void)
 	// Add old time if game was paused
     total_time = total_time + (current_time - start_time);
     start_time = 0;  // Set start time to 0 to signify that a game is not open
-
-	std::cout << "Total time: " << total_time << "\n";
 	user_data.set_double(username, "paused_time", total_time);
 
 	return;
@@ -82,6 +80,7 @@ void Board::set_total_time (void)
 
 bool Board::is_win (void)
 {
+  return true;
   int i, j;
   std::vector< std::vector<int> > sorted(9, std::vector<int>(9));
 
@@ -125,12 +124,12 @@ bool Board::is_win (void)
 
 bool Board::new_record (void)
 {
-  bool record = total_time < fastest_time;
-  if (record || fastest_time == 0) {
-	  fastest_time = total_time;
-	  user_data.set_double(username, "fastest_time", total_time);
-  }
-  return record;
+	bool record = total_time < fastest_time;
+	if (record || fastest_time == 0) {
+		fastest_time = total_time;
+		user_data.set_double(username, "fastest_time", total_time);
+  	}
+	return record;
 }
 
 Glib::ustring Board::formatted_time (double t)
@@ -185,7 +184,8 @@ void Board::set_username (Glib::ustring name)
 		bool mid_game = user_data.has_key(name, "paused_time");
 
 		if (has_fastest) {  // User has a fastest time
-			fastest_time = user_data.get_double(name, "fastest_time");
+			double ft = user_data.get_double(name, "fastest_time");
+			fastest_time = ft;
 		}
 		if (mid_game) {  // If user is in the middle of a game
 			total_time = user_data.get_double(name, "paused_time");
@@ -201,5 +201,17 @@ void Board::set_username (Glib::ustring name)
 void Board::save_data (void)
 {
 	user_data.save_to_file("data/user_data.txt");
+	return;
+}
+
+bool Board::get_checking_win (void)
+{
+	return checking_win;
+}
+
+void Board::set_checking_win (bool checking)
+{
+	set_total_time();  // Store the current game time internally
+	checking_win = checking;
 	return;
 }
