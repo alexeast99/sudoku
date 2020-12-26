@@ -160,6 +160,21 @@ void Board::reset_time (void)
 {
 	total_time = 0;
 	user_data.set_double(username, "paused_time", total_time);
+	return;
+}
+
+void Board::reset_board (void)
+{
+	game_board = initial;
+	blocks = initial;
+	return;
+}
+
+void Board::reset (void)
+{
+	reset_time();
+	reset_board();
+	return;
 }
 
 Glib::ustring Board::timeout_handler_helper (void)

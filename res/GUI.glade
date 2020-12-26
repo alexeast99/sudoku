@@ -1843,7 +1843,7 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="winning_new_game_button">
                 <property name="label" translatable="yes">New Game</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

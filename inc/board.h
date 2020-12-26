@@ -15,38 +15,33 @@ class Board {
 
   private:
 
+	  /* Used to reset the game_board and blocks variables
+	   *
+	   */
+	   std::vector< std::vector<int> > initial =
+		 { {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
+		   {0, 0, 0, 0, 0, 0, 0, 0, 0}
+		 };
+
     /* A 3 by 3 board where the outer array specifies the row, starting at 0, and
     *  the inner array specifies the column, also starting at 0. The value is
     *  the number in the square at this position on the board.
     */
-    std::vector< std::vector<int> > game_board =
-      { {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0}
-      };
+    std::vector< std::vector<int> > game_board = initial;
 
     /* Represents each 9-cell block on the board. Each inner vector is one block.
      * Blocks are numbered starting at 0 in the upper left, 3 directly below that,
      * and 6 directly below 3. This is used to simplify checking board validity.
      * Order in each block does not matter.
      */
-    std::vector< std::vector<int> > blocks =
-      { {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0}
-      };
+    std::vector< std::vector<int> > blocks = initial;
 
     /* A lookup table giving the index of the inner vector for the blocks
      * variable. Since we don't care about the exact position in the block,
@@ -162,6 +157,16 @@ class Board {
 	 *
 	 */
 	 void reset_time (void);
+
+	/* Resets the board to all 0's when a new game is started
+	 *
+	 */
+	 void reset_board (void);
+
+	 /* A convenient method to reset everything
+	  *
+	  */
+	  void reset (void);
 
 	/* Called from main.cpp in timeout_handler. Returns a time as XX Minutes
 	 * YY Seconds. timeout_handler updates GUI

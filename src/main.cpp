@@ -20,6 +20,7 @@
 void open_game ();
 void close_game ();
 void new_game ();
+void new_game_from_paused ();
 
 bool quit (GdkEventAny*, Glib::RefPtr<Gtk::Application>);
 void quit_wrapper (Gtk::Window*);
@@ -110,10 +111,20 @@ close_game (void)
 
 // Resets the board time and the main menu for the current user.
 void
+new_game_from_paused (void)
+{
+	board.reset();  // Resets internal object state
+	reset_board();  // Resets external playing board
+	update_main_menu();
+}
+
+// Jumps straight into a new game after winning a previous one
+void
 new_game (void)
 {
-	board.reset_time();
-	update_main_menu();
+	board.reset();  // Resets internal object state
+	reset_board();  // Resets external playing board
+	hide_dialog("congratulations_dialog");
 }
 
 // Called from close_game and handle_user to update the buttons on the main menu
@@ -481,6 +492,7 @@ main(int argc, char **argv)
 	Gtk::Button* switch_user_button;
 	Gtk::Button* exit_button;
 	Gtk::Button* main_menu_button;
+	Gtk::Button* winning_new_game_button;
 
     // Grid pointers
     Gtk::Grid* board_container_grid;
@@ -513,6 +525,7 @@ main(int argc, char **argv)
 	builder -> get_widget ("switch_user_button", switch_user_button);
 	builder -> get_widget ("exit_button", exit_button);
 	builder -> get_widget ("main_menu_button", main_menu_button);
+	builder -> get_widget ("winning_new_game_button", winning_new_game_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
@@ -622,7 +635,7 @@ main(int argc, char **argv)
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
 	);
 	new_game_button -> signal_clicked().connect(  // Reset time and update main menu
-		sigc::ptr_fun(&new_game)
+		sigc::ptr_fun(&new_game_from_paused)
 	);
 
 	switch_user_button -> signal_enter().connect(  // Cursor clickable
@@ -656,6 +669,16 @@ main(int argc, char **argv)
 	);
 	main_menu_button -> signal_clicked().connect(  // Clear you win dialog
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&hide_dialog), "congratulations_dialog")
+	);
+
+	winning_new_game_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "winning_new_game_button")
+	);
+	winning_new_game_button -> signal_leave().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "winning_new_game_button")
+	);
+	winning_new_game_button -> signal_clicked().connect(
+		sigc::ptr_fun(&new_game)
 	);
 
 	// Entry signals
@@ -692,6 +715,8 @@ main(int argc, char **argv)
 	exit_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	main_menu_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	winning_new_game_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to windows
