@@ -18,7 +18,7 @@
 
 // Function prototypes
 void open_game ();
-void close_game ();
+void close_game (bool);
 void new_game ();
 void new_game_from_paused ();
 
@@ -90,16 +90,15 @@ open_game (void)
 	return;
 }
 
-// Closes the game window for single-board games
-// TODO: Reset board state after closing. Maybe different function?
+// Closes the game window and saves the time if finish later was clicked
 void
-close_game (void)
+close_game (bool game_in_progress)
 {
+	if (game_in_progress) board.set_total_time();
+	else hide_dialog("congratulations_dialog");
+
 	Gtk::Grid* board_container_grid;
-
 	builder -> get_widget ("board_container_grid", board_container_grid);
-
-    board.set_total_time();
 
 	update_main_menu();
 
@@ -125,6 +124,8 @@ new_game (void)
 	board.reset();  // Resets internal object state
 	reset_board();  // Resets external playing board
 	hide_dialog("congratulations_dialog");
+	open_game();
+	board.start();
 }
 
 // Called from close_game and handle_user to update the buttons on the main menu
@@ -328,13 +329,12 @@ check_win (void)
 		bool new_record = board.new_record();  // Check to see if new record
 		board.reset_time();  // Reset time since not in a paused game
 
-	if (new_record) {
-		Gtk::Label *fastest_time_time_label;
+		if (new_record) {
+			Gtk::Label *fastest_time_time_label;
+			builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
+			fastest_time_time_label -> set_text( board.get_fastest_time());
 
-		builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
-
-		fastest_time_time_label -> set_text( board.get_fastest_time());
-	}
+		}
 
 		open_congratulations();
 
@@ -439,7 +439,6 @@ switch_stack_page (Glib::ustring page)
 	Gtk::Stack* application_stack;
 	builder -> get_widget ("application_stack", application_stack);
 	application_stack -> set_visible_child(page);
-	if (page == "Main Menu") update_main_menu();
 	return;
 }
 
@@ -608,7 +607,7 @@ main(int argc, char **argv)
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button")
     );
 	finish_later_button -> signal_clicked().connect(  // Save time and return to menu
-		sigc::ptr_fun(&close_game)
+		sigc::bind<bool>( sigc::ptr_fun(&close_game), true)
 	);
 
     continue_button -> signal_clicked().connect(  // Close 'almost there' dialog
@@ -645,7 +644,7 @@ main(int argc, char **argv)
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "switch_user_button")
 	);
 	switch_user_button -> signal_clicked().connect(  // Switch to player info page
-		sigc::bind<Glib::ustring>( sigc::ptr_fun(&switch_stack_page), "Main Menu")
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&switch_stack_page), "Player Info")
 	);
 
 	exit_button -> signal_enter().connect(  // Cursor clickable
@@ -665,10 +664,7 @@ main(int argc, char **argv)
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "main_menu_button")
 	);
 	main_menu_button -> signal_clicked().connect(  // Go to main menu
-		sigc::bind<Glib::ustring>( sigc::ptr_fun(&switch_stack_page), "Main Menu")
-	);
-	main_menu_button -> signal_clicked().connect(  // Clear you win dialog
-		sigc::bind<Glib::ustring>( sigc::ptr_fun(&hide_dialog), "congratulations_dialog")
+		sigc::bind<bool>( sigc::ptr_fun(&close_game), false)
 	);
 
 	winning_new_game_button -> signal_enter().connect(  // Cursor clickable

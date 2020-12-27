@@ -56,6 +56,7 @@ void Board::start (void)
   time_t current_time;
   current_time = time(NULL);  // Gets the current time
   start_time = current_time;
+  checking_win = false;
 
   return;
 }
