@@ -1,4 +1,4 @@
-/* Last Modified: 12/21/2020
+/* Last Modified: 12/27/2020
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -9,7 +9,6 @@
 #include "board.h"
 #include <time.h>
 #include <iostream>
-#include <vector>
 #include <algorithm>
 
 // Initializes the board
@@ -51,14 +50,14 @@ bool Board::check_reserved (int outer, int inner)
 
 void Board::start (void)
 {
-  if (start_time != 0)  // Hitting begin while a game is open should not do anything
-      return;
-  time_t current_time;
-  current_time = time(NULL);  // Gets the current time
-  start_time = current_time;
-  checking_win = false;
+	if (start_time != 0)  // Hitting begin while a game is open should not do anything
+		return;
+	time_t current_time;
+	current_time = time(NULL);  // Gets the current time
+	start_time = current_time;
+	checking_win = false;
 
-  return;
+	return;
 }
 
 long Board::get_total_time (void)
@@ -81,42 +80,42 @@ void Board::set_total_time (void)
 
 bool Board::is_win (void)
 {
-  return true;
-  int i, j;
-  std::vector< std::vector<int> > sorted(9, std::vector<int>(9));
+	return true;
+	int i, j;
+	std::vector< std::vector<int> > sorted(9, std::vector<int>(9));
 
-  for (i=0; i<9; i++) {
+	for (i=0; i<9; i++) {
 
-    std::vector<int> column;
-    std::vector<int> row = game_board.at(i);
-    std::vector<int> block = blocks.at(i);
+		std::vector<int> column;
+    	std::vector<int> row = game_board.at(i);
+    	std::vector<int> block = blocks.at(i);
 
-    // Populate column with values at i'th column across all rows
-    for (j=0; j<9; j++) {
-      column.push_back(game_board.at(j).at(i));
-    }
+    	// Populate column with values at i'th column across all rows
+    	for (j=0; j<9; j++) {
+			column.push_back(game_board.at(j).at(i));
+		}
 
-    // Remove duplicates and check size. Wrong size means duplicate, therefore invalid.
-    std::sort (row.begin(), row.end());
-    row.erase ( std::unique(row.begin(), row.end()), row.end());
-    if (row.size() != 9 && std::find(row.begin(), row.end(), 0) != row.end()) {
-      printf("Failed at row\n");
-      return false;
-    }
+		// Remove duplicates and check size. Wrong size means duplicate, therefore invalid.
+    	std::sort (row.begin(), row.end());
+    	row.erase ( std::unique(row.begin(), row.end()), row.end());
+    	if (row.size() != 9 && std::find(row.begin(), row.end(), 0) != row.end()) {
+      		printf("Failed at row\n");
+      		return false;
+    	}
 
-    std::sort (block.begin(), block.end());
-    block.erase ( std::unique(block.begin(), block.end()), block.end());
-    if (block.size() != 9 && std::find(block.begin(), block.end(), 0) != block.end()) {
-      printf("Failed at block\n");
-      return false;
-    }
+    	std::sort (block.begin(), block.end());
+    	block.erase ( std::unique(block.begin(), block.end()), block.end());
+    	if (block.size() != 9 && std::find(block.begin(), block.end(), 0) != block.end()) {
+      		printf("Failed at block\n");
+      		return false;
+    	}
 
-    std::sort (column.begin(), column.end());
-    column.erase( std::unique(column.begin(), column.end()), column.end());
-    if (column.size() != 9 && std::find(column.begin(), column.end(), 0) != column.end()) {
-      printf("Failed at column\n");
-      return false;
-    }
+    	std::sort (column.begin(), column.end());
+    	column.erase( std::unique(column.begin(), column.end()), column.end());
+    	if (column.size() != 9 && std::find(column.begin(), column.end(), 0) != column.end()) {
+      		printf("Failed at column\n");
+      		return false;
+    	}
 
   }
 
@@ -135,26 +134,26 @@ bool Board::new_record (void)
 
 Glib::ustring Board::formatted_time (double t)
 {
-  // Time already in seconds. Get minutes then subtract to get seconds
-  int minutes = t / 60;
-  int seconds = t - (minutes * 60);
+	// Time already in seconds. Get minutes then subtract to get seconds
+	int minutes = t / 60;
+	int seconds = t - (minutes * 60);
 
-  Glib::ustring minutes_string;
-  Glib::ustring seconds_string;
+	Glib::ustring minutes_string;
+	Glib::ustring seconds_string;
 
-  if (seconds < 10)
-    seconds_string = "0" + std::to_string(seconds);
-  else
-    seconds_string = std::to_string(seconds);
-  minutes_string = std::to_string(minutes);
+	if (seconds < 10)
+    	seconds_string = "0" + std::to_string(seconds);
+  	else
+    	seconds_string = std::to_string(seconds);
+  	minutes_string = std::to_string(minutes);
 
-  return minutes_string + " Minutes " + seconds_string + " Seconds";
+	return minutes_string + " Minutes " + seconds_string + " Seconds";
 
 }
 
 Glib::ustring Board::get_fastest_time (void)
 {
-  return formatted_time (fastest_time);
+	return formatted_time (fastest_time);
 }
 
 void Board::reset_time (void)
@@ -180,9 +179,9 @@ void Board::reset (void)
 
 Glib::ustring Board::timeout_handler_helper (void)
 {
-  time_t current_time;
-  current_time = time(NULL);
-  return formatted_time (current_time - start_time + total_time);
+	time_t current_time;
+	current_time = time(NULL);
+	return formatted_time (current_time - start_time + total_time);
 }
 
 Glib::ustring Board::get_username (void)

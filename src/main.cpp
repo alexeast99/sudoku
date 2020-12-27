@@ -1,5 +1,5 @@
 /*
-* Last Modified: 12/21/20
+* Last Modified: 12/27/20
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -289,17 +289,17 @@ check_if_number (char inserted, Glib::RefPtr< Gtk::EntryBuffer > buffer)
 {
   if (inserted > '9' || inserted < '1') {
     buffer -> delete_text(0, 1);
-    return false;
+	return false;
   }
-  return true;
+	return true;
 }
 
 // When text is entered, must store in internal board
 void
 insert_to_board (char inserted, int outer, int inner)
 {
-  board.set_number(inserted - '0', outer, inner);
-  return;
+	board.set_number(inserted - '0', outer, inner);
+	return;
 }
 
 // Call this every time a number is inserted on the board
@@ -307,12 +307,12 @@ void
 on_inserted (guint position, const gchar* chars, guint n_chars,
   Glib::RefPtr< Gtk::EntryBuffer > buffer, int outer, int inner)
 {
-  char inserted = *chars;
-  if ( check_if_number(inserted, buffer)) {
-    insert_to_board (inserted, outer, inner);
-  }
+	char inserted = *chars;
+	if ( check_if_number(inserted, buffer)) {
+		insert_to_board (inserted, outer, inner);
+	}
 
-  return;
+	return;
 }
 
 // Check if a board is a win. If it is, check if this is the fastest score and
@@ -342,31 +342,31 @@ check_win (void)
 		open_sorry ();  // Show dialog saying it was not a win
 	}
 
-return;
+	return;
 }
 
 void
 open_sorry (void)
 {
-  Gtk::Dialog* sorry_dialog;
-  builder -> get_widget ("sorry_dialog", sorry_dialog);
-  if (sorry_dialog) {
-  	sorry_dialog -> show();
-  }
+	Gtk::Dialog* sorry_dialog;
+	builder -> get_widget ("sorry_dialog", sorry_dialog);
+	if (sorry_dialog) {
+		sorry_dialog -> show();
+	}
 
-  return;
+	return;
 }
 
 void
 close_sorry (void)
 {
-  Gtk::Dialog* sorry_dialog;
-  builder -> get_widget ("sorry_dialog", sorry_dialog);
-  if (sorry_dialog) {
-  	sorry_dialog -> hide();
-  }
+	Gtk::Dialog* sorry_dialog;
+	builder -> get_widget ("sorry_dialog", sorry_dialog);
+	if (sorry_dialog) {
+		sorry_dialog -> hide();
+	}
 
-  return;
+	return;
 }
 
 void
@@ -389,13 +389,13 @@ close_congratulations (void)
 bool
 timeout_handler (void)
 {
-  if ( board.get_checking_win()) return true;
+	if ( board.get_checking_win()) return true;
 
-  Gtk::Label* current_time_time_label;
-  builder -> get_widget ("current_time_time_label", current_time_time_label);
+	Gtk::Label* current_time_time_label;
+	builder -> get_widget ("current_time_time_label", current_time_time_label);
 
-  current_time_time_label -> set_text( board.timeout_handler_helper());
-  return true;
+	current_time_time_label -> set_text( board.timeout_handler_helper());
+	return true;
 }
 
 // Called when the "lets go" button is clicked after entering a username
@@ -460,6 +460,13 @@ hide_dialog (Glib::ustring dialog)
 	return;
 }
 
+
+/*
+ *	TODO
+ *		- Save internal board state when a user hits finish_later
+ *		- Load saved state when a user resumes game
+ *			- Populate game board
+ */
 
 int
 main(int argc, char **argv)

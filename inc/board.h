@@ -1,5 +1,5 @@
 /*
-* Last Modified: 12/21/2020
+* Last Modified: 12/27/2020
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer.
