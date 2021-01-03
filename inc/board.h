@@ -198,4 +198,14 @@ class Board {
 	  */
 	 void set_checking_win (bool);
 
+	 /* Used to save the state of the board to the user data file for the
+	  * the current user
+	  */
+	 void save_board_state (void);
+
+	 /* Used to load the state of the board from the user data file for the
+	  * current user
+	  */
+	 void load_board_state (void);
+
 };

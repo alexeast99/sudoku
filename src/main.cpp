@@ -205,6 +205,7 @@ void
 initialize_board (void)
 {
     int i, j;
+	board.load_board_state();
 
     // Create CssProvider
     auto css_provider = Gtk::CssProvider::create();
@@ -212,6 +213,9 @@ initialize_board (void)
 
     for (i=0; i<9; i++) {
         for (j=0; j<9; j++) {
+			// Used to ensure the GUI matches the internal state
+			std::string tile = std::to_string( board.get_number(i, j));
+
             // ID of Gtk::Entry based on position in matrix
             gchar* cell_name = (gchar *) g_malloc(31);
             g_snprintf(cell_name, 31,"row_%d_%d", i, j);
@@ -226,6 +230,7 @@ initialize_board (void)
             cell -> set_alignment (0.5);
             cell -> get_style_context() ->
                 add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+			if ( tile.compare("0")) cell -> set_text( tile);
 
             cell -> get_buffer() -> signal_inserted_text().connect(
               sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
@@ -426,6 +431,7 @@ handle_user (void)
 	g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
 	welcome_label -> set_text(welcome_message);
 
+	initialize_board();
 	update_main_menu();
 	switch_stack_page("Main Menu");
 
@@ -734,7 +740,7 @@ main(int argc, char **argv)
      *
      */
 
-    initialize_board();
+    // initialize_board();
 
     if (window) {
 		app -> run(*window);

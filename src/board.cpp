@@ -215,6 +215,7 @@ void Board::set_username (Glib::ustring name)
 
 void Board::save_data (void)
 {
+	save_board_state();
 	user_data.save_to_file("data/user_data.txt");
 	return;
 }
@@ -228,5 +229,43 @@ void Board::set_checking_win (bool checking)
 {
 	set_total_time();  // Store the current game time internally
 	checking_win = checking;
+	return;
+}
+
+
+void Board::save_board_state (void)
+{
+
+	int i, j;
+	for (i=0; i<9; i++) {
+		std::vector< int> row = game_board[i];
+		std::string row_string;
+
+		for (j=0; j<9; j++) {
+			char tile = row[j] + '0';
+			row_string.push_back(tile);
+		}
+
+		user_data.set_string(username, std::to_string(i), row_string);
+	}
+
+	return;
+}
+
+void Board::load_board_state (void)
+{
+	int i, j;
+	for (i=0; i<9; i++) {
+		std::string key = std::to_string(i);
+		if (user_data.has_key(username, key)) {
+			std::string row = user_data.get_string(username, std::to_string(i));
+
+			for (j=0; j<9; j++) {
+				int tile = row[j] - '0';
+				set_number(tile, i, j);
+			}
+		}
+	}
+
 	return;
 }
