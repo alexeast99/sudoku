@@ -159,7 +159,7 @@ Glib::ustring Board::get_fastest_time (void)
 void Board::reset_time (void)
 {
 	total_time = 0;
-	user_data.set_double(username, "paused_time", total_time);
+	if (username != "") user_data.set_double(username, "paused_time", total_time);
 	return;
 }
 

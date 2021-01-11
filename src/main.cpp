@@ -420,6 +420,9 @@ handle_user (void)
 		return;
 	}
 
+	board.reset();  // Clear internal board state
+	reset_board();  // Clears external board  GUI
+
 	// Set username in board and signal to dialog
 	Glib::ustring username = username_entry -> get_text();
 	board.set_username(username);
