@@ -1,5 +1,5 @@
 /*
-* Last Modified: 12/27/2020
+* Last Modified: 01/12/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer.
@@ -10,6 +10,8 @@
 #include <fstream>
 #include <glibmm/ustring.h>
 #include <glibmm/keyfile.h>
+
+#define RESERVED 7
 
 class Board {
 
@@ -59,7 +61,12 @@ class Board {
     *  and the value at that index is the position in the inner array.
     *  Contains IF a space is reserved, not WHAT is there.
     */
-    int reserved[10];
+    std::vector<int> reserved = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+
+	/* Whether or not the reserved member variable was set. Faster than checking
+	 * entries in reserved
+	 */
+	 bool reserved_set;
 
     /* The starting time.
      *
@@ -207,5 +214,21 @@ class Board {
 	  * current user
 	  */
 	 void load_board_state (void);
+
+	 /* Load the previously generated coordinates for reserved cells from the
+	  * keyfile and into the reserved member variable
+	  */
+	  void set_reserved (void);
+
+	  /* Generates coordinates of reserved cells. Ensures that there are at least
+	   * RESERVED cells reserved (ie if the same coords are generated it doesn't
+	   * matter)
+	   */
+	   void generate_reserved (void);
+
+	   /* Returns the reserved member variable. Not to be confused with
+	    * check_reserved
+	    */
+		std::vector<int> get_reserved (void);
 
 };

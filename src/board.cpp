@@ -1,4 +1,4 @@
-/* Last Modified: 12/27/2020
+/* Last Modified: 01/12/21
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -10,6 +10,7 @@
 #include <time.h>
 #include <iostream>
 #include <algorithm>
+#include <stdlib.h>
 
 // Initializes the board
 Board::Board (void)
@@ -18,6 +19,7 @@ Board::Board (void)
     total_time = 0;
     fastest_time = 0; // This is retrieved from keyfile based on username
 	username = "";
+	reserved_set = false;
 	user_data.load_from_file("data/user_data.txt");
 }
 
@@ -41,11 +43,9 @@ int Board::get_number (int outer, int inner)
     return game_board.at(outer).at(inner);
 }
 
-// TODO: this
 bool Board::check_reserved (int outer, int inner)
 {
-    return false;
-    // return (reserved[outer] == inner) ? true : false;
+    return (reserved[outer] == inner) ? true : false;
 }
 
 void Board::start (void)
@@ -197,6 +197,7 @@ void Board::set_username (Glib::ustring name)
 
 		bool has_fastest = user_data.has_key(name, "fastest_time");
 		bool mid_game = user_data.has_key(name, "paused_time");
+		bool has_reserved = user_data.has_key(name, "reserved");
 
 		if (has_fastest) {  // User has a fastest time
 			double ft = user_data.get_double(name, "fastest_time");
@@ -205,10 +206,14 @@ void Board::set_username (Glib::ustring name)
 		if (mid_game) {  // If user is in the middle of a game
 			total_time = user_data.get_double(name, "paused_time");
 		}
+		if (has_reserved) {
+			set_reserved();
+		}
 
 	} else {
 		user_data.set_double(name, "fastest_time", 0);
 		user_data.set_double(name, "paused_time", 0);
+		user_data.set_string(name, "reserved", "");
 	}
 	return;
 }
@@ -268,4 +273,53 @@ void Board::load_board_state (void)
 	}
 
 	return;
+}
+
+void Board::set_reserved (void)
+{
+	std::string coords = user_data.get_string(username, "reserved");
+
+	uint i;
+	for (i=0; i<coords.size(); i++) {  // i is row, coords[i] is column
+		char c = coords[i];
+
+		if (c == '-') {
+			reserved[i] = -1;
+			i = i+1;
+
+		} else {
+			reserved[i] = coords[i] - '0';
+
+		}
+
+	}
+
+	if (coords.size() > 0) reserved_set = true;
+
+	return;
+}
+
+void Board::generate_reserved (void)
+{
+	srand( time(NULL));  // Initialize random seed
+
+	int i;
+	for (i=0; i<RESERVED; i++) {
+		// Generate between 0 and 9
+		int row = rand() % 10;
+		int col = rand() % 10;
+
+		// Must be between 0 and 8 since reserved has size 9
+		while (row == 9) row = rand() % 10;
+		while (col == 9) col = rand() % 10;
+
+		// Must not have been previously reserved
+		if (!check_reserved(row, col)) reserved[row] = col;
+		else i -= 1;
+	}
+}
+
+std::vector<int> Board::get_reserved (void)
+{
+	return reserved;
 }

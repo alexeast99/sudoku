@@ -1,5 +1,5 @@
 /*
-* Last Modified: 12/27/20
+* Last Modified: 01/12/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -235,6 +235,9 @@ initialize_board (void)
             cell -> get_buffer() -> signal_inserted_text().connect(
               sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
                 sigc::ptr_fun(&on_inserted), buffer, i, j));
+
+			// If reserved cell chosen by game, disallow editing
+			if ( board.check_reserved(i, j)) cell -> set_editable(false);
         }
     }
 
