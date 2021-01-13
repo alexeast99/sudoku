@@ -43,9 +43,10 @@ int Board::get_number (int outer, int inner)
     return game_board.at(outer).at(inner);
 }
 
+// This needs to be changed
 bool Board::check_reserved (int outer, int inner)
 {
-    return (reserved[outer] == inner) ? true : false;
+    return false;
 }
 
 void Board::start (void)
@@ -275,30 +276,15 @@ void Board::load_board_state (void)
 	return;
 }
 
+// This needs to be changed
 void Board::set_reserved (void)
 {
-	std::string coords = user_data.get_string(username, "reserved");
-
-	uint i;
-	for (i=0; i<coords.size(); i++) {  // i is row, coords[i] is column
-		char c = coords[i];
-
-		if (c == '-') {
-			reserved[i] = -1;
-			i = i+1;
-
-		} else {
-			reserved[i] = coords[i] - '0';
-
-		}
-
-	}
-
-	if (coords.size() > 0) reserved_set = true;
+	//std::string rows = user_data.get_string(username, "reserved");
 
 	return;
 }
 
+// This needs to be changed
 void Board::generate_reserved (void)
 {
 	srand( time(NULL));  // Initialize random seed
@@ -313,13 +299,21 @@ void Board::generate_reserved (void)
 		while (row == 9) row = rand() % 10;
 		while (col == 9) col = rand() % 10;
 
-		// Must not have been previously reserved
-		if (!check_reserved(row, col)) reserved[row] = col;
-		else i -= 1;
 	}
 }
 
-std::vector<int> Board::get_reserved (void)
+// This needs to be changed
+void Board::populate_reserved (void)
+{
+	srand( time(NULL)); // Initialize random seed
+
+	// Breaks rules if same row as other reserved with same number or if same
+	// column as other reserved with same number or if same block as other
+	// reserved with same number
+
+}
+
+std::vector< std::vector< int>> Board::get_reserved (void)
 {
 	return reserved;
 }

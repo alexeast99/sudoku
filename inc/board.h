@@ -20,7 +20,7 @@ class Board {
 	  /* Used to reset the game_board and blocks variables
 	   *
 	   */
-	   std::vector< std::vector<int> > initial =
+	   std::vector< std::vector< int>> initial =
 		 { {0, 0, 0, 0, 0, 0, 0, 0, 0},
 		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
 		   {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -36,20 +36,20 @@ class Board {
     *  the inner array specifies the column, also starting at 0. The value is
     *  the number in the square at this position on the board.
     */
-    std::vector< std::vector<int> > game_board = initial;
+    std::vector< std::vector< int>> game_board = initial;
 
     /* Represents each 9-cell block on the board. Each inner vector is one block.
      * Blocks are numbered starting at 0 in the upper left, 3 directly below that,
      * and 6 directly below 3. This is used to simplify checking board validity.
      * Order in each block does not matter.
      */
-    std::vector< std::vector<int> > blocks = initial;
+    std::vector< std::vector< int>> blocks = initial;
 
     /* A lookup table giving the index of the inner vector for the blocks
      * variable. Since we don't care about the exact position in the block,
      * having the blocks index is good enough
      */
-     std::vector< std::vector<int> > blocksLookup =
+     std::vector< std::vector< int>> blocksLookup =
       {
         {0, 1, 2},
         {3, 4, 5},
@@ -58,10 +58,20 @@ class Board {
 
     /* Contains the positions of numbers that were set by the game, and are
     *  therefore un-changeable. The index is the position in the outer array,
-    *  and the value at that index is the position in the inner array.
+    *  and the values at that index are the positions in the inner array.
     *  Contains IF a space is reserved, not WHAT is there.
     */
-    std::vector<int> reserved = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    std::vector< std::vector< int>> reserved = {
+		{-1, -1, -1},
+		{-1, -1, -1},
+		{-1, -1, -1},
+		{-1, -1, -1},
+		{-1, -1, -1},
+		{-1, -1, -1},
+		{-1, -1, -1},
+		{-1, -1, -1},
+		{-1, -1, -1}
+	};
 
 	/* Whether or not the reserved member variable was set. Faster than checking
 	 * entries in reserved
@@ -220,15 +230,20 @@ class Board {
 	  */
 	  void set_reserved (void);
 
-	  /* Generates coordinates of reserved cells. Ensures that there are at least
-	   * RESERVED cells reserved (ie if the same coords are generated it doesn't
-	   * matter)
-	   */
-	   void generate_reserved (void);
+	 /* Generates coordinates of reserved cells. Ensures that there are at least
+	  * RESERVED cells reserved (ie if the same coords are generated it doesn't
+	  * matter)
+	  */
+	  void generate_reserved (void);
 
-	   /* Returns the reserved member variable. Not to be confused with
-	    * check_reserved
-	    */
-		std::vector<int> get_reserved (void);
+	  /* Generate numbers for each of the reserved cells. Ensure that the
+	   * numbers and coordinates follow the rules of sudoku1
+	   */
+	   void populate_reserved (void);
+
+	  /* Returns the reserved member variable. Not to be confused with
+	   * check_reserved
+	   */
+	   std::vector< std::vector< int>> get_reserved (void);
 
 };
