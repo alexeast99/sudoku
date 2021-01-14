@@ -250,17 +250,21 @@ reset_board (void)
 {
     int i, j;
     for (i=0; i<9; i++) {
-        for (j=0; j<9 && !board.check_reserved(i, j); j++) {
-            // ID of Gtk::Entry based on position in matrix
-            gchar* cell_name = (gchar *) g_malloc(31);
-            g_snprintf(cell_name, 31, "row_%d_%d", i, j);
+        for (j=0; j<9; j++) {
+			if ( !board.check_reserved(i, j) ) {
+				// ID of Gtk::Entry based on position in matrix
+	            gchar* cell_name = (gchar *) g_malloc(31);
+	            g_snprintf(cell_name, 31, "row_%d_%d", i, j);
 
-            // Get current Gtk::Entry from the builder
-            Gtk::Entry*  cell;
-            builder -> get_widget (cell_name, cell);
+	            // Get current Gtk::Entry from the builder
+	            Gtk::Entry*  cell;
+	            builder -> get_widget (cell_name, cell);
 
-            // Clear this Gtk::Entry's text
-            cell -> set_text("");
+	            // Clear this Gtk::Entry's text
+	            cell -> set_text("");
+
+				board.set_number(0, i, j);
+			}
         }
    }
 
