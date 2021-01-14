@@ -437,6 +437,7 @@ handle_user (void)
 	g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
 	welcome_label -> set_text(welcome_message);
 
+	board.generate_reserved();
 	initialize_board();
 	update_main_menu();
 	switch_stack_page("Main Menu");
@@ -751,7 +752,6 @@ main(int argc, char **argv)
     if (window) {
 		app -> run(*window);
 	}
-
 
     delete window;
 

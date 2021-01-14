@@ -20,6 +20,7 @@ Board::Board (void)
     fastest_time = 0; // This is retrieved from keyfile based on username
 	username = "";
 	reserved_set = false;
+	reserved_index = 0;
 	user_data.load_from_file("data/user_data.txt");
 }
 
@@ -43,10 +44,14 @@ int Board::get_number (int outer, int inner)
     return game_board.at(outer).at(inner);
 }
 
-// This needs to be changed
 bool Board::check_reserved (int outer, int inner)
 {
-    return false;
+    int i;
+	for (i=0; i<RESERVED; i++) {
+		std::vector<int> coordinate = reserved[i];
+		if (coordinate[0] == outer && coordinate[1] == inner) return true;
+	}
+	return false;
 }
 
 void Board::start (void)
@@ -81,7 +86,6 @@ void Board::set_total_time (void)
 
 bool Board::is_win (void)
 {
-	return true;
 	int i, j;
 	std::vector< std::vector<int> > sorted(9, std::vector<int>(9));
 
@@ -198,7 +202,7 @@ void Board::set_username (Glib::ustring name)
 
 		bool has_fastest = user_data.has_key(name, "fastest_time");
 		bool mid_game = user_data.has_key(name, "paused_time");
-		bool has_reserved = user_data.has_key(name, "reserved");
+		bool has_reserved = user_data.has_key(name, "r0");
 
 		if (has_fastest) {  // User has a fastest time
 			double ft = user_data.get_double(name, "fastest_time");
@@ -209,6 +213,7 @@ void Board::set_username (Glib::ustring name)
 		}
 		if (has_reserved) {
 			set_reserved();
+			reserved_set = true;
 		}
 
 	} else {
@@ -241,18 +246,32 @@ void Board::set_checking_win (bool checking)
 
 void Board::save_board_state (void)
 {
+	std::vector<int> game_row;
+	std::vector<int> coordinate;
+	std::string game_row_string = "";
+	std::string coordinate_string = "";
 
 	int i, j;
 	for (i=0; i<9; i++) {
-		std::vector< int> row = game_board[i];
-		std::string row_string;
-
-		for (j=0; j<9; j++) {
-			char tile = row[j] + '0';
-			row_string.push_back(tile);
+		// Save reserved coordinates
+		if (i < RESERVED) {
+			coordinate = reserved[i];
+			coordinate_string.push_back(coordinate[0] + '0');
+			coordinate_string.push_back(coordinate[1] + '0');
+			user_data.set_string(username, "r" + std::to_string(i), coordinate_string);
+			coordinate_string.clear();
 		}
 
-		user_data.set_string(username, std::to_string(i), row_string);
+		// Save i'th row of the game board
+		game_row = game_board[i];
+		for (j=0; j<9; j++) {
+			char tile = game_row[j] + '0';
+			game_row_string.push_back(tile);
+		}
+		user_data.set_string(username, std::to_string(i), game_row_string);
+		game_row_string.clear();
+
+
 	}
 
 	return;
@@ -260,11 +279,14 @@ void Board::save_board_state (void)
 
 void Board::load_board_state (void)
 {
+	std::string key;
+	std::string row;
+
 	int i, j;
 	for (i=0; i<9; i++) {
-		std::string key = std::to_string(i);
+		key = std::to_string(i);
 		if (user_data.has_key(username, key)) {
-			std::string row = user_data.get_string(username, std::to_string(i));
+			row = user_data.get_string(username, std::to_string(i));
 
 			for (j=0; j<9; j++) {
 				int tile = row[j] - '0';
@@ -276,17 +298,32 @@ void Board::load_board_state (void)
 	return;
 }
 
-// This needs to be changed
 void Board::set_reserved (void)
 {
-	//std::string rows = user_data.get_string(username, "reserved");
+	// 'reserved' vector is stored exactly the same as the game board vector,
+	// except that an 'r' is prepended to the number representing the row
+	std::string key = "r";
+	std::string row;
+
+	int i;
+	for (i=0; i<RESERVED; i++) {
+		key = key + std::to_string(i);
+		row = user_data.get_string(username, key);
+
+		reserved[reserved_index][0] = row[0] - '0';
+		reserved[reserved_index][1] = row[1] - '0';
+		reserved_index += 1;
+
+		key.pop_back();
+	}
 
 	return;
 }
 
-// This needs to be changed
 void Board::generate_reserved (void)
 {
+	if (reserved_set) return;  // Save time if reserved already set
+
 	srand( time(NULL));  // Initialize random seed
 
 	int i;
@@ -299,10 +336,21 @@ void Board::generate_reserved (void)
 		while (row == 9) row = rand() % 10;
 		while (col == 9) col = rand() % 10;
 
+		// If not already reserved, set to 1 to flag as reserved
+		if ( !check_reserved(row, col)) {
+			reserved[reserved_index][0] = row;
+			reserved[reserved_index][1] = col;
+			reserved_index += 1;
+		}
+		else i -= 1;
+
 	}
+
+	reserved_set = true;
+	populate_reserved();
+	return;
 }
 
-// This needs to be changed
 void Board::populate_reserved (void)
 {
 	srand( time(NULL)); // Initialize random seed
@@ -310,6 +358,46 @@ void Board::populate_reserved (void)
 	// Breaks rules if same row as other reserved with same number or if same
 	// column as other reserved with same number or if same block as other
 	// reserved with same number
+
+	int i, j;
+	for (i=0; i<RESERVED; i++) {
+		int value = rand() % 10;
+		while (value == 0) value = rand() % 10;
+
+		std::vector<int> coordinate = reserved[i];
+		for (j=0; j<RESERVED; j++) {
+			if (i != j) {
+				std::vector<int> compare = reserved[j];
+
+				int x1 = coordinate[0];
+				int y1 = coordinate[1];
+
+				int x2 = compare[0];
+				int y2 = compare[1];
+
+				int comp_value = get_number(x2, y2);
+
+				bool same_value = comp_value == value;
+				bool same_row = x1 == x2;
+				bool same_col = y1 == y2;
+
+				int blockIndex = blocksLookup.at(x1/3).at(y1/3);
+				int compIndex = blocksLookup.at(x2/3).at(y2/3);
+				bool same_block = blockIndex == compIndex;
+
+				// Breaks rule, regenerate value
+				if ((same_row || same_col || same_block) && same_value) {
+					i -= 1;
+
+				// Doesn't break rules, add to internal board state
+				} else {
+					set_number(value, x1, y1);
+				}
+
+			}
+		}
+
+	}
 
 }
 

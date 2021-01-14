@@ -56,27 +56,29 @@ class Board {
         {6, 7, 8}
       };
 
-    /* Contains the positions of numbers that were set by the game, and are
-    *  therefore un-changeable. The index is the position in the outer array,
-    *  and the values at that index are the positions in the inner array.
-    *  Contains IF a space is reserved, not WHAT is there.
-    */
+    /* Contains subarrays where the first two values are the x and y, or row and
+	 * column, coordinates of reserved cells, and the third is the block that
+	 * those coordinates are located in
+     */
     std::vector< std::vector< int>> reserved = {
-		{-1, -1, -1},
-		{-1, -1, -1},
-		{-1, -1, -1},
-		{-1, -1, -1},
-		{-1, -1, -1},
-		{-1, -1, -1},
-		{-1, -1, -1},
-		{-1, -1, -1},
-		{-1, -1, -1}
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0}
 	};
 
 	/* Whether or not the reserved member variable was set. Faster than checking
 	 * entries in reserved
 	 */
 	 bool reserved_set;
+
+	 /* Holds the index of the next inner array to set the coordinates of a
+	  * reserved cell into
+	  */
+	 int reserved_index;
 
     /* The starting time.
      *
