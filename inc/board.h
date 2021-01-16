@@ -60,16 +60,7 @@ class Board {
 	 * column, coordinates of reserved cells, and the third is the block that
 	 * those coordinates are located in
      */
-    std::vector< std::vector< int>> reserved = {
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0}
-	};
-
+    std::vector< std::vector< int>> reserved;
 	/* Whether or not the reserved member variable was set. Faster than checking
 	 * entries in reserved
 	 */

@@ -1,4 +1,4 @@
-/* Last Modified: 01/12/21
+/* Last Modified: 01/16/21
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -21,6 +21,13 @@ Board::Board (void)
 	username = "";
 	reserved_set = false;
 	reserved_index = 0;
+	reserved.resize(RESERVED);
+
+	int i;
+	for (i=0; i<RESERVED; i++) {
+		reserved[i] = {0, 0, 0};
+	}
+
 	user_data.load_from_file("data/user_data.txt");
 }
 
@@ -46,12 +53,18 @@ int Board::get_number (int outer, int inner)
 
 bool Board::check_reserved (int outer, int inner)
 {
+	bool rsrv = false;
+
     int i;
 	for (i=0; i<RESERVED; i++) {
 		std::vector<int> coordinate = reserved[i];
-		if (coordinate[0] == outer && coordinate[1] == inner) return true;
+		if (coordinate[0] == outer && coordinate[1] == inner) {
+			rsrv = true;
+			break;
+		}
 	}
-	return false;
+
+	return rsrv;
 }
 
 void Board::start (void)
@@ -164,7 +177,9 @@ Glib::ustring Board::get_fastest_time (void)
 void Board::reset_time (void)
 {
 	total_time = 0;
-	if (username != "") user_data.set_double(username, "paused_time", total_time);
+	if (username != "") {
+		user_data.set_double(username, "paused_time", total_time);
+	}
 	return;
 }
 
@@ -172,6 +187,7 @@ void Board::reset_board (void)
 {
 	game_board = initial;
 	blocks = initial;
+	printf("Game: %d\n", game_board[0][0]);
 	return;
 }
 
@@ -179,6 +195,24 @@ void Board::reset (void)
 {
 	reset_time();
 	reset_board();
+	reserved_set = false;
+	reserved_index = 0;
+	if (username != "") {
+		int i;
+		for (i=0; i<9; i++) {
+			std::string cell_index = std::to_string(i);
+			std::string reserved_key = "r" + cell_index;
+			if (user_data.has_key(username, reserved_key)) {
+				user_data.remove_key(username, reserved_key);
+			}
+			if (user_data.has_key(username, cell_index)) {
+				user_data.remove_key(username, cell_index);
+			}
+			if (i < RESERVED) reserved[i] = {0, 0, 0};
+
+		}
+	}
+	if (username != "") save_data();
 	return;
 }
 
@@ -219,7 +253,6 @@ void Board::set_username (Glib::ustring name)
 	} else {
 		user_data.set_double(name, "fastest_time", 0);
 		user_data.set_double(name, "paused_time", 0);
-		user_data.set_string(name, "reserved", "");
 	}
 	return;
 }
@@ -256,8 +289,9 @@ void Board::save_board_state (void)
 		// Save reserved coordinates
 		if (i < RESERVED) {
 			coordinate = reserved[i];
-			coordinate_string.push_back(coordinate[0] + '0');
+			coordinate_string.push_back(coordinate[0] + '0');  // +'0' to convert to char
 			coordinate_string.push_back(coordinate[1] + '0');
+			coordinate_string.push_back(coordinate[2] + '0');
 			user_data.set_string(username, "r" + std::to_string(i), coordinate_string);
 			coordinate_string.clear();
 		}
@@ -312,6 +346,7 @@ void Board::set_reserved (void)
 
 		reserved[reserved_index][0] = row[0] - '0';
 		reserved[reserved_index][1] = row[1] - '0';
+		reserved[reserved_index][2] = row[2] - '0';
 		reserved_index += 1;
 
 		key.pop_back();
@@ -322,7 +357,9 @@ void Board::set_reserved (void)
 
 void Board::generate_reserved (void)
 {
-	if (reserved_set) return;  // Save time if reserved already set
+	// If this user already has reserved tiles, don't set
+	if (reserved_set) return;
+	printf("Generating reserved before initializing board\n");
 
 	srand( time(NULL));  // Initialize random seed
 
@@ -336,10 +373,10 @@ void Board::generate_reserved (void)
 		while (row == 9) row = rand() % 10;
 		while (col == 9) col = rand() % 10;
 
-		// If not already reserved, set to 1 to flag as reserved
 		if ( !check_reserved(row, col)) {
 			reserved[reserved_index][0] = row;
 			reserved[reserved_index][1] = col;
+			reserved[reserved_index][2] = blocksLookup.at(row/3).at(col/3);
 			reserved_index += 1;
 		}
 		else i -= 1;
@@ -359,31 +396,32 @@ void Board::populate_reserved (void)
 	// column as other reserved with same number or if same block as other
 	// reserved with same number
 
+	// Two loops since we must compare each generated value with each previously
+	// generated value
+
 	int i, j;
 	for (i=0; i<RESERVED; i++) {
 		int value = rand() % 10;
 		while (value == 0) value = rand() % 10;
 
 		std::vector<int> coordinate = reserved[i];
+		int x1 = coordinate[0];
+		int y1 = coordinate[1];
+		int z1 = coordinate[2]; // Block index
+
 		for (j=0; j<RESERVED; j++) {
 			if (i != j) {
 				std::vector<int> compare = reserved[j];
-
-				int x1 = coordinate[0];
-				int y1 = coordinate[1];
-
 				int x2 = compare[0];
 				int y2 = compare[1];
+				int z2 = compare[2];
 
 				int comp_value = get_number(x2, y2);
 
 				bool same_value = comp_value == value;
 				bool same_row = x1 == x2;
 				bool same_col = y1 == y2;
-
-				int blockIndex = blocksLookup.at(x1/3).at(y1/3);
-				int compIndex = blocksLookup.at(x2/3).at(y2/3);
-				bool same_block = blockIndex == compIndex;
+				bool same_block = z1 == z2;
 
 				// Breaks rule, regenerate value
 				if ((same_row || same_col || same_block) && same_value) {
@@ -398,7 +436,8 @@ void Board::populate_reserved (void)
 		}
 
 	}
-
+	if (username != "") save_data();
+	return;
 }
 
 std::vector< std::vector< int>> Board::get_reserved (void)

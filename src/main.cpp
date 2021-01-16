@@ -28,8 +28,9 @@ void quit_wrapper (Gtk::Window*);
 void open_instructions ();
 void close_instructions ();
 
-void initalize_board ();
+void initialize_board ();
 void reset_board ();
+void reset_reserved ();
 
 void set_pointer (Glib::ustring);
 void restore_pointer (Glib::ustring);
@@ -113,7 +114,10 @@ void
 new_game_from_paused (void)
 {
 	board.reset();  // Resets internal object state
+	board.generate_reserved(); // Generate and populate new reserved cells
 	reset_board();  // Resets external playing board
+	reset_reserved();  // Clears reserved cells from GUI
+	initialize_board();
 	update_main_menu();
 }
 
@@ -122,7 +126,10 @@ void
 new_game (void)
 {
 	board.reset();  // Resets internal object state
+	board.generate_reserved(); // Generate and populate new reserved cells
 	reset_board();  // Resets external playing board
+	reset_reserved();  // Clears reserved cells from GUI
+	initialize_board();
 	hide_dialog("congratulations_dialog");
 	open_game();
 	board.start();
@@ -205,7 +212,7 @@ void
 initialize_board (void)
 {
     int i, j;
-	board.load_board_state();
+	board.load_board_state();  // Load data from keyfile into object
 
     // Create CssProvider
     auto css_provider = Gtk::CssProvider::create();
@@ -230,7 +237,7 @@ initialize_board (void)
             cell -> set_alignment (0.5);
             cell -> get_style_context() ->
                 add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-			if ( tile.compare("0")) cell -> set_text( tile);
+			if ( tile.compare("0") != 0) cell -> set_text( tile);
 
             cell -> get_buffer() -> signal_inserted_text().connect(
               sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
@@ -238,6 +245,9 @@ initialize_board (void)
 
 			// If reserved cell chosen by game, disallow editing
 			if ( board.check_reserved(i, j)) cell -> set_editable(false);
+			else cell -> set_editable(true);
+			// else above is needed to allow cells that were previously reserved
+			// to be changed in case the user starts a new game
         }
     }
 
@@ -269,6 +279,25 @@ reset_board (void)
    }
 
    return;
+}
+
+// Erases the reserved cells in the gui only
+void
+reset_reserved (void)
+{
+	std::vector< std::vector< int>> reserved = board.get_reserved();
+	for (auto i : reserved) {
+		gchar* cell_name = (gchar *) g_malloc(31);
+		g_snprintf(cell_name, 31, "row_%d_%d", i[0], i[1]);
+
+		Gtk::Entry* cell;
+		builder -> get_widget (cell_name, cell);
+
+		cell -> set_editable(true);
+		cell -> set_text("");
+
+		board.set_number(0, i[0], i[1]);
+	}
 }
 
 // Set cursor to pointer when over button
@@ -429,8 +458,9 @@ handle_user (void)
 
 	board.reset();  // Clear internal board state
 	reset_board();  // Clears external board  GUI
+	reset_reserved();  // Clears reserved cells in GUI
 
-	// Set username in board and signal to dialog
+	// Set username in board. Set fastest time
 	Glib::ustring username = username_entry -> get_text();
 	board.set_username(username);
 	Glib::ustring user_fastest = board.get_fastest_time();
