@@ -100,8 +100,10 @@ open_game (void)
 void
 close_game (bool game_in_progress)
 {
-	if (game_in_progress) board.set_total_time();
-	else hide_dialog("congratulations_dialog");
+	if (game_in_progress) {
+		board.set_total_time();
+		board.save_data();  // Save in case switching user
+	} else hide_dialog("congratulations_dialog");
 
 	Gtk::Grid* board_container_grid;
 	builder -> get_widget ("board_container_grid", board_container_grid);
@@ -172,7 +174,6 @@ update_main_menu (void)
 bool
 quit (GdkEventAny* event, Glib::RefPtr<Gtk::Application> app)
 {
-	board.save_data();
 	app -> quit();
 	return true;
 }
@@ -318,7 +319,7 @@ reset_reserved (void)
 void
 reset_all (void)
 {
-	reset_board();  // Resets external playing board
+	reset_board();     // Resets external playing board
 	reset_reserved();  // Clears reserved cells from GUI
 	board.reset();
 }
@@ -699,7 +700,7 @@ main(int argc, char **argv)
 	new_game_button -> signal_enter().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "new_game_button")
 	);
-	new_game_button -> signal_leave().connect(  // Cursor clickable
+	new_game_button -> signal_leave().connect(  // Cursor normal
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
 	);
 	new_game_button -> signal_clicked().connect(  // Reset time and update main menu
@@ -709,20 +710,20 @@ main(int argc, char **argv)
 	switch_user_button -> signal_enter().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "switch_user_button")
 	);
-	switch_user_button -> signal_leave().connect(  // Cursor clickable
+	switch_user_button -> signal_leave().connect(  // Cursor normal
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "switch_user_button")
 	);
 	switch_user_button -> signal_clicked().connect(  // Switch to player info page
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&switch_stack_page), "Player Info")
 	);
-	switch_user_button -> signal_clicked().connect(  // Switch to player info page
+	switch_user_button -> signal_clicked().connect(  // Reset board state & GUI
 		sigc::ptr_fun(&reset_all)
 	);
 
 	exit_button -> signal_enter().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "exit_button")
 	);
-	exit_button -> signal_leave().connect(  // Cursor clickable
+	exit_button -> signal_leave().connect(  // Cursor normal
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "exit_button")
 	);
 	exit_button -> signal_clicked().connect(  // Exit button quits game
@@ -732,7 +733,7 @@ main(int argc, char **argv)
 	main_menu_button -> signal_enter().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "main_menu_button")
 	);
-	main_menu_button -> signal_leave().connect(  // Cursor clickable
+	main_menu_button -> signal_leave().connect(  // Cursor normal
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "main_menu_button")
 	);
 	main_menu_button -> signal_clicked().connect(  // Go to main menu
@@ -742,7 +743,7 @@ main(int argc, char **argv)
 	winning_new_game_button -> signal_enter().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "winning_new_game_button")
 	);
-	winning_new_game_button -> signal_leave().connect(  // Cursor clickable
+	winning_new_game_button -> signal_leave().connect(  // Cursor normal
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "winning_new_game_button")
 	);
 	winning_new_game_button -> signal_clicked().connect(
