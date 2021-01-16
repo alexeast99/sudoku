@@ -19,6 +19,7 @@ Board::Board (void)
     total_time = 0;
     fastest_time = 0; // This is retrieved from keyfile based on username
 	username = "";
+	load_from_user_data = false;
 	reserved_set = false;
 	reserved_index = 0;
 	reserved.resize(RESERVED);
@@ -187,32 +188,33 @@ void Board::reset_board (void)
 {
 	game_board = initial;
 	blocks = initial;
-	printf("Game: %d\n", game_board[0][0]);
 	return;
+}
+
+void Board::reset_reserved (void)
+{
+	reserved_set = false;
+	reserved_index = 0;
+
+	int i;
+	for (i=0; i<RESERVED; i++) {
+		reserved[i] = {0, 0, 0};
+	}
 }
 
 void Board::reset (void)
 {
 	reset_time();
 	reset_board();
-	reserved_set = false;
-	reserved_index = 0;
-	if (username != "") {
-		int i;
-		for (i=0; i<9; i++) {
-			std::string cell_index = std::to_string(i);
-			std::string reserved_key = "r" + cell_index;
-			if (user_data.has_key(username, reserved_key)) {
-				user_data.remove_key(username, reserved_key);
-			}
-			if (user_data.has_key(username, cell_index)) {
-				user_data.remove_key(username, cell_index);
-			}
-			if (i < RESERVED) reserved[i] = {0, 0, 0};
+	reset_reserved();
 
-		}
-	}
-	if (username != "") save_data();
+	// Reset will be called when a new game is requested. No matter what the
+	// scenario is, board data should not be loaded from the keyfile when a new
+	// game is requested
+	load_from_user_data = false;
+
+	generate_reserved();
+
 	return;
 }
 
@@ -235,24 +237,30 @@ void Board::set_username (Glib::ustring name)
 	if (user_data.has_group(name)) {  // If this user has played before
 
 		bool has_fastest = user_data.has_key(name, "fastest_time");
-		bool mid_game = user_data.has_key(name, "paused_time");
-		bool has_reserved = user_data.has_key(name, "r0");
+		bool has_paused = user_data.has_key(name, "paused_time");
 
 		if (has_fastest) {  // User has a fastest time
 			double ft = user_data.get_double(name, "fastest_time");
 			fastest_time = ft;
 		}
-		if (mid_game) {  // If user is in the middle of a game
+
+		// If user is in the middle of a game
+		if (has_paused && user_data.get_double(name, "paused_time") != 0) {
 			total_time = user_data.get_double(name, "paused_time");
-		}
-		if (has_reserved) {
+			load_from_user_data = true;
 			set_reserved();
-			reserved_set = true;
+			load_board_state();
+
+		} else {
+			generate_reserved();
+
 		}
+
 
 	} else {
 		user_data.set_double(name, "fastest_time", 0);
 		user_data.set_double(name, "paused_time", 0);
+		generate_reserved();
 	}
 	return;
 }
@@ -263,19 +271,6 @@ void Board::save_data (void)
 	user_data.save_to_file("data/user_data.txt");
 	return;
 }
-
-bool Board::get_checking_win (void)
-{
-	return checking_win;
-}
-
-void Board::set_checking_win (bool checking)
-{
-	set_total_time();  // Store the current game time internally
-	checking_win = checking;
-	return;
-}
-
 
 void Board::save_board_state (void)
 {
@@ -311,8 +306,22 @@ void Board::save_board_state (void)
 	return;
 }
 
+bool Board::get_checking_win (void)
+{
+	return checking_win;
+}
+
+void Board::set_checking_win (bool checking)
+{
+	set_total_time();  // Store the current game time internally
+	checking_win = checking;
+	return;
+}
+
 void Board::load_board_state (void)
 {
+	if (!load_from_user_data) return;
+
 	std::string key;
 	std::string row;
 
@@ -352,6 +361,7 @@ void Board::set_reserved (void)
 		key.pop_back();
 	}
 
+	reserved_set = true;
 	return;
 }
 
@@ -359,7 +369,6 @@ void Board::generate_reserved (void)
 {
 	// If this user already has reserved tiles, don't set
 	if (reserved_set) return;
-	printf("Generating reserved before initializing board\n");
 
 	srand( time(NULL));  // Initialize random seed
 

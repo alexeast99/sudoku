@@ -103,6 +103,12 @@ class Board {
 	  */
 	 bool checking_win;
 
+	 /* Used to determine whether or not data *from the board only*
+	  * should be loaded from the keyfile. True if resuming a paused game,
+	  * false in all other cases
+	  */
+	 bool load_from_user_data;
+
   public:
 
     /* Initialize with start_time = 0 to signify a game has not yet been started.
@@ -172,6 +178,11 @@ class Board {
 	 *
 	 */
 	 void reset_board (void);
+
+	 /* Resets the reserved_index, reserved_set, and reserved member variables
+	  *
+	  */
+	  void reset_reserved (void);
 
 	 /* A convenient method to reset everything
 	  *

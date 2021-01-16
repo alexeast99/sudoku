@@ -20,7 +20,7 @@
 void open_game ();
 void close_game (bool);
 void new_game ();
-void new_game_from_paused ();
+void new_from_main_menu ();
 
 bool quit (GdkEventAny*, Glib::RefPtr<Gtk::Application>);
 void quit_wrapper (Gtk::Window*);
@@ -29,6 +29,9 @@ void open_instructions ();
 void close_instructions ();
 
 void initialize_board ();
+void populate_board ();
+
+void reset_all ();
 void reset_board ();
 void reset_reserved ();
 
@@ -65,7 +68,6 @@ Board board;
 ************************/
 
 // Opens the game window for single-board games. Gets users name
-// TODO: Generate game board before displaying (i.e. initialize game state)
 void
 open_game (void)
 {
@@ -83,11 +85,14 @@ open_game (void)
 	Glib::ustring game_time = board.formatted_time( board.get_total_time());
 	current_time_time_label -> set_text( game_time);
 
+	populate_board();
+
 	// Update game time every second
     Glib::signal_timeout().connect_seconds(  // Updates counter in game screen
       sigc::ptr_fun(&timeout_handler), 1
     );
 
+	board.start(); // Start internal clock
 	return;
 }
 
@@ -109,15 +114,12 @@ close_game (bool game_in_progress)
 	return;
 }
 
-// Resets the board time and the main menu for the current user.
+// Resets the board time and the main menu for the current user. Called when
+// New Game is clicked in the main menu
 void
-new_game_from_paused (void)
+new_from_main_menu (void)
 {
-	board.reset();  // Resets internal object state
-	board.generate_reserved(); // Generate and populate new reserved cells
-	reset_board();  // Resets external playing board
-	reset_reserved();  // Clears reserved cells from GUI
-	initialize_board();
+	reset_all();
 	update_main_menu();
 }
 
@@ -125,14 +127,9 @@ new_game_from_paused (void)
 void
 new_game (void)
 {
-	board.reset();  // Resets internal object state
-	board.generate_reserved(); // Generate and populate new reserved cells
-	reset_board();  // Resets external playing board
-	reset_reserved();  // Clears reserved cells from GUI
-	initialize_board();
+	reset_all();
 	hide_dialog("congratulations_dialog");
 	open_game();
-	board.start();
 }
 
 // Called from close_game and handle_user to update the buttons on the main menu
@@ -207,21 +204,16 @@ close_instructions (void)
 }
 
 // Customize TextView for each cell on the board
-// TODO: Font size? Font? Set reserved. If reserved, set un-editable.
 void
 initialize_board (void)
 {
-    int i, j;
-	board.load_board_state();  // Load data from keyfile into object
-
     // Create CssProvider
     auto css_provider = Gtk::CssProvider::create();
     css_provider -> load_from_path ("res/styles.css");
 
+	int i, j;
     for (i=0; i<9; i++) {
         for (j=0; j<9; j++) {
-			// Used to ensure the GUI matches the internal state
-			std::string tile = std::to_string( board.get_number(i, j));
 
             // ID of Gtk::Entry based on position in matrix
             gchar* cell_name = (gchar *) g_malloc(31);
@@ -237,21 +229,43 @@ initialize_board (void)
             cell -> set_alignment (0.5);
             cell -> get_style_context() ->
                 add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-			if ( tile.compare("0") != 0) cell -> set_text( tile);
 
             cell -> get_buffer() -> signal_inserted_text().connect(
               sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
                 sigc::ptr_fun(&on_inserted), buffer, i, j));
-
-			// If reserved cell chosen by game, disallow editing
-			if ( board.check_reserved(i, j)) cell -> set_editable(false);
-			else cell -> set_editable(true);
-			// else above is needed to allow cells that were previously reserved
-			// to be changed in case the user starts a new game
         }
     }
 
 	return;
+}
+
+// Update GUI to match internal board state
+void
+populate_board (void)
+{
+	Gtk::Entry* cell;
+
+	int i, j;
+	for (i=0; i<9; i++) {
+		std::string iStr = std::to_string(i);
+
+		for (j=0; j<9; j++) {
+			std::string jStr = std::to_string(j);
+
+			// Used to ensure the GUI matches the internal state
+			std::string cell_value = std::to_string( board.get_number(i, j));
+			std::string cell_name = "row_" + iStr + "_" + jStr;
+			bool reserved_cell = board.check_reserved(i, j);
+
+			builder -> get_widget(cell_name, cell);
+
+			if ( cell_value.compare("0") != 0) cell -> set_text(cell_value);
+
+			if (reserved_cell) cell -> set_editable(false);
+			else cell -> set_editable(true);
+
+		}
+	}
 }
 
 // Set every entry back to blank when reset button is hit. Excludes buttons set by the game.
@@ -298,6 +312,15 @@ reset_reserved (void)
 
 		board.set_number(0, i[0], i[1]);
 	}
+}
+
+// Resets the gui and internal board state
+void
+reset_all (void)
+{
+	reset_board();  // Resets external playing board
+	reset_reserved();  // Clears reserved cells from GUI
+	board.reset();
 }
 
 // Set cursor to pointer when over button
@@ -456,13 +479,10 @@ handle_user (void)
 		return;
 	}
 
-	board.reset();  // Clear internal board state
-	reset_board();  // Clears external board  GUI
-	reset_reserved();  // Clears reserved cells in GUI
-
 	// Set username in board. Set fastest time
 	Glib::ustring username = username_entry -> get_text();
 	board.set_username(username);
+
 	Glib::ustring user_fastest = board.get_fastest_time();
 	fastest_time_time_label -> set_text(user_fastest);
 
@@ -471,8 +491,6 @@ handle_user (void)
 	g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
 	welcome_label -> set_text(welcome_message);
 
-	board.generate_reserved();
-	initialize_board();
 	update_main_menu();
 	switch_stack_page("Main Menu");
 
@@ -602,9 +620,6 @@ main(int argc, char **argv)
     begin_button  -> signal_clicked().connect(  // Begin button opens game
       sigc::ptr_fun(&open_game)
     );
-    begin_button  -> signal_clicked().connect(  // Start internal clock
-      sigc::mem_fun(board, &Board::start)
-    );
     begin_button  -> signal_enter().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "begin_button")
     );
@@ -688,7 +703,7 @@ main(int argc, char **argv)
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
 	);
 	new_game_button -> signal_clicked().connect(  // Reset time and update main menu
-		sigc::ptr_fun(&new_game_from_paused)
+		sigc::ptr_fun(&new_from_main_menu)
 	);
 
 	switch_user_button -> signal_enter().connect(  // Cursor clickable
@@ -699,6 +714,9 @@ main(int argc, char **argv)
 	);
 	switch_user_button -> signal_clicked().connect(  // Switch to player info page
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&switch_stack_page), "Player Info")
+	);
+	switch_user_button -> signal_clicked().connect(  // Switch to player info page
+		sigc::ptr_fun(&reset_all)
 	);
 
 	exit_button -> signal_enter().connect(  // Cursor clickable
@@ -780,8 +798,7 @@ main(int argc, char **argv)
     /* Initial setup
      *
      */
-
-    // initialize_board();
+	 initialize_board();
 
     if (window) {
 		app -> run(*window);
