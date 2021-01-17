@@ -21,7 +21,6 @@ Board::Board (void)
 	username = "";
 	load_from_user_data = false;
 	reserved_set = false;
-	reserved_index = 0;
 	reserved.resize(RESERVED);
 
 	int i;
@@ -191,7 +190,6 @@ void Board::reset_board (void)
 void Board::reset_reserved (void)
 {
 	reserved_set = false;
-	reserved_index = 0;
 
 	int i;
 	for (i=0; i<RESERVED; i++) {
@@ -259,6 +257,7 @@ void Board::set_username (Glib::ustring name)
 		user_data.set_double(name, "paused_time", 0);
 		generate_reserved();
 	}
+
 	return;
 }
 
@@ -350,10 +349,9 @@ void Board::set_reserved (void)
 		key = key + std::to_string(i);
 		row = user_data.get_string(username, key);
 
-		reserved[reserved_index][0] = row[0] - '0';
-		reserved[reserved_index][1] = row[1] - '0';
-		reserved[reserved_index][2] = row[2] - '0';
-		reserved_index += 1;
+		reserved[i][0] = row[0] - '0';
+		reserved[i][1] = row[1] - '0';
+		reserved[i][2] = row[2] - '0';
 
 		key.pop_back();
 	}
@@ -380,10 +378,9 @@ void Board::generate_reserved (void)
 		while (col == 9) col = rand() % 10;
 
 		if ( !check_reserved(row, col)) {
-			reserved[reserved_index][0] = row;
-			reserved[reserved_index][1] = col;
-			reserved[reserved_index][2] = blocksLookup.at(row/3).at(col/3);
-			reserved_index += 1;
+			reserved[i][0] = row;
+			reserved[i][1] = col;
+			reserved[i][2] = blocksLookup.at(row/3).at(col/3);
 		}
 		else i -= 1;
 

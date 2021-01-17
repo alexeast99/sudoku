@@ -66,11 +66,6 @@ class Board {
 	 */
 	 bool reserved_set;
 
-	 /* Holds the index of the next inner array to set the coordinates of a
-	  * reserved cell into
-	  */
-	 int reserved_index;
-
     /* The starting time.
      *
      */
