@@ -609,6 +609,8 @@ main(int argc, char **argv)
 	Gtk::Label* fastest_time_header_label;
 	Gtk::Label* fastest_time_time_label;
 	Gtk::Label* note_label;
+	Gtk::Label* you_won_label;
+	Gtk::Label* almost_there_label;
 
 	// Dialog pointers
 	Gtk::Dialog* sorry_dialog;
@@ -668,6 +670,8 @@ main(int argc, char **argv)
 	builder -> get_widget("fastest_time_header_label", fastest_time_header_label);
 	builder -> get_widget("fastest_time_time_label", fastest_time_time_label);
 	builder -> get_widget("note_label", note_label);
+	builder -> get_widget("you_won_label", you_won_label);
+	builder -> get_widget("almost_there_label", almost_there_label);
 
 	// Dialog widgets
 	builder -> get_widget("sorry_dialog", sorry_dialog);
@@ -873,6 +877,12 @@ main(int argc, char **argv)
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	winning_new_game_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	got_it_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	hint_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	continue_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to windows
     window -> get_style_context() ->
@@ -919,6 +929,10 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	note_label -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	almost_there_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	you_won_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 	// Add stylesheet to dialogs
 	sorry_dialog -> get_style_context() ->

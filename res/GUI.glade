@@ -421,11 +421,11 @@ will be created.</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_left">20</property>
             <property name="margin_start">10</property>
             <property name="margin_end">10</property>
-            <property name="margin_top">10</property>
+            <property name="margin_top">20</property>
+            <property name="margin_bottom">20</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="border_width">0</property>
@@ -727,6 +727,7 @@ will be created.</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <property name="margin_right">20</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="row_homogeneous">True</property>
@@ -1141,6 +1142,7 @@ will be created.</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <property name="margin_right">20</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="row_homogeneous">True</property>
@@ -1546,6 +1548,7 @@ will be created.</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <property name="margin_right">20</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="row_homogeneous">True</property>
@@ -1674,100 +1677,12 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButtonBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">False</property>
-                <property name="spacing">10</property>
-                <property name="layout_style">center</property>
-                <child>
-                  <object class="GtkButton" id="finish_later_button">
-                    <property name="label" translatable="yes">Finish Later</property>
-                    <property name="name">finish_later_button</property>
-                    <property name="width_request">150</property>
-                    <property name="height_request">45</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">False</property>
-                    <style>
-                      <class name="button"/>
-                      <class name="menu_text"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="done_button">
-                    <property name="label" translatable="yes">Done</property>
-                    <property name="name">done_button</property>
-                    <property name="width_request">150</property>
-                    <property name="height_request">45</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">False</property>
-                    <style>
-                      <class name="button"/>
-                      <class name="menu_text"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="reset_button">
-                    <property name="label" translatable="yes">Reset</property>
-                    <property name="name">reset_button</property>
-                    <property name="width_request">150</property>
-                    <property name="height_request">45</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">False</property>
-                    <style>
-                      <class name="button"/>
-                      <class name="menu_text"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="width_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">100</property>
+                <property name="valign">center</property>
+                <property name="margin_right">20</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="current_time_header_label">
@@ -1819,7 +1734,8 @@ will be created.</property>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">100</property>
+                <property name="valign">center</property>
+                <property name="margin_right">20</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="fastest_time_header_label">
@@ -1868,10 +1784,94 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkButtonBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_right">20</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
+                <property name="layout_style">center</property>
+                <child>
+                  <object class="GtkButton" id="done_button">
+                    <property name="label" translatable="yes">Done</property>
+                    <property name="name">done_button</property>
+                    <property name="width_request">150</property>
+                    <property name="height_request">45</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <style>
+                      <class name="button"/>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="finish_later_button">
+                    <property name="label" translatable="yes">Finish Later</property>
+                    <property name="name">finish_later_button</property>
+                    <property name="width_request">150</property>
+                    <property name="height_request">45</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <style>
+                      <class name="button"/>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="reset_button">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="name">reset_button</property>
+                    <property name="width_request">150</property>
+                    <property name="height_request">45</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <style>
+                      <class name="button"/>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">2</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -1908,7 +1908,8 @@ will be created.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="danger_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -1924,7 +1925,8 @@ will be created.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="primary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -1940,7 +1942,8 @@ will be created.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="secondary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -1957,13 +1960,16 @@ will be created.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="you_won_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">You Won!</property>
             <attributes>
               <attribute name="size" value="30000"/>
             </attributes>
+            <style>
+              <class name="menu_text"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -2013,6 +2019,10 @@ will be created.</property>
                 <property name="receives_default">True</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
+                <style>
+                  <class name="button"/>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -2081,7 +2091,8 @@ When these conditions are satisfied, the game has been won!</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="secondary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -2097,7 +2108,8 @@ When these conditions are satisfied, the game has been won!</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="primary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -2114,13 +2126,16 @@ When these conditions are satisfied, the game has been won!</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="almost_there_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">You're Almost There!</property>
             <attributes>
               <attribute name="size" value="30000"/>
             </attributes>
+            <style>
+              <class name="menu_text"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
