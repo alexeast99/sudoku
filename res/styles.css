@@ -21,12 +21,13 @@ entry {
 .button {
 	border-radius: 6px;
 	border: none;
-	box-shadow: 3px 3px 3px black;
+	box-shadow: 1px 1px 2px black;
 	font-size: 18px;
 }
 
 .menu_text {
 	color: #f7f7f7;
+	text-shadow: 1px 1px 2px black;
 }
 
 .background {
@@ -36,4 +37,12 @@ entry {
 
 #board_container_grid {
     margin: 0;
+}
+
+#welcome_label {
+	font-size: 18px;
+}
+
+#source_code_label {
+	font-size: 14px;
 }

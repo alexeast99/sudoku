@@ -597,8 +597,7 @@ main(int argc, char **argv)
 	Gtk::Box* menu_screen_box;
 	Gtk::Box* username_entry_box;
 	Gtk::Box* button_box_box;
-	Gtk::Box* switch_user_box;
-
+	
 	// Stack pointers
 	Gtk::Stack* application_stack;
 
@@ -654,7 +653,6 @@ main(int argc, char **argv)
 	builder -> get_widget("menu_screen_box", menu_screen_box);
 	builder -> get_widget("username_entry_box", username_entry_box);
 	builder -> get_widget("button_box_box", button_box_box);
-	builder -> get_widget("switch_user_box", switch_user_box);
 
 	// Stack widgets
 	builder -> get_widget("application_stack", application_stack);
@@ -875,8 +873,6 @@ main(int argc, char **argv)
 	username_entry_box -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	button_box_box -> get_style_context() ->
-        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-	switch_user_box -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 	// Add stylesheet to stacks
