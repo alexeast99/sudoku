@@ -5,6 +5,7 @@
   <!-- interface-css-provider-path styles.css -->
   <object class="GtkWindow" id="application_window">
     <property name="can_focus">False</property>
+    <property name="resizable">False</property>
     <property name="window_position">center</property>
     <child type="titlebar">
       <placeholder/>
@@ -13,6 +14,8 @@
       <object class="GtkStack" id="application_stack">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
         <child>
           <object class="GtkGrid" id="player_info_grid">
             <property name="visible">True</property>
@@ -126,8 +129,8 @@ will be created.</property>
           <object class="GtkBox" id="menu_screen_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
             <property name="orientation">vertical</property>
             <property name="spacing">40</property>
             <child>
@@ -174,7 +177,7 @@ will be created.</property>
                             <property name="width_request">200</property>
                             <property name="height_request">50</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <style>
                               <class name="primary_button"/>
@@ -204,7 +207,7 @@ will be created.</property>
                             <property name="label" translatable="yes">How to Play</property>
                             <property name="name">how_to_play_button</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">20</property>
                             <property name="margin_right">20</property>
@@ -284,22 +287,63 @@ will be created.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="welcome_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="margin_top">16</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="welcome_label">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkButton" id="switch_user_button">
+                        <property name="label" translatable="yes">Switch User</property>
+                        <property name="width_request">40</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
+                        <property name="margin_top">7</property>
+                        <style>
+                          <class name="secondary_button"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -333,6 +377,7 @@ will be created.</property>
             <property name="margin_right">10</property>
             <property name="margin_start">10</property>
             <property name="margin_end">10</property>
+            <property name="margin_top">10</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="border_width">0</property>
@@ -1782,7 +1827,7 @@ will be created.</property>
             <property name="hexpand">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="exit_button">
                 <property name="label" translatable="yes">Exit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -1798,7 +1843,7 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="winning_new_game_button">
                 <property name="label" translatable="yes">New Game</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -1814,7 +1859,7 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="main_menu_button">
                 <property name="label" translatable="yes">Main Menu</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -1891,6 +1936,8 @@ will be created.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1906,14 +1953,25 @@ will be created.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="how_to_play_text_view">
+          <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="editable">False</property>
-            <property name="wrap_mode">word</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">10</property>
+            <property name="margin_right">10</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
+            <property name="label" translatable="yes">The purpose of sudoku is to fill out the large, 3x3 grid, consisting of 9 smaller 3x3 grids, with the numbers 1-9.
+		
+The smaller 3x3 grids must have exactly one of each number 1-9.
+	
+The larger grid must obey the following rules:
+	- Each column must have the numbers 1-9 (no repeats)
+	- Each row must have the numbers 1-9 (no repeats)
+
+When these conditions are satisfied, the game has been won!</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>

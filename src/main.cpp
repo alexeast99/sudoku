@@ -1,5 +1,5 @@
 /*
-* Last Modified: 12/20/20
+* Last Modified: 01/17/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -16,24 +16,33 @@
 #include "board.h"
 
 
-// Funciton prototypes
+// Function prototypes
 void open_game ();
-void close_game ();
+void close_game (bool);
+void new_game ();
+void new_from_main_menu ();
 
 bool quit (GdkEventAny*, Glib::RefPtr<Gtk::Application>);
+void quit_wrapper (Gtk::Window*);
 
 void open_instructions ();
 void close_instructions ();
 
-void initalize_board ();
+void initialize_board ();
+void populate_board ();
+
+void reset_all ();
 void reset_board ();
+void reset_reserved ();
 
 void set_pointer (Glib::ustring);
 void restore_pointer (Glib::ustring);
 
 bool check_if_number (char, Glib::RefPtr< Gtk::EntryBuffer >);
 void insert_to_board (char, int, int);
+
 void on_inserted (guint, const char*, guint, Glib::RefPtr< Gtk::EntryBuffer >, int, int);
+void on_removed (guint, guint, int, int);
 
 void check_win ();
 
@@ -47,7 +56,9 @@ bool timeout_handler ();
 
 void handle_user ();
 
-void finish_later ();
+void update_main_menu ();
+void switch_stack_page (Glib::ustring);
+void hide_dialog (Glib::ustring);
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -59,41 +70,105 @@ Board board;
 ************************/
 
 // Opens the game window for single-board games. Gets users name
-// TODO: Generate game board before displaying (i.e. initialize game state)
 void
 open_game (void)
 {
-    Gtk::Stack* application_stack;
 	Gtk::Grid* board_container_grid;
+	Gtk::Label* current_time_time_label;
 
-	builder -> get_widget ("application_stack", application_stack);
 	builder -> get_widget ("board_container_grid", board_container_grid);
+	builder -> get_widget ("current_time_time_label", current_time_time_label);
 
+	// Show game board
 	board_container_grid -> show();
-	application_stack -> set_visible_child("Game Board");
+	switch_stack_page("Game Board");
 
+	// Set correct time
+	Glib::ustring game_time = board.formatted_time( board.get_total_time());
+	current_time_time_label -> set_text( game_time);
+
+	board.generate_reserved(); // Generate reserved if not already set
+	populate_board();		   // Update GUI to match internal board state
+
+	// Update game time every second
     Glib::signal_timeout().connect_seconds(  // Updates counter in game screen
       sigc::ptr_fun(&timeout_handler), 1
     );
 
+	board.start(); // Start internal clock
 	return;
 }
 
-// Closes the game window for single-board games
-// TODO: Reset board state after closing. Maybe different function?
+// Closes the game window and saves the time if finish later was clicked
 void
-close_game (void)
+close_game (bool game_in_progress)
 {
-    Gtk::Stack* application_stack;
-	Gtk::Grid* board_container_grid;
+	if (game_in_progress) {
+		board.set_total_time();
+		board.save_data();  // Save in case switching user
+	} else hide_dialog("congratulations_dialog");
 
-    builder -> get_widget ("application_stack", application_stack);
+	Gtk::Grid* board_container_grid;
 	builder -> get_widget ("board_container_grid", board_container_grid);
 
-    board.set_total_time();
+	update_main_menu();
 
 	board_container_grid -> hide();
-    application_stack -> set_visible_child("Main Menu");
+    switch_stack_page("Main Menu");
+
+	return;
+}
+
+// Resets the board time and the main menu for the current user. Called when
+// New Game is clicked in the main menu
+void
+new_from_main_menu (void)
+{
+	reset_all();
+	board.save_data();
+	update_main_menu();
+}
+
+// Jumps straight into a new game after winning a previous one
+void
+new_game (void)
+{
+	reset_all();
+	hide_dialog("congratulations_dialog");
+	open_game();
+}
+
+// Called from close_game and handle_user to update the buttons on the main menu
+// based on whether or not a user has a paused game
+void
+update_main_menu (void)
+{
+	Gtk::Box* menu_screen_box;
+	Gtk::Button* begin_button;
+	Gtk::Button* new_game_button;
+	Gtk::Widget* new_game_button_box;
+	Gtk::Widget* how_to_play_button_box;
+	Gtk::Box* button_box_box;
+
+	builder -> get_widget ("menu_screen_box", menu_screen_box);
+	builder -> get_widget ("begin_button", begin_button);
+	builder -> get_widget ("new_game_button_box", new_game_button_box);
+	builder -> get_widget ("how_to_play_button_box", how_to_play_button_box);
+	builder -> get_widget ("button_box_box", button_box_box);
+	builder -> get_widget ("new_game_button", new_game_button);
+
+	// Change begin to resume, and add new game button, if there is a game in
+	// progress
+	if ( board.get_total_time() != 0) {
+		begin_button -> set_label("Resume Game");
+		button_box_box -> reorder_child(*how_to_play_button_box, 2);
+		button_box_box -> reorder_child(*new_game_button_box, 1);
+		new_game_button -> show();
+	} else {
+		begin_button -> set_label("Begin");
+		new_game_button -> hide();
+		button_box_box -> reorder_child(*how_to_play_button_box, 1);
+	}
 
 	return;
 }
@@ -103,7 +178,6 @@ close_game (void)
 bool
 quit (GdkEventAny* event, Glib::RefPtr<Gtk::Application> app)
 {
-	board.save_data();
 	app -> quit();
 	return true;
 }
@@ -134,35 +208,18 @@ close_instructions (void)
 	return;
 }
 
-// Write the text buffer that holds the instructions for the 'How to Play' dialog
-void
-write_instructions (void)
-{
-    Gtk::TextView* instructions_text_view;
-    Glib::RefPtr<Gtk::TextBuffer> instructions_text_buffer;
-
-    builder -> get_widget ("how_to_play_text_view", instructions_text_view);
-    if (instructions_text_view) {
-		instructions_text_buffer = instructions_text_view -> get_buffer();
-	}
-    instructions_text_buffer -> set_text ("Success!");
-
-	return;
-}
-
 // Customize TextView for each cell on the board
-// TODO: Font size? Font? Set reserved. If reserved, set un-editable.
 void
 initialize_board (void)
 {
-    int i, j;
-
     // Create CssProvider
     auto css_provider = Gtk::CssProvider::create();
     css_provider -> load_from_path ("res/styles.css");
 
+	int i, j;
     for (i=0; i<9; i++) {
         for (j=0; j<9; j++) {
+
             // ID of Gtk::Entry based on position in matrix
             gchar* cell_name = (gchar *) g_malloc(31);
             g_snprintf(cell_name, 31,"row_%d_%d", i, j);
@@ -180,11 +237,48 @@ initialize_board (void)
 
             cell -> get_buffer() -> signal_inserted_text().connect(
               sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
-                sigc::ptr_fun(&on_inserted), buffer, i, j));
+                	sigc::ptr_fun(&on_inserted), buffer, i, j
+				)
+			);
+
+			cell -> get_buffer() -> signal_deleted_text().connect(
+				sigc::bind(
+					sigc::ptr_fun(&on_removed), i, j
+				)
+			);
         }
     }
 
 	return;
+}
+
+// Update GUI to match internal board state
+void
+populate_board (void)
+{
+	Gtk::Entry* cell;
+
+	int i, j;
+	for (i=0; i<9; i++) {
+		std::string iStr = std::to_string(i);
+
+		for (j=0; j<9; j++) {
+			std::string jStr = std::to_string(j);
+
+			// Used to ensure the GUI matches the internal state
+			std::string cell_value = std::to_string( board.get_number(i, j));
+			std::string cell_name = "row_" + iStr + "_" + jStr;
+			bool reserved_cell = board.check_reserved(i, j);
+
+			builder -> get_widget(cell_name, cell);
+
+			if ( cell_value.compare("0") != 0) cell -> set_text(cell_value);
+
+			if (reserved_cell) cell -> set_editable(false);
+			else cell -> set_editable(true);
+
+		}
+	}
 }
 
 // Set every entry back to blank when reset button is hit. Excludes buttons set by the game.
@@ -193,21 +287,53 @@ reset_board (void)
 {
     int i, j;
     for (i=0; i<9; i++) {
-        for (j=0; j<9 && !board.check_reserved(i, j); j++) {
-            // ID of Gtk::Entry based on position in matrix
-            gchar* cell_name = (gchar *) g_malloc(31);
-            g_snprintf(cell_name, 31, "row_%d_%d", i, j);
+        for (j=0; j<9; j++) {
+			if ( !board.check_reserved(i, j) ) {
+				// ID of Gtk::Entry based on position in matrix
+	            gchar* cell_name = (gchar *) g_malloc(31);
+	            g_snprintf(cell_name, 31, "row_%d_%d", i, j);
 
-            // Get current Gtk::Entry from the builder
-            Gtk::Entry*  cell;
-            builder -> get_widget (cell_name, cell);
+	            // Get current Gtk::Entry from the builder
+	            Gtk::Entry*  cell;
+	            builder -> get_widget (cell_name, cell);
 
-            // Clear this Gtk::Entry's text
-            cell -> set_text("");
+	            // Clear this Gtk::Entry's text
+	            cell -> set_text("");
+
+				board.set_number(0, i, j);
+			}
         }
    }
 
    return;
+}
+
+// Erases the reserved cells in the gui only
+void
+reset_reserved (void)
+{
+	std::vector< std::vector< int>> reserved = board.get_reserved();
+	for (auto i : reserved) {
+		gchar* cell_name = (gchar *) g_malloc(31);
+		g_snprintf(cell_name, 31, "row_%d_%d", i[0], i[1]);
+
+		Gtk::Entry* cell;
+		builder -> get_widget (cell_name, cell);
+
+		cell -> set_editable(true);
+		cell -> set_text("");
+
+		board.set_number(0, i[0], i[1]);
+	}
+}
+
+// Resets the gui and internal board state
+void
+reset_all (void)
+{
+	reset_board();     // Resets external playing board
+	reset_reserved();  // Clears reserved cells from GUI
+	board.reset();
 }
 
 // Set cursor to pointer when over button
@@ -240,17 +366,17 @@ check_if_number (char inserted, Glib::RefPtr< Gtk::EntryBuffer > buffer)
 {
   if (inserted > '9' || inserted < '1') {
     buffer -> delete_text(0, 1);
-    return false;
+	return false;
   }
-  return true;
+	return true;
 }
 
 // When text is entered, must store in internal board
 void
 insert_to_board (char inserted, int outer, int inner)
 {
-  board.set_number(inserted - '0', outer, inner);
-  return;
+	board.set_number(inserted - '0', outer, inner);
+	return;
 }
 
 // Call this every time a number is inserted on the board
@@ -258,12 +384,19 @@ void
 on_inserted (guint position, const gchar* chars, guint n_chars,
   Glib::RefPtr< Gtk::EntryBuffer > buffer, int outer, int inner)
 {
-  char inserted = *chars;
-  if ( check_if_number(inserted, buffer)) {
-    insert_to_board (inserted, outer, inner);
-  }
+	char inserted = *chars;
+	if ( check_if_number(inserted, buffer)) {
+		insert_to_board (inserted, outer, inner);
+	}
 
-  return;
+	return;
+}
+
+// Call this every time a number is erased from the board
+void
+on_removed (guint position, guint n_chars, int outer, int inner)
+{
+	insert_to_board('0', outer, inner);
 }
 
 // Check if a board is a win. If it is, check if this is the fastest score and
@@ -272,62 +405,81 @@ on_inserted (guint position, const gchar* chars, guint n_chars,
 void
 check_win (void)
 {
-  board.set_total_time();  // Stop time while performing checks
+	board.set_checking_win(true);  // Stop time while performing checks
 
-  bool winner = board.is_win();
+	bool winner = board.is_win();
 
-  if (winner) {
-    bool new_record = board.new_record();
+	if (winner) {
+		bool new_record = board.new_record();  // Check to see if new record
+		board.reset_time();  // Reset time since not in a paused game
 
-    if (new_record) {
-      Gtk::Label *fastest_time_time_label;
+		if (new_record) {
+			Gtk::Label *fastest_time_time_label;
+			builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
+			fastest_time_time_label -> set_text( board.get_fastest_time());
 
-      builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
+		}
 
-      fastest_time_time_label -> set_text( board.get_fastest_time());
-    }
-    // TODO: show dialog saying they won. Username?
+		open_congratulations();
 
-  } else {
-    open_sorry ();  // Show dialog saying it was not a win
-  }
+	} else {
+		open_sorry ();  // Show dialog saying it was not a win
+	}
 
-  return;
+	return;
 }
 
 void
 open_sorry (void)
 {
-  Gtk::Dialog* sorry_dialog;
-  builder -> get_widget ("sorry_dialog", sorry_dialog);
-  if (sorry_dialog) {
-  	sorry_dialog -> show();
-  }
+	Gtk::Dialog* sorry_dialog;
+	builder -> get_widget ("sorry_dialog", sorry_dialog);
+	if (sorry_dialog) {
+		sorry_dialog -> show();
+	}
 
-  return;
+	return;
 }
 
 void
 close_sorry (void)
 {
-  Gtk::Dialog* sorry_dialog;
-  builder -> get_widget ("sorry_dialog", sorry_dialog);
-  if (sorry_dialog) {
-  	sorry_dialog -> hide();
-  }
+	Gtk::Dialog* sorry_dialog;
+	builder -> get_widget ("sorry_dialog", sorry_dialog);
+	if (sorry_dialog) {
+		sorry_dialog -> hide();
+	}
 
-  return;
+	return;
+}
+
+void
+open_congratulations (void)
+{
+	Gtk::Dialog* congratulations_dialog;
+	builder -> get_widget ("congratulations_dialog", congratulations_dialog);
+	congratulations_dialog -> show();
+}
+
+void
+close_congratulations (void)
+{
+	Gtk::Dialog* congratulations_dialog;
+	builder -> get_widget ("congratulations_dialog", congratulations_dialog);
+	congratulations_dialog -> hide();
 }
 
 // Wrapper for boards timeout handler to match handler for Glib::signal_timeout
 bool
 timeout_handler (void)
 {
-  Gtk::Label* current_time_time_label;
-  builder -> get_widget ("current_time_time_label", current_time_time_label);
+	if ( board.get_checking_win()) return true;
 
-  current_time_time_label -> set_text( board.timeout_handler_helper());
-  return true;
+	Gtk::Label* current_time_time_label;
+	builder -> get_widget ("current_time_time_label", current_time_time_label);
+
+	current_time_time_label -> set_text( board.timeout_handler_helper());
+	return true;
 }
 
 // Called when the "lets go" button is clicked after entering a username
@@ -337,33 +489,20 @@ handle_user (void)
 	Gtk::Entry* username_entry;
 	Gtk::Label* welcome_label;
 	Gtk::Label* fastest_time_time_label;
-	Gtk::Box* menu_screen_box;
-	Gtk::Stack* application_stack;
-	Gtk::Button* begin_button;
-	Gtk::Button* new_game_button;
-	Gtk::Widget* new_game_button_box;
-	Gtk::Widget* how_to_play_button_box;
-	Gtk::Box* button_box_box;
 
 	builder -> get_widget ("username_entry", username_entry);
 	builder -> get_widget ("welcome_label", welcome_label);
 	builder -> get_widget ("fastest_time_time_label", fastest_time_time_label);
-	builder -> get_widget ("menu_screen_box", menu_screen_box);
-	builder -> get_widget ("application_stack", application_stack);
-	builder -> get_widget ("begin_button", begin_button);
-	builder -> get_widget ("new_game_button_box", new_game_button_box);
-	builder -> get_widget ("how_to_play_button_box", how_to_play_button_box);
-	builder -> get_widget ("button_box_box", button_box_box);
-	builder -> get_widget ("new_game_button", new_game_button);
 
 	// User must enter a name to continue
 	if ( !username_entry -> get_text_length()) {
 		return;
 	}
 
-	// Set username in board and signal to dialog
+	// Set username in board. Set fastest time
 	Glib::ustring username = username_entry -> get_text();
 	board.set_username(username);
+
 	Glib::ustring user_fastest = board.get_fastest_time();
 	fastest_time_time_label -> set_text(user_fastest);
 
@@ -372,28 +511,47 @@ handle_user (void)
 	g_snprintf(welcome_message, 120,"Welcome, %s!", username.c_str());
 	welcome_label -> set_text(welcome_message);
 
-	// Change begin to resume, and add new game button, if there is a game in
-	// progress
-	if ( board.get_total_time() != 0) {
-		begin_button -> set_label("Resume Game");
-		button_box_box -> reorder_child(*how_to_play_button_box, 2);
-		button_box_box -> reorder_child(*new_game_button_box, 1);
-		new_game_button -> show();
-	}
-
-	// Switch stack page to main menu
-	application_stack -> set_visible_child("Main Menu");
+	update_main_menu();
+	switch_stack_page("Main Menu");
 
 	return;
 }
 
-// Handler for finish later button on game board page
+// Called to switch the stack page
 void
-finish_later (void)
+switch_stack_page (Glib::ustring page)
 {
-	close_game();
+	Gtk::Stack* application_stack;
+	builder -> get_widget ("application_stack", application_stack);
+	application_stack -> set_visible_child(page);
+	return;
 }
 
+// Called from the exit button in the winning dialog
+void
+quit_wrapper (Gtk::Window* window)
+{
+	window -> close();
+	return;
+}
+
+// Hide the dialog whose name is given as the argument
+void
+hide_dialog (Glib::ustring dialog)
+{
+	Gtk::Dialog* hide;
+	builder -> get_widget (dialog, hide);
+	hide -> hide();
+	return;
+}
+
+
+/*
+ *	TODO
+ *		- Save internal board state when a user hits finish_later
+ *		- Load saved state when a user resumes game
+ *			- Populate game board
+ */
 
 int
 main(int argc, char **argv)
@@ -422,9 +580,16 @@ main(int argc, char **argv)
     Gtk::Button* continue_button;
 	Gtk::Button* lets_go_button;
 	Gtk::Button* new_game_button;
+	Gtk::Button* switch_user_button;
+	Gtk::Button* exit_button;
+	Gtk::Button* main_menu_button;
+	Gtk::Button* winning_new_game_button;
 
-    // Grid points
+    // Grid pointers
     Gtk::Grid* board_container_grid;
+
+	// Entry pointers
+	Gtk::Entry* username_entry;
 
     /* Create builder from Glade file. Load necessary widgets.
      *
@@ -448,9 +613,16 @@ main(int argc, char **argv)
     builder -> get_widget ("continue_button", continue_button);
 	builder -> get_widget ("lets_go_button", lets_go_button);
 	builder -> get_widget ("new_game_button", new_game_button);
+	builder -> get_widget ("switch_user_button", switch_user_button);
+	builder -> get_widget ("exit_button", exit_button);
+	builder -> get_widget ("main_menu_button", main_menu_button);
+	builder -> get_widget ("winning_new_game_button", winning_new_game_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
+
+	// Entry widgets
+	builder -> get_widget ("username_entry", username_entry);
 
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor.
      * Helps with compatibility
@@ -467,9 +639,6 @@ main(int argc, char **argv)
     // Button signals
     begin_button  -> signal_clicked().connect(  // Begin button opens game
       sigc::ptr_fun(&open_game)
-    );
-    begin_button  -> signal_clicked().connect(  // Start internal clock
-      sigc::mem_fun(board, &Board::start)
     );
     begin_button  -> signal_enter().connect(  // Cursor pointer
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "begin_button")
@@ -527,7 +696,7 @@ main(int argc, char **argv)
       sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "finish_later_button")
     );
 	finish_later_button -> signal_clicked().connect(  // Save time and return to menu
-		sigc::ptr_fun(&finish_later)
+		sigc::bind<bool>( sigc::ptr_fun(&close_game), true)
 	);
 
     continue_button -> signal_clicked().connect(  // Close 'almost there' dialog
@@ -550,8 +719,60 @@ main(int argc, char **argv)
 	new_game_button -> signal_enter().connect(  // Cursor clickable
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "new_game_button")
 	);
-	new_game_button -> signal_leave().connect(  // Cursor clickable
+	new_game_button -> signal_leave().connect(  // Cursor normal
 		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "new_game_button")
+	);
+	new_game_button -> signal_clicked().connect(  // Reset time and update main menu
+		sigc::ptr_fun(&new_from_main_menu)
+	);
+
+	switch_user_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "switch_user_button")
+	);
+	switch_user_button -> signal_leave().connect(  // Cursor normal
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "switch_user_button")
+	);
+	switch_user_button -> signal_clicked().connect(  // Switch to player info page
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&switch_stack_page), "Player Info")
+	);
+	switch_user_button -> signal_clicked().connect(  // Reset board state & GUI
+		sigc::ptr_fun(&reset_all)
+	);
+
+	exit_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "exit_button")
+	);
+	exit_button -> signal_leave().connect(  // Cursor normal
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "exit_button")
+	);
+	exit_button -> signal_clicked().connect(  // Exit button quits game
+		sigc::bind<Gtk::Window*>( sigc::ptr_fun(&quit_wrapper), window)
+	);
+
+	main_menu_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "main_menu_button")
+	);
+	main_menu_button -> signal_leave().connect(  // Cursor normal
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "main_menu_button")
+	);
+	main_menu_button -> signal_clicked().connect(  // Go to main menu
+		sigc::bind<bool>( sigc::ptr_fun(&close_game), false)
+	);
+
+	winning_new_game_button -> signal_enter().connect(  // Cursor clickable
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "winning_new_game_button")
+	);
+	winning_new_game_button -> signal_leave().connect(  // Cursor normal
+		sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "winning_new_game_button")
+	);
+	winning_new_game_button -> signal_clicked().connect(
+		sigc::ptr_fun(&new_game)
+	);
+
+	// Entry signals
+	username_entry -> signal_activate().connect(
+		// Hitting enter is the same as clicking lets go button
+		sigc::ptr_fun(&handle_user)
 	);
 
     /* CSS for styling
@@ -577,6 +798,14 @@ main(int argc, char **argv)
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	new_game_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	switch_user_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	exit_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	main_menu_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	winning_new_game_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to windows
     window -> get_style_context() ->
@@ -587,16 +816,13 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* Initial setup
-     * TODO: Set fastest time on menu when game starts
+     *
      */
-
-    write_instructions();
-    initialize_board();
+	 initialize_board();
 
     if (window) {
 		app -> run(*window);
 	}
-
 
     delete window;
 
