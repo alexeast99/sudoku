@@ -1,5 +1,5 @@
 /*
-* Last Modified: 01/12/21
+* Last Modified: 01/17/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -40,7 +40,9 @@ void restore_pointer (Glib::ustring);
 
 bool check_if_number (char, Glib::RefPtr< Gtk::EntryBuffer >);
 void insert_to_board (char, int, int);
+
 void on_inserted (guint, const char*, guint, Glib::RefPtr< Gtk::EntryBuffer >, int, int);
+void on_removed (guint, guint, int, int);
 
 void check_win ();
 
@@ -85,7 +87,8 @@ open_game (void)
 	Glib::ustring game_time = board.formatted_time( board.get_total_time());
 	current_time_time_label -> set_text( game_time);
 
-	populate_board();
+	board.generate_reserved(); // Generate reserved if not already set
+	populate_board();		   // Update GUI to match internal board state
 
 	// Update game time every second
     Glib::signal_timeout().connect_seconds(  // Updates counter in game screen
@@ -122,6 +125,7 @@ void
 new_from_main_menu (void)
 {
 	reset_all();
+	board.save_data();
 	update_main_menu();
 }
 
@@ -233,7 +237,15 @@ initialize_board (void)
 
             cell -> get_buffer() -> signal_inserted_text().connect(
               sigc::bind<Glib::RefPtr <Gtk::EntryBuffer> >(
-                sigc::ptr_fun(&on_inserted), buffer, i, j));
+                	sigc::ptr_fun(&on_inserted), buffer, i, j
+				)
+			);
+
+			cell -> get_buffer() -> signal_deleted_text().connect(
+				sigc::bind(
+					sigc::ptr_fun(&on_removed), i, j
+				)
+			);
         }
     }
 
@@ -378,6 +390,13 @@ on_inserted (guint position, const gchar* chars, guint n_chars,
 	}
 
 	return;
+}
+
+// Call this every time a number is erased from the board
+void
+on_removed (guint position, guint n_chars, int outer, int inner)
+{
+	insert_to_board('0', outer, inner);
 }
 
 // Check if a board is a win. If it is, check if this is the fastest score and

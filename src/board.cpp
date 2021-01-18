@@ -1,4 +1,4 @@
-/* Last Modified: 01/16/21
+/* Last Modified: 01/17/21
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -71,6 +71,7 @@ void Board::start (void)
 {
 	if (start_time != 0)  // Hitting begin while a game is open should not do anything
 		return;
+
 	time_t current_time;
 	current_time = time(NULL);  // Gets the current time
 	start_time = current_time;
@@ -92,7 +93,6 @@ void Board::set_total_time (void)
 	// Add old time if game was paused
     total_time = total_time + (current_time - start_time);
     start_time = 0;  // Set start time to 0 to signify that a game is not open
-	user_data.set_double(username, "paused_time", total_time);
 
 	return;
 }
@@ -145,7 +145,6 @@ bool Board::new_record (void)
 	bool record = total_time < fastest_time;
 	if (record || fastest_time == 0) {
 		fastest_time = total_time;
-		user_data.set_double(username, "fastest_time", total_time);
   	}
 	return record;
 }
@@ -208,8 +207,6 @@ void Board::reset (void)
 	// game is requested
 	load_from_user_data = false;
 
-	generate_reserved();
-
 	return;
 }
 
@@ -235,8 +232,7 @@ void Board::set_username (Glib::ustring name)
 		bool has_paused = user_data.has_key(name, "paused_time");
 
 		if (has_fastest) {  // User has a fastest time
-			double ft = user_data.get_double(name, "fastest_time");
-			fastest_time = ft;
+			fastest_time = user_data.get_double(name, "fastest_time");
 		}
 
 		// If user is in the middle of a game
@@ -246,25 +242,15 @@ void Board::set_username (Glib::ustring name)
 			set_reserved();
 			load_board_state();
 
-		} else {
-			generate_reserved();
-
 		}
 
 
 	} else {
 		user_data.set_double(name, "fastest_time", 0);
 		user_data.set_double(name, "paused_time", 0);
-		generate_reserved();
+
 	}
 
-	return;
-}
-
-void Board::save_data (void)
-{
-	save_board_state();
-	user_data.save_to_file("data/user_data.txt");
 	return;
 }
 
@@ -299,6 +285,21 @@ void Board::save_board_state (void)
 
 	}
 
+	return;
+}
+
+void Board::save_time (void)
+{
+	user_data.set_double(username, "paused_time", total_time);
+	user_data.set_double(username, "fastest_time", fastest_time);
+	return;
+}
+
+void Board::save_data (void)
+{
+	save_board_state();
+	save_time();
+	user_data.save_to_file("data/user_data.txt");
 	return;
 }
 

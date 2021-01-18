@@ -199,6 +199,16 @@ class Board {
 	  */
 	 void set_username (Glib::ustring);
 
+	 /* Used to save the state of the board to the user data file for the
+	  * the current user
+	  */
+	 void save_board_state (void);
+
+	 /* Saves the fastest_time and total_time member variables to the keyfile
+	  *
+	  */
+	  void save_time (void);
+
 	 /* Save the data in the private keyfile variable to the text file. This is
 	  * called when the game is exited.
 	  */
@@ -213,11 +223,6 @@ class Board {
 	  *
 	  */
 	 void set_checking_win (bool);
-
-	 /* Used to save the state of the board to the user data file for the
-	  * the current user
-	  */
-	 void save_board_state (void);
 
 	 /* Used to load the state of the board from the user data file for the
 	  * current user
