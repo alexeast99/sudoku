@@ -1,7 +1,8 @@
 /*
-* Last Modified: 09/24/2020
+* Last Modified: 01/18/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
+* File: res/styles.css
 */
 
 window {
@@ -17,55 +18,22 @@ entry {
 
 
 
-.primary_button {
-    border-radius: 6px;
-    border: none;
-    box-shadow: 3px 3px 3px gray;
-    background: #6666ff;
-    color: white;
+.button {
+	border-radius: 6px;
+	border: none;
+	box-shadow: 3px 3px 3px black;
+	font-size: 18px;
 }
 
-.secondary_button {
-    border-radius: 6px;
-    border: 1px solid #b3b3b3;
-    box-shadow: 1px 1px 3px gray;
-    color: #4d4d4d;
-    background: #F1F2F6;
+.menu_text {
+	color: #f7f7f7;
 }
 
-.danger_button {
-    background: #ff4d4d;
-    border: none;
-    box-shadow: 1px 1px 3px gray;
-    color: white;
+.background {
+	background: #373737;
 }
 
-
-
-#begin_button {
-    font-size: 18px;
-}
-
-#how_to_play_button {
-    font-size: 14px;
-}
-
-#done_button {
-    font-size: 18px;
-}
-
-#finish_later_button {
-    font-size: 14px;
-}
-
-#reset_button {
-    font-size: 14px;
-}
 
 #board_container_grid {
     margin: 0;
-}
-
-#menu_screen_box {
-	background-image: url("");
 }

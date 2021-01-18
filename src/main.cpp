@@ -602,6 +602,19 @@ main(int argc, char **argv)
 	// Stack pointers
 	Gtk::Stack* application_stack;
 
+	// Label pointers
+	Gtk::Label* welcome_label;
+	Gtk::Label* game_title_label;
+	Gtk::Label* source_code_label;
+	Gtk::Label* username_label;
+	Gtk::Label* player_info_title_label;
+	Gtk::Label* current_time_header_label;
+	Gtk::Label* current_time_time_label;
+	Gtk::Label* fastest_time_header_label;
+	Gtk::Label* fastest_time_time_label;
+
+
+
     /* Create builder from Glade file. Load necessary widgets.
      *
      */
@@ -645,6 +658,19 @@ main(int argc, char **argv)
 
 	// Stack widgets
 	builder -> get_widget("application_stack", application_stack);
+
+	// Label widgets
+	builder -> get_widget("welcome_label", welcome_label);
+	builder -> get_widget("game_title_label", game_title_label);
+	builder -> get_widget("source_code_label", source_code_label);
+	builder -> get_widget("username_label", username_label);
+	builder -> get_widget("player_info_title_label", player_info_title_label);
+	builder -> get_widget("current_time_header_label", current_time_header_label);
+	builder -> get_widget("current_time_time_label", current_time_time_label);
+	builder -> get_widget("fastest_time_header_label", fastest_time_header_label);
+	builder -> get_widget("fastest_time_time_label", fastest_time_time_label);
+
+
 
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor.
      * Helps with compatibility
@@ -797,6 +823,8 @@ main(int argc, char **argv)
 		sigc::ptr_fun(&handle_user)
 	);
 
+
+
     /* CSS for styling
      *
      */
@@ -854,6 +882,27 @@ main(int argc, char **argv)
 	// Add stylesheet to stacks
 	application_stack -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to labels
+	welcome_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	game_title_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	source_code_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	username_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	player_info_title_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	current_time_header_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	current_time_time_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	fastest_time_header_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	fastest_time_time_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
 
 
     /* Initial setup

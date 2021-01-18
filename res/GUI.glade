@@ -25,13 +25,16 @@
             <property name="vexpand">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="player_info_title_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Who's Playing?</property>
                 <attributes>
                   <attribute name="size" value="30000"/>
                 </attributes>
+                <style>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -63,7 +66,7 @@ will be created.</property>
                 <property name="valign">center</property>
                 <property name="vexpand">True</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="username_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
@@ -73,6 +76,9 @@ will be created.</property>
                     <attributes>
                       <attribute name="size" value="20000"/>
                     </attributes>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -105,7 +111,8 @@ will be created.</property>
             <child>
               <object class="GtkButton" id="lets_go_button">
                 <property name="label" translatable="yes">Let's Go</property>
-                <property name="width_request">150</property>
+                <property name="width_request">200</property>
+                <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -114,7 +121,7 @@ will be created.</property>
                 <property name="hexpand">False</property>
                 <property name="vexpand">True</property>
                 <style>
-                  <class name="primary_button"/>
+                  <class name="button"/>
                 </style>
               </object>
               <packing>
@@ -139,13 +146,16 @@ will be created.</property>
             <property name="orientation">vertical</property>
             <property name="spacing">40</property>
             <child>
-              <object class="GtkLabel" id="game_title">
+              <object class="GtkLabel" id="game_title_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Sudoku</property>
                 <attributes>
                   <attribute name="scale" value="6"/>
                 </attributes>
+                <style>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -187,7 +197,7 @@ will be created.</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <style>
-                              <class name="primary_button"/>
+                              <class name="button"/>
                             </style>
                           </object>
                           <packing>
@@ -213,6 +223,8 @@ will be created.</property>
                           <object class="GtkButton" id="how_to_play_button">
                             <property name="label" translatable="yes">How to Play</property>
                             <property name="name">how_to_play_button</property>
+                            <property name="width_request">200</property>
+                            <property name="height_request">50</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
@@ -221,7 +233,7 @@ will be created.</property>
                             <property name="margin_start">20</property>
                             <property name="margin_end">20</property>
                             <style>
-                              <class name="secondary_button"/>
+                              <class name="button"/>
                             </style>
                           </object>
                           <packing>
@@ -247,7 +259,8 @@ will be created.</property>
                         <child>
                           <object class="GtkButton" id="new_game_button">
                             <property name="label" translatable="yes">New Game</property>
-                            <property name="width_request">152</property>
+                            <property name="width_request">200</property>
+                            <property name="height_request">50</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">20</property>
@@ -255,7 +268,7 @@ will be created.</property>
                             <property name="margin_start">20</property>
                             <property name="margin_end">20</property>
                             <style>
-                              <class name="danger_button"/>
+                              <class name="button"/>
                             </style>
                           </object>
                           <packing>
@@ -278,7 +291,7 @@ will be created.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="source_code_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_top">70</property>
@@ -287,6 +300,9 @@ will be created.</property>
                     <attributes>
                       <attribute name="scale" value="0.65000000000000002"/>
                     </attributes>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -304,6 +320,9 @@ will be created.</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="margin_top">16</property>
+                        <style>
+                          <class name="menu_text"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -337,7 +356,7 @@ will be created.</property>
                         <property name="valign">start</property>
                         <property name="margin_top">7</property>
                         <style>
-                          <class name="secondary_button"/>
+                          <class name="button"/>
                         </style>
                       </object>
                       <packing>
@@ -389,8 +408,8 @@ will be created.</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="border_width">0</property>
-            <property name="row_spacing">10</property>
-            <property name="column_spacing">10</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
             <child>
               <object class="GtkGrid" id="board_1">
                 <property name="width_request">250</property>
@@ -1637,6 +1656,7 @@ will be created.</property>
               <object class="GtkButtonBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">False</property>
@@ -1735,6 +1755,9 @@ will be created.</property>
                     <attributes>
                       <attribute name="scale" value="1.25"/>
                     </attributes>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1747,6 +1770,9 @@ will be created.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">0 Minutes 00 Seconds</property>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1775,6 +1801,9 @@ will be created.</property>
                     <attributes>
                       <attribute name="scale" value="1.25"/>
                     </attributes>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1787,6 +1816,9 @@ will be created.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">0 Minutes 00 Seconds</property>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
