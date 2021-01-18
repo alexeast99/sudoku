@@ -587,9 +587,20 @@ main(int argc, char **argv)
 
     // Grid pointers
     Gtk::Grid* board_container_grid;
+	Gtk::Grid* player_info_grid;
+	Gtk::Grid* menu_grid;
 
 	// Entry pointers
 	Gtk::Entry* username_entry;
+
+	// Box pointers
+	Gtk::Box* menu_screen_box;
+	Gtk::Box* username_entry_box;
+	Gtk::Box* button_box_box;
+	Gtk::Box* switch_user_box;
+
+	// Stack pointers
+	Gtk::Stack* application_stack;
 
     /* Create builder from Glade file. Load necessary widgets.
      *
@@ -620,9 +631,20 @@ main(int argc, char **argv)
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
+	builder -> get_widget ("player_info_grid", player_info_grid);
+	builder -> get_widget ("menu_grid", menu_grid);
 
 	// Entry widgets
 	builder -> get_widget ("username_entry", username_entry);
+
+	// Box widgets
+	builder -> get_widget("menu_screen_box", menu_screen_box);
+	builder -> get_widget("username_entry_box", username_entry_box);
+	builder -> get_widget("button_box_box", button_box_box);
+	builder -> get_widget("switch_user_box", switch_user_box);
+
+	// Stack widgets
+	builder -> get_widget("application_stack", application_stack);
 
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor.
      * Helps with compatibility
@@ -814,6 +836,25 @@ main(int argc, char **argv)
     // Add stylesheet to grids
     board_container_grid -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	player_info_grid -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	menu_grid -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to boxes
+	menu_screen_box -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	username_entry_box -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	button_box_box -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	switch_user_box -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to stacks
+	application_stack -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
 
     /* Initial setup
      *

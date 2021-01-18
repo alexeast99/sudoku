@@ -65,3 +65,7 @@ entry {
 #board_container_grid {
     margin: 0;
 }
+
+#menu_screen_box {
+	background-image: url("");
+}

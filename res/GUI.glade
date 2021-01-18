@@ -12,16 +12,17 @@
     </child>
     <child>
       <object class="GtkStack" id="application_stack">
+        <property name="name">application_stack</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkGrid" id="player_info_grid">
+            <property name="name">player_info_grid</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="vexpand">True</property>
-            <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
               <object class="GtkLabel">
@@ -54,10 +55,13 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="username_entry_box">
+                <property name="name">username_entry_box</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="vexpand">True</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
@@ -127,6 +131,7 @@ will be created.</property>
         </child>
         <child>
           <object class="GtkBox" id="menu_screen_box">
+            <property name="name">menu_screen_box</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
@@ -150,6 +155,7 @@ will be created.</property>
             </child>
             <child>
               <object class="GtkGrid" id="menu_grid">
+                <property name="name">menu_grid</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
@@ -159,6 +165,7 @@ will be created.</property>
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkBox" id="button_box_box">
+                    <property name="name">button_box_box</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -314,7 +321,8 @@ will be created.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="switch_user_box">
+                    <property name="name">switch_user_box</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
