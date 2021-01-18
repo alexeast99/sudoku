@@ -20,18 +20,22 @@ entry {
 
 .button {
 	border-radius: 6px;
-	border: none;
-	box-shadow: 1px 1px 2px black;
+	border: 1px solid #4f4f4f;
 	font-size: 18px;
 }
 
 .menu_text {
-	color: #f7f7f7;
-	text-shadow: 1px 1px 2px black;
+	font-family: Montserrat;
+	color: #232323;
 }
 
 .background {
-	background: #373737;
+	/* background-image: url("plant.jpg"); */
+	background: #ebe7e4;
+}
+
+.label {
+	background: white;
 }
 
 
@@ -45,4 +49,18 @@ entry {
 
 #source_code_label {
 	font-size: 14px;
+}
+
+#current_time_header_label, #fastest_time_header_label {
+	border-radius: 6px 6px 0 0;
+	border-left: 1px solid #4f4f4f;
+	border-top: 1px solid #4f4f4f;
+	border-right: 1px solid #4f4f4f;
+}
+
+#current_time_time_label, #fastest_time_time_label {
+	border-radius: 0 0 6px 6px;
+	border-left: 1px solid #4f4f4f;
+	border-bottom: 1px solid #4f4f4f;
+	border-right: 1px solid #4f4f4f;
 }

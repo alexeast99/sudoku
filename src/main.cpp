@@ -566,9 +566,6 @@ main(int argc, char **argv)
     // Window pointers
     Gtk::Window* window;
 
-    // Dialog pointers
-    Gtk::Dialog* sorry_dialog;
-
     // Button pointers
     Gtk::Button* begin_button;
     Gtk::Button* done_button;
@@ -597,7 +594,7 @@ main(int argc, char **argv)
 	Gtk::Box* menu_screen_box;
 	Gtk::Box* username_entry_box;
 	Gtk::Box* button_box_box;
-	
+
 	// Stack pointers
 	Gtk::Stack* application_stack;
 
@@ -611,6 +608,12 @@ main(int argc, char **argv)
 	Gtk::Label* current_time_time_label;
 	Gtk::Label* fastest_time_header_label;
 	Gtk::Label* fastest_time_time_label;
+	Gtk::Label* note_label;
+
+	// Dialog pointers
+	Gtk::Dialog* sorry_dialog;
+	Gtk::Dialog* congratulations_dialog;
+	Gtk::Dialog* how_to_play_dialog;
 
 
 
@@ -621,9 +624,6 @@ main(int argc, char **argv)
     // Window widgets
     builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
     builder -> get_widget ("application_window", window);
-
-    // Dialog widgets
-    builder -> get_widget ("sorry_dialog", sorry_dialog);
 
     // Button widgets
     builder -> get_widget ("begin_button", begin_button);
@@ -667,6 +667,12 @@ main(int argc, char **argv)
 	builder -> get_widget("current_time_time_label", current_time_time_label);
 	builder -> get_widget("fastest_time_header_label", fastest_time_header_label);
 	builder -> get_widget("fastest_time_time_label", fastest_time_time_label);
+	builder -> get_widget("note_label", note_label);
+
+	// Dialog widgets
+	builder -> get_widget("sorry_dialog", sorry_dialog);
+	builder -> get_widget("how_to_play_dialog", how_to_play_dialog);
+	builder -> get_widget("congratulations_dialog", congratulations_dialog);
 
 
 
@@ -745,11 +751,24 @@ main(int argc, char **argv)
 		sigc::bind<bool>( sigc::ptr_fun(&close_game), true)
 	);
 
+	continue_button  -> signal_leave().connect(  // Cursor normal
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "continue_button")
+    );
+    continue_button  -> signal_enter().connect(  // Cursor clickable
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "continue_button")
+    );
     continue_button -> signal_clicked().connect(  // Close 'almost there' dialog
       sigc::ptr_fun(&close_sorry)
     );
     continue_button -> signal_clicked().connect(  // Start time when back to game
       sigc::mem_fun(board, &Board::start)
+    );
+
+	hint_button  -> signal_leave().connect(  // Cursor normal
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "hint_button")
+    );
+    hint_button  -> signal_enter().connect(  // Cursor clickable
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "hint_button")
     );
 
 	lets_go_button -> signal_clicked().connect(  // After username, main menu
@@ -897,6 +916,16 @@ main(int argc, char **argv)
 	fastest_time_header_label -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	fastest_time_time_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	note_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to dialogs
+	sorry_dialog -> get_style_context() ->
+	   add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	congratulations_dialog -> get_style_context() ->
+         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	how_to_play_dialog -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 

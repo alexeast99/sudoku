@@ -28,6 +28,8 @@
               <object class="GtkLabel" id="player_info_title_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">50</property>
                 <property name="label" translatable="yes">Who's Playing?</property>
                 <attributes>
                   <attribute name="size" value="30000"/>
@@ -43,13 +45,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="note_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
+                <property name="margin_bottom">10</property>
                 <property name="label" translatable="yes">Note: If this user does not already exist, a new user
 will be created.</property>
                 <property name="justify">center</property>
+                <style>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -114,7 +120,7 @@ will be created.</property>
                 <property name="width_request">200</property>
                 <property name="height_request">50</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
@@ -122,6 +128,7 @@ will be created.</property>
                 <property name="vexpand">True</property>
                 <style>
                   <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -171,11 +178,11 @@ will be created.</property>
                 <property name="vexpand">True</property>
                 <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
-                <property name="row_homogeneous">True</property>
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkBox" id="button_box_box">
                     <property name="name">button_box_box</property>
+                    <property name="height_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -198,6 +205,7 @@ will be created.</property>
                             <property name="receives_default">True</property>
                             <style>
                               <class name="button"/>
+                              <class name="menu_text"/>
                             </style>
                           </object>
                           <packing>
@@ -234,6 +242,7 @@ will be created.</property>
                             <property name="margin_end">20</property>
                             <style>
                               <class name="button"/>
+                              <class name="menu_text"/>
                             </style>
                           </object>
                           <packing>
@@ -261,7 +270,7 @@ will be created.</property>
                             <property name="label" translatable="yes">New Game</property>
                             <property name="width_request">200</property>
                             <property name="height_request">50</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">20</property>
                             <property name="margin_right">20</property>
@@ -269,6 +278,7 @@ will be created.</property>
                             <property name="margin_end">20</property>
                             <style>
                               <class name="button"/>
+                              <class name="menu_text"/>
                             </style>
                           </object>
                           <packing>
@@ -288,23 +298,7 @@ will be created.</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="source_code_label">
-                    <property name="name">source_code_label</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">70</property>
-                    <property name="label" translatable="yes">https://github.com/alexeast-99</property>
-                    <property name="justify">center</property>
-                    <style>
-                      <class name="menu_text"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="height">2</property>
                   </packing>
                 </child>
                 <child>
@@ -342,6 +336,7 @@ will be created.</property>
                         <property name="margin_top">7</property>
                         <style>
                           <class name="button"/>
+                          <class name="menu_text"/>
                         </style>
                       </object>
                       <packing>
@@ -375,6 +370,30 @@ will be created.</property>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="source_code_label">
+                    <property name="name">source_code_label</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">end</property>
+                    <property name="margin_bottom">9</property>
+                    <property name="label" translatable="yes">https://github.com/alexeast-99</property>
+                    <property name="justify">center</property>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -1671,14 +1690,15 @@ will be created.</property>
                     <property name="width_request">150</property>
                     <property name="height_request">45</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="hexpand">False</property>
                     <property name="vexpand">False</property>
                     <style>
-                      <class name="secondary_button"/>
+                      <class name="button"/>
+                      <class name="menu_text"/>
                     </style>
                   </object>
                   <packing>
@@ -1694,15 +1714,15 @@ will be created.</property>
                     <property name="width_request">150</property>
                     <property name="height_request">45</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="hexpand">False</property>
                     <property name="vexpand">False</property>
                     <style>
-                      <class name="game_button"/>
-                      <class name="primary_button"/>
+                      <class name="button"/>
+                      <class name="menu_text"/>
                     </style>
                   </object>
                   <packing>
@@ -1718,14 +1738,15 @@ will be created.</property>
                     <property name="width_request">150</property>
                     <property name="height_request">45</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="hexpand">False</property>
                     <property name="vexpand">False</property>
                     <style>
-                      <class name="danger_button"/>
+                      <class name="button"/>
+                      <class name="menu_text"/>
                     </style>
                   </object>
                   <packing>
@@ -1750,6 +1771,8 @@ will be created.</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="current_time_header_label">
+                    <property name="name">current_time_header_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Current Time</property>
@@ -1758,6 +1781,7 @@ will be created.</property>
                       <attribute name="scale" value="1.25"/>
                     </attributes>
                     <style>
+                      <class name="label"/>
                       <class name="menu_text"/>
                     </style>
                   </object>
@@ -1769,10 +1793,13 @@ will be created.</property>
                 </child>
                 <child>
                   <object class="GtkLabel" id="current_time_time_label">
+                    <property name="name">current_time_time_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">0 Minutes 00 Seconds</property>
                     <style>
+                      <class name="label"/>
                       <class name="menu_text"/>
                     </style>
                   </object>
@@ -1796,6 +1823,8 @@ will be created.</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="fastest_time_header_label">
+                    <property name="name">fastest_time_header_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Fastest Time</property>
@@ -1804,6 +1833,7 @@ will be created.</property>
                       <attribute name="scale" value="1.25"/>
                     </attributes>
                     <style>
+                      <class name="label"/>
                       <class name="menu_text"/>
                     </style>
                   </object>
@@ -1815,10 +1845,13 @@ will be created.</property>
                 </child>
                 <child>
                   <object class="GtkLabel" id="fastest_time_time_label">
+                    <property name="name">fastest_time_time_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">0 Minutes 00 Seconds</property>
                     <style>
+                      <class name="label"/>
                       <class name="menu_text"/>
                     </style>
                   </object>
