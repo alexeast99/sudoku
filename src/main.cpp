@@ -1,5 +1,5 @@
 /*
-* Last Modified: 01/17/21
+* Last Modified: 01/19/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -548,9 +548,7 @@ hide_dialog (Glib::ustring dialog)
 
 /*
  *	TODO
- *		- Save internal board state when a user hits finish_later
- *		- Load saved state when a user resumes game
- *			- Populate game board
+ *		- Undo / redo
  */
 
 int
