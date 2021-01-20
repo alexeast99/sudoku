@@ -274,8 +274,14 @@ populate_board (void)
 
 			if ( cell_value.compare("0") != 0) cell -> set_text(cell_value);
 
-			if (reserved_cell) cell -> set_editable(false);
-			else cell -> set_editable(true);
+			if (reserved_cell) {
+				cell -> set_editable(false);
+				cell -> get_style_context() -> add_class("reserved");
+
+			} else {
+				cell -> set_editable(true);
+				cell -> get_style_context() -> remove_class("reserved");
+			}
 
 		}
 	}
@@ -549,6 +555,7 @@ hide_dialog (Glib::ustring dialog)
 /*
  *	TODO
  *		- Undo / redo
+ *		- Color for reserved squares?
  */
 
 int

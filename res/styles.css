@@ -38,6 +38,10 @@ entry {
 	background: white;
 }
 
+.reserved {
+    background: #f3f3f3;
+}
+
 
 #board_container_grid {
     margin: 0;
