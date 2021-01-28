@@ -62,7 +62,7 @@ void hide_dialog (Glib::ustring);
 
 void undo ();
 void redo ();
-gboolean grab_old (GdkEventButton*);
+gboolean grab_old (GdkEventButton*, std::string);
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -70,17 +70,13 @@ Board board;
 
 struct actions {
 
-	// Stores user actions
+	// Stores user actions. Inner vector is [widgetName, value]
 	std::stack< std::vector< std::string>> user_stack;
 
 	// Stores actions that were undone so they can be redone
 	std::stack< std::vector< std::string>> undone_stack;
 
 } user_actions;
-
-struct data {
-	bool once = false;
-} u_data;
 
 
 /************************
@@ -267,7 +263,9 @@ initialize_board (void)
 
 			// Connect mouse-click to grab_old handler for undo functionality
 			cell -> signal_button_press_event().connect(
-				sigc::ptr_fun(&grab_old),
+				sigc::bind(
+					sigc::ptr_fun(&grab_old), std::string(cell_name)
+				),
 				false
 			);
 
@@ -580,6 +578,8 @@ hide_dialog (Glib::ustring dialog)
 void
 undo (void)
 {
+	if (user_actions.user_stack.empty()) return;
+
 	std::vector< std::string> action = user_actions.user_stack.top();
 	user_actions.user_stack.pop();
 
@@ -598,6 +598,8 @@ undo (void)
 void
 redo (void)
 {
+	if (user_actions.undone_stack.empty()) return;
+
 	std::vector< std::string> action = user_actions.undone_stack.top();
 	user_actions.undone_stack.pop();
 
@@ -615,9 +617,15 @@ redo (void)
 
 // Grabs the old value in the entry before the user changes for undo functionality
 gboolean
-grab_old (GdkEventButton* event)
+grab_old (GdkEventButton* event, std::string name)
 {
-	printf("Registered\n");
+	Gtk::Entry* cell;
+	builder -> get_widget(name, cell);
+	std::string restoreValue = cell -> get_text();
+
+	std::vector< std::string> action = {name, restoreValue};
+	user_actions.user_stack.push(action);
+
 	return false;
 }
 
