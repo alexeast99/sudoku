@@ -6,7 +6,6 @@
 */
 
 #include <gtkmm.h>
-#include <gtk/gtk.h>
 #include <iostream>
 #include <time.h>
 #include <string.h>
