@@ -53,14 +53,14 @@ entry {
 
 #current_time_header_label, #fastest_time_header_label {
 	border-radius: 6px 6px 0 0;
-	border-left: 1px solid #4f4f4f;
-	border-top: 1px solid #4f4f4f;
-	border-right: 1px solid #4f4f4f;
+	border-left: 1px solid #818181;
+	border-top: 1px solid #818181;
+	border-right: 1px solid #818181;
 }
 
 #current_time_time_label, #fastest_time_time_label {
 	border-radius: 0 0 6px 6px;
-	border-left: 1px solid #4f4f4f;
-	border-bottom: 1px solid #4f4f4f;
-	border-right: 1px solid #4f4f4f;
+	border-left: 1px solid #818181;
+	border-bottom: 1px solid #818181;
+	border-right: 1px solid #818181;
 }

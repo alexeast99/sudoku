@@ -1,11 +1,12 @@
 /*
-* Last Modified: 01/17/21
+* Last Modified: 01/27/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
 */
 
 #include <gtkmm.h>
+#include <gtk/gtk.h>
 #include <iostream>
 #include <time.h>
 #include <string.h>
@@ -60,9 +61,27 @@ void update_main_menu ();
 void switch_stack_page (Glib::ustring);
 void hide_dialog (Glib::ustring);
 
+void undo ();
+void redo ();
+gboolean grab_old (GdkEventButton*);
+
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
 Board board;
+
+struct actions {
+
+	// Stores user actions
+	std::stack< std::vector< std::string>> user_stack;
+
+	// Stores actions that were undone so they can be redone
+	std::stack< std::vector< std::string>> undone_stack;
+
+} user_actions;
+
+struct data {
+	bool once = false;
+} u_data;
 
 
 /************************
@@ -246,6 +265,13 @@ initialize_board (void)
 					sigc::ptr_fun(&on_removed), i, j
 				)
 			);
+
+			// Connect mouse-click to grab_old handler for undo functionality
+			cell -> signal_button_press_event().connect(
+				sigc::ptr_fun(&grab_old),
+				false
+			);
+
         }
     }
 
@@ -387,6 +413,7 @@ on_inserted (guint position, const gchar* chars, guint n_chars,
 	char inserted = *chars;
 	if ( check_if_number(inserted, buffer)) {
 		insert_to_board (inserted, outer, inner);
+
 	}
 
 	return;
@@ -545,6 +572,49 @@ hide_dialog (Glib::ustring dialog)
 	return;
 }
 
+void
+undo (void)
+{
+	std::vector< std::string> action = user_actions.user_stack.top();
+	user_actions.user_stack.pop();
+
+	std::string widgetName = action[0];
+	std::string restoreValue = action[1];
+
+	Gtk::Entry* cell;
+	builder -> get_widget(widgetName, cell);
+	cell -> set_text(restoreValue);
+
+	user_actions.undone_stack.push(action);
+
+	return;
+}
+
+void
+redo (void)
+{
+	std::vector< std::string> action = user_actions.undone_stack.top();
+	user_actions.undone_stack.pop();
+
+	std::string widgetName = action[0];
+	std::string restoreValue = action[1];
+
+	Gtk::Entry* cell;
+	builder -> get_widget(widgetName, cell);
+	cell -> set_text(restoreValue);
+
+	user_actions.user_stack.push(action);
+
+	return;
+}
+
+// Grabs the old value in the entry before the user changes for undo functionality
+gboolean
+grab_old (GdkEventButton* event)
+{
+	printf("Registered\n");
+	return false;
+}
 
 /*
  *	TODO
@@ -581,6 +651,7 @@ main(int argc, char **argv)
 	Gtk::Button* exit_button;
 	Gtk::Button* main_menu_button;
 	Gtk::Button* winning_new_game_button;
+	Gtk::Button* undo_button;
 
     // Grid pointers
     Gtk::Grid* board_container_grid;
@@ -610,7 +681,10 @@ main(int argc, char **argv)
 	Gtk::Label* fastest_time_time_label;
 	Gtk::Label* note_label;
 	Gtk::Label* you_won_label;
+	Gtk::Label* you_won_info_label;
 	Gtk::Label* almost_there_label;
+	Gtk::Label* almost_there_info_label;
+	Gtk::Label* instructions_label;
 
 	// Dialog pointers
 	Gtk::Dialog* sorry_dialog;
@@ -642,6 +716,7 @@ main(int argc, char **argv)
 	builder -> get_widget ("exit_button", exit_button);
 	builder -> get_widget ("main_menu_button", main_menu_button);
 	builder -> get_widget ("winning_new_game_button", winning_new_game_button);
+	builder -> get_widget ("undo_button", undo_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
@@ -671,7 +746,10 @@ main(int argc, char **argv)
 	builder -> get_widget("fastest_time_time_label", fastest_time_time_label);
 	builder -> get_widget("note_label", note_label);
 	builder -> get_widget("you_won_label", you_won_label);
+	builder -> get_widget("you_won_info_label", you_won_info_label);
 	builder -> get_widget("almost_there_label", almost_there_label);
+	builder -> get_widget("almost_there_info_label", almost_there_info_label);
+	builder -> get_widget("instructions_label", instructions_label);
 
 	// Dialog widgets
 	builder -> get_widget("sorry_dialog", sorry_dialog);
@@ -844,6 +922,10 @@ main(int argc, char **argv)
 		sigc::ptr_fun(&handle_user)
 	);
 
+	undo_button -> signal_clicked().connect(
+		sigc::ptr_fun(&undo)
+	);
+
 
 
     /* CSS for styling
@@ -929,9 +1011,15 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	note_label -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	you_won_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	you_won_info_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	almost_there_label -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-	you_won_label -> get_style_context() ->
+	almost_there_info_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	instructions_label -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 	// Add stylesheet to dialogs
@@ -943,6 +1031,7 @@ main(int argc, char **argv)
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 
+	gtk_widget_set_events(GTK_WIDGET(window->gobj()), GDK_BUTTON_PRESS_MASK);
 
     /* Initial setup
      *
