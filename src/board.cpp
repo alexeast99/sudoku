@@ -1,4 +1,4 @@
-/* Last Modified: 01/17/21
+/* Last Modified: 01/19/21
  * Author: Alex Eastman
  * Contact: alexeast@buffalo.edu
  * Summary: Definitions for function prototypes found in board.h . See board.h
@@ -254,6 +254,7 @@ void Board::set_username (Glib::ustring name)
 	return;
 }
 
+// TODO: This is being called when a board is being made. Should it be?
 void Board::save_board_state (void)
 {
 	std::vector<int> game_row;
@@ -262,27 +263,25 @@ void Board::save_board_state (void)
 	std::string coordinate_string = "";
 
 	int i, j;
-	for (i=0; i<9; i++) {
+	for (i=0; i<RESERVED; i++) {
 		// Save reserved coordinates
-		if (i < RESERVED) {
-			coordinate = reserved[i];
-			coordinate_string.push_back(coordinate[0] + '0');  // +'0' to convert to char
-			coordinate_string.push_back(coordinate[1] + '0');
-			coordinate_string.push_back(coordinate[2] + '0');
-			user_data.set_string(username, "r" + std::to_string(i), coordinate_string);
-			coordinate_string.clear();
-		}
+		coordinate = reserved[i];
+		coordinate_string.push_back(coordinate[0] + '0');  // +'0' to convert to char
+		coordinate_string.push_back(coordinate[1] + '0');
+		coordinate_string.push_back(coordinate[2] + '0');
+		user_data.set_string(username, "r" + std::to_string(i), coordinate_string);
+		coordinate_string.clear();
 
 		// Save i'th row of the game board
-		game_row = game_board[i];
-		for (j=0; j<9; j++) {
-			char tile = game_row[j] + '0';
-			game_row_string.push_back(tile);
-		}
-		user_data.set_string(username, std::to_string(i), game_row_string);
-		game_row_string.clear();
-
-
+    if (i < 9) {
+      game_row = game_board[i];
+  		for (j=0; j<9; j++) {
+  			char tile = game_row[j] + '0';
+  			game_row_string.push_back(tile);
+  		}
+  		user_data.set_string(username, std::to_string(i), game_row_string);
+  		game_row_string.clear();
+    }
 	}
 
 	return;
@@ -354,7 +353,7 @@ void Board::set_reserved (void)
 		reserved[i][1] = row[1] - '0';
 		reserved[i][2] = row[2] - '0';
 
-		key.pop_back();
+		key = "r";
 	}
 
 	reserved_set = true;

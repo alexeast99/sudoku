@@ -300,8 +300,14 @@ populate_board (void)
 
 			if ( cell_value.compare("0") != 0) cell -> set_text(cell_value);
 
-			if (reserved_cell) cell -> set_editable(false);
-			else cell -> set_editable(true);
+			if (reserved_cell) {
+				cell -> set_editable(false);
+				cell -> get_style_context() -> add_class("reserved");
+
+			} else {
+				cell -> set_editable(true);
+				cell -> get_style_context() -> remove_class("reserved");
+			}
 
 		}
 	}
@@ -618,9 +624,8 @@ grab_old (GdkEventButton* event)
 
 /*
  *	TODO
- *		- Save internal board state when a user hits finish_later
- *		- Load saved state when a user resumes game
- *			- Populate game board
+ *		- Undo / redo
+ *		- Color for reserved squares?
  */
 
 int
