@@ -663,7 +663,6 @@ main(int argc, char **argv)
 	Gtk::Button* exit_button;
 	Gtk::Button* main_menu_button;
 	Gtk::Button* winning_new_game_button;
-	Gtk::Button* undo_button;
 
     // Grid pointers
     Gtk::Grid* board_container_grid;
@@ -704,7 +703,6 @@ main(int argc, char **argv)
 	Gtk::Dialog* how_to_play_dialog;
 
 
-
     /* Create builder from Glade file. Load necessary widgets.
      *
      */
@@ -728,7 +726,6 @@ main(int argc, char **argv)
 	builder -> get_widget ("exit_button", exit_button);
 	builder -> get_widget ("main_menu_button", main_menu_button);
 	builder -> get_widget ("winning_new_game_button", winning_new_game_button);
-	builder -> get_widget ("undo_button", undo_button);
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
@@ -767,6 +764,10 @@ main(int argc, char **argv)
 	builder -> get_widget("sorry_dialog", sorry_dialog);
 	builder -> get_widget("how_to_play_dialog", how_to_play_dialog);
 	builder -> get_widget("congratulations_dialog", congratulations_dialog);
+
+	// Image menu item widgets
+	// builder -> get_widget("undo_image_menu_item", undo_image_menu_item);
+	// builder -> get_widget("redo_image_menu_item", redo_image_menu_item);
 
 
 
@@ -933,12 +934,6 @@ main(int argc, char **argv)
 		// Hitting enter is the same as clicking lets go button
 		sigc::ptr_fun(&handle_user)
 	);
-
-	undo_button -> signal_clicked().connect(
-		sigc::ptr_fun(&undo)
-	);
-
-
 
     /* CSS for styling
      *
