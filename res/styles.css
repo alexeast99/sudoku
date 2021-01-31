@@ -1,5 +1,5 @@
 /*
-* Last Modified: 01/18/21
+* Last Modified: 01/30/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * File: res/styles.css
@@ -15,8 +15,6 @@ entry {
     border-radius: 0;
     font-size: 30px;
 }
-
-
 
 .button {
 	border-radius: 6px;
@@ -39,8 +37,49 @@ entry {
 }
 
 .reserved {
-    background: #f3f3f3;
+	color: black;
+	background: white;
 }
+
+.top_middle_left {
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	border-top: none;
+	border-left: none;
+}
+
+.top_middle_middle {
+	border-bottom: 1px solid black;
+	border-top: none;
+	border-right: none;
+	border-left: none;
+}
+
+.top_middle_right {
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	border-right: none;
+	border-top: none;
+}
+
+.bottom_left {
+	border-right: 1px solid black;
+	border-left: none;
+	border-bottom: none;
+	border-top: none;
+}
+
+.bottom_right {
+	border-left: 1px solid black;
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+}
+
+.bottom_middle {
+	border: none;
+}
+
 
 
 #board_container_grid {

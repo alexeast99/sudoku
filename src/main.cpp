@@ -1,5 +1,5 @@
 /*
-* Last Modified: 01/27/21
+* Last Modified: 01/30/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -63,6 +63,8 @@ void hide_dialog (Glib::ustring);
 void undo ();
 void redo ();
 gboolean grab_old (GdkEventButton*, std::string);
+
+void build_toolbar ();
 
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
@@ -232,6 +234,7 @@ initialize_board (void)
 
 	int i, j;
     for (i=0; i<9; i++) {
+
         for (j=0; j<9; j++) {
 
             // ID of Gtk::Entry based on position in matrix
@@ -266,9 +269,10 @@ initialize_board (void)
 				sigc::bind(
 					sigc::ptr_fun(&grab_old), std::string(cell_name)
 				),
-				false
+				false  // Causes handling to be passed to default handler after this callback
 			);
 
+			free(cell_name);
         }
     }
 
@@ -299,10 +303,12 @@ populate_board (void)
 
 			if (reserved_cell) {
 				cell -> set_editable(false);
+				cell -> set_sensitive(false);
 				cell -> get_style_context() -> add_class("reserved");
 
 			} else {
 				cell -> set_editable(true);
+				cell -> set_sensitive(true);
 				cell -> get_style_context() -> remove_class("reserved");
 			}
 
@@ -629,6 +635,13 @@ grab_old (GdkEventButton* event, std::string name)
 	return false;
 }
 
+// Build the toolbar, create the action group, assign actions
+void
+build_toolbar (void)
+{
+
+}
+
 /*
  *	TODO
  *		- Undo / redo
@@ -646,7 +659,7 @@ main(int argc, char **argv)
      */
 
     // Window pointers
-    Gtk::Window* window;
+    Gtk::ApplicationWindow* window;
 
     // Button pointers
     Gtk::Button* begin_button;
@@ -701,6 +714,7 @@ main(int argc, char **argv)
 	Gtk::Dialog* sorry_dialog;
 	Gtk::Dialog* congratulations_dialog;
 	Gtk::Dialog* how_to_play_dialog;
+
 
 
     /* Create builder from Glade file. Load necessary widgets.
@@ -764,10 +778,6 @@ main(int argc, char **argv)
 	builder -> get_widget("sorry_dialog", sorry_dialog);
 	builder -> get_widget("how_to_play_dialog", how_to_play_dialog);
 	builder -> get_widget("congratulations_dialog", congratulations_dialog);
-
-	// Image menu item widgets
-	// builder -> get_widget("undo_image_menu_item", undo_image_menu_item);
-	// builder -> get_widget("redo_image_menu_item", redo_image_menu_item);
 
 
 
