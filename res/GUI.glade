@@ -3,34 +3,38 @@
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <!-- interface-css-provider-path styles.css -->
-  <object class="GtkWindow" id="application_window">
+  <object class="GtkApplicationWindow" id="application_window">
     <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="window_position">center</property>
     <child type="titlebar">
       <placeholder/>
     </child>
     <child>
       <object class="GtkStack" id="application_stack">
+        <property name="name">application_stack</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkGrid" id="player_info_grid">
+            <property name="name">player_info_grid</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="vexpand">True</property>
-            <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="player_info_title_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">50</property>
                 <property name="label" translatable="yes">Who's Playing?</property>
                 <attributes>
                   <attribute name="size" value="30000"/>
                 </attributes>
+                <style>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -39,13 +43,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="note_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
+                <property name="margin_bottom">10</property>
                 <property name="label" translatable="yes">Note: If this user does not already exist, a new user
 will be created.</property>
                 <property name="justify">center</property>
+                <style>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -54,21 +62,26 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="username_entry_box">
+                <property name="name">username_entry_box</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="vexpand">True</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="username_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="margin_right">15</property>
                     <property name="label" translatable="yes">Username:</property>
                     <attributes>
                       <attribute name="size" value="20000"/>
                     </attributes>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -101,7 +114,8 @@ will be created.</property>
             <child>
               <object class="GtkButton" id="lets_go_button">
                 <property name="label" translatable="yes">Let's Go</property>
-                <property name="width_request">150</property>
+                <property name="width_request">200</property>
+                <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -110,7 +124,8 @@ will be created.</property>
                 <property name="hexpand">False</property>
                 <property name="vexpand">True</property>
                 <style>
-                  <class name="primary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -127,6 +142,7 @@ will be created.</property>
         </child>
         <child>
           <object class="GtkBox" id="menu_screen_box">
+            <property name="name">menu_screen_box</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
@@ -134,13 +150,16 @@ will be created.</property>
             <property name="orientation">vertical</property>
             <property name="spacing">40</property>
             <child>
-              <object class="GtkLabel" id="game_title">
+              <object class="GtkLabel" id="game_title_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Sudoku</property>
                 <attributes>
                   <attribute name="scale" value="6"/>
                 </attributes>
+                <style>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -150,15 +169,17 @@ will be created.</property>
             </child>
             <child>
               <object class="GtkGrid" id="menu_grid">
+                <property name="name">menu_grid</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
-                <property name="row_homogeneous">True</property>
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkBox" id="button_box_box">
+                    <property name="name">button_box_box</property>
+                    <property name="height_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -180,7 +201,8 @@ will be created.</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <style>
-                              <class name="primary_button"/>
+                              <class name="button"/>
+                              <class name="menu_text"/>
                             </style>
                           </object>
                           <packing>
@@ -206,6 +228,8 @@ will be created.</property>
                           <object class="GtkButton" id="how_to_play_button">
                             <property name="label" translatable="yes">How to Play</property>
                             <property name="name">how_to_play_button</property>
+                            <property name="width_request">200</property>
+                            <property name="height_request">50</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
@@ -214,7 +238,8 @@ will be created.</property>
                             <property name="margin_start">20</property>
                             <property name="margin_end">20</property>
                             <style>
-                              <class name="secondary_button"/>
+                              <class name="button"/>
+                              <class name="menu_text"/>
                             </style>
                           </object>
                           <packing>
@@ -240,15 +265,17 @@ will be created.</property>
                         <child>
                           <object class="GtkButton" id="new_game_button">
                             <property name="label" translatable="yes">New Game</property>
-                            <property name="width_request">152</property>
-                            <property name="can_focus">True</property>
+                            <property name="width_request">200</property>
+                            <property name="height_request">50</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">20</property>
                             <property name="margin_right">20</property>
                             <property name="margin_start">20</property>
                             <property name="margin_end">20</property>
                             <style>
-                              <class name="danger_button"/>
+                              <class name="button"/>
+                              <class name="menu_text"/>
                             </style>
                           </object>
                           <packing>
@@ -268,22 +295,7 @@ will be created.</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">70</property>
-                    <property name="label" translatable="yes">https://github.com/alexeast-99</property>
-                    <property name="justify">center</property>
-                    <attributes>
-                      <attribute name="scale" value="0.65000000000000002"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="height">2</property>
                   </packing>
                 </child>
                 <child>
@@ -291,12 +303,17 @@ will be created.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">10</property>
                     <child>
                       <object class="GtkLabel" id="welcome_label">
+                        <property name="name">welcome_label</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="margin_top">16</property>
+                        <style>
+                          <class name="menu_text"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -305,7 +322,26 @@ will be created.</property>
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkButton" id="switch_user_button">
+                        <property name="label" translatable="yes">Switch User</property>
+                        <property name="width_request">40</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
+                        <property name="margin_top">7</property>
+                        <style>
+                          <class name="button"/>
+                          <class name="menu_text"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -319,24 +355,10 @@ will be created.</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkButton" id="switch_user_button">
-                        <property name="label" translatable="yes">Switch User</property>
-                        <property name="width_request">40</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="receives_default">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">start</property>
-                        <property name="margin_top">7</property>
-                        <style>
-                          <class name="secondary_button"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
@@ -346,6 +368,30 @@ will be created.</property>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="source_code_label">
+                    <property name="name">source_code_label</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">end</property>
+                    <property name="margin_bottom">9</property>
+                    <property name="label" translatable="yes">https://github.com/alexeast-99</property>
+                    <property name="justify">center</property>
+                    <style>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -377,12 +423,13 @@ will be created.</property>
             <property name="margin_right">10</property>
             <property name="margin_start">10</property>
             <property name="margin_end">10</property>
-            <property name="margin_top">10</property>
+            <property name="margin_top">20</property>
+            <property name="margin_bottom">20</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="border_width">0</property>
-            <property name="row_spacing">10</property>
-            <property name="column_spacing">10</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
             <child>
               <object class="GtkGrid" id="board_1">
                 <property name="width_request">250</property>
@@ -402,7 +449,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">etched-in</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -416,7 +467,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -430,7 +485,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -444,7 +503,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -458,7 +521,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -472,7 +539,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -486,7 +557,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -500,7 +575,11 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -514,13 +593,20 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
+                    <property name="shadow_type">none</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -547,6 +633,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -561,6 +650,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -575,6 +667,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -589,6 +684,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -603,6 +701,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -617,6 +718,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -631,6 +735,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -645,6 +752,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -659,12 +769,18 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -691,6 +807,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -705,6 +824,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -719,6 +841,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -733,6 +858,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -747,6 +875,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -761,6 +892,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -775,6 +909,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -789,6 +926,9 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -803,12 +943,18 @@ will be created.</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">0.5</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -834,6 +980,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -847,6 +996,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -860,6 +1012,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -873,6 +1028,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -886,6 +1044,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -899,6 +1060,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -912,6 +1076,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -925,6 +1092,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -938,12 +1108,18 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -969,6 +1145,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -982,6 +1161,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -995,6 +1177,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1008,6 +1193,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1021,6 +1209,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1034,6 +1225,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1047,6 +1241,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1060,6 +1257,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1073,12 +1273,18 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -1104,6 +1310,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1117,6 +1326,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1130,6 +1342,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1143,6 +1358,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1156,6 +1374,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1169,6 +1390,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1182,6 +1406,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1195,6 +1422,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1208,12 +1438,18 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -1239,6 +1475,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1252,6 +1491,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1265,6 +1507,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1278,6 +1523,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1291,6 +1539,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1304,6 +1555,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1317,6 +1571,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1330,6 +1587,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1343,12 +1603,18 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -1374,6 +1640,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1387,6 +1656,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1400,6 +1672,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1413,6 +1688,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1426,6 +1704,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1439,6 +1720,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1452,6 +1736,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1465,6 +1752,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1478,12 +1768,18 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -1509,6 +1805,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1522,6 +1821,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1535,6 +1837,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1548,6 +1853,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1561,6 +1869,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1574,6 +1885,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="top_middle_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1587,6 +1901,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_left"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1600,6 +1917,9 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_middle"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1613,12 +1933,18 @@ will be created.</property>
                     <property name="max_length">1</property>
                     <property name="width_chars">3</property>
                     <property name="input_purpose">digits</property>
+                    <style>
+                      <class name="bottom_right"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="subboard"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -1626,100 +1952,16 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButtonBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_bottom">10</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">False</property>
-                <property name="spacing">10</property>
-                <property name="layout_style">center</property>
-                <child>
-                  <object class="GtkButton" id="finish_later_button">
-                    <property name="label" translatable="yes">Finish Later</property>
-                    <property name="name">finish_later_button</property>
-                    <property name="width_request">125</property>
-                    <property name="height_request">35</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">False</property>
-                    <style>
-                      <class name="secondary_button"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="done_button">
-                    <property name="label" translatable="yes">Done</property>
-                    <property name="name">done_button</property>
-                    <property name="width_request">150</property>
-                    <property name="height_request">45</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">False</property>
-                    <style>
-                      <class name="game_button"/>
-                      <class name="primary_button"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="reset_button">
-                    <property name="label" translatable="yes">Reset</property>
-                    <property name="name">reset_button</property>
-                    <property name="width_request">125</property>
-                    <property name="height_request">35</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">False</property>
-                    <style>
-                      <class name="danger_button"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="width_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">100</property>
+                <property name="valign">center</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="current_time_header_label">
+                    <property name="name">current_time_header_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Current Time</property>
@@ -1727,6 +1969,10 @@ will be created.</property>
                     <attributes>
                       <attribute name="scale" value="1.25"/>
                     </attributes>
+                    <style>
+                      <class name="label"/>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1736,9 +1982,15 @@ will be created.</property>
                 </child>
                 <child>
                   <object class="GtkLabel" id="current_time_time_label">
+                    <property name="name">current_time_time_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">0 Minutes 00 Seconds</property>
+                    <style>
+                      <class name="label"/>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1756,10 +2008,12 @@ will be created.</property>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">100</property>
+                <property name="valign">center</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="fastest_time_header_label">
+                    <property name="name">fastest_time_header_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Fastest Time</property>
@@ -1767,6 +2021,10 @@ will be created.</property>
                     <attributes>
                       <attribute name="scale" value="1.25"/>
                     </attributes>
+                    <style>
+                      <class name="label"/>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1776,9 +2034,15 @@ will be created.</property>
                 </child>
                 <child>
                   <object class="GtkLabel" id="fastest_time_time_label">
+                    <property name="name">fastest_time_time_label</property>
+                    <property name="height_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">0 Minutes 00 Seconds</property>
+                    <style>
+                      <class name="label"/>
+                      <class name="menu_text"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1793,10 +2057,93 @@ will be created.</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkButtonBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
+                <property name="layout_style">center</property>
+                <child>
+                  <object class="GtkButton" id="done_button">
+                    <property name="label" translatable="yes">Done</property>
+                    <property name="name">done_button</property>
+                    <property name="width_request">150</property>
+                    <property name="height_request">45</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <style>
+                      <class name="button"/>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="finish_later_button">
+                    <property name="label" translatable="yes">Finish Later</property>
+                    <property name="name">finish_later_button</property>
+                    <property name="width_request">150</property>
+                    <property name="height_request">45</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <style>
+                      <class name="button"/>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="reset_button">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="name">reset_button</property>
+                    <property name="width_request">150</property>
+                    <property name="height_request">45</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <style>
+                      <class name="button"/>
+                      <class name="menu_text"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">2</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -1833,7 +2180,8 @@ will be created.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="danger_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -1849,7 +2197,8 @@ will be created.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="primary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -1865,7 +2214,8 @@ will be created.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="secondary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -1882,13 +2232,16 @@ will be created.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="you_won_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">You Won!</property>
             <attributes>
               <attribute name="size" value="30000"/>
             </attributes>
+            <style>
+              <class name="menu_text"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -1897,7 +2250,7 @@ will be created.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="you_won_info_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Thanks for playing! You can see the source code for this game on GitHub- just follow the link in the menu!</property>
@@ -1938,6 +2291,10 @@ will be created.</property>
                 <property name="receives_default">True</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
+                <style>
+                  <class name="button"/>
+                  <class name="menu_text"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1953,7 +2310,7 @@ will be created.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="instructions_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_left">10</property>
@@ -2006,7 +2363,8 @@ When these conditions are satisfied, the game has been won!</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="secondary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -2022,7 +2380,8 @@ When these conditions are satisfied, the game has been won!</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <style>
-                  <class name="primary_button"/>
+                  <class name="button"/>
+                  <class name="menu_text"/>
                 </style>
               </object>
               <packing>
@@ -2039,13 +2398,16 @@ When these conditions are satisfied, the game has been won!</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="almost_there_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">You're Almost There!</property>
             <attributes>
               <attribute name="size" value="30000"/>
             </attributes>
+            <style>
+              <class name="menu_text"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -2054,7 +2416,7 @@ When these conditions are satisfied, the game has been won!</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="almost_there_info_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">13</property>

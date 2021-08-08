@@ -1,5 +1,5 @@
 /*
-* Last Modified: 01/17/21
+* Last Modified: 01/30/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Main program file for Sudoku
@@ -60,9 +60,25 @@ void update_main_menu ();
 void switch_stack_page (Glib::ustring);
 void hide_dialog (Glib::ustring);
 
+void undo ();
+void redo ();
+gboolean grab_old (GdkEventButton*, std::string);
+
+void build_toolbar ();
+
 // Global references
 Glib::RefPtr<Gtk::Builder> builder;
 Board board;
+
+struct actions {
+
+	// Stores user actions. Inner vector is [widgetName, value]
+	std::stack< std::vector< std::string>> user_stack;
+
+	// Stores actions that were undone so they can be redone
+	std::stack< std::vector< std::string>> undone_stack;
+
+} user_actions;
 
 
 /************************
@@ -218,6 +234,7 @@ initialize_board (void)
 
 	int i, j;
     for (i=0; i<9; i++) {
+
         for (j=0; j<9; j++) {
 
             // ID of Gtk::Entry based on position in matrix
@@ -246,6 +263,16 @@ initialize_board (void)
 					sigc::ptr_fun(&on_removed), i, j
 				)
 			);
+
+			// Connect mouse-click to grab_old handler for undo functionality
+			cell -> signal_button_press_event().connect(
+				sigc::bind(
+					sigc::ptr_fun(&grab_old), std::string(cell_name)
+				),
+				false  // Causes handling to be passed to default handler after this callback
+			);
+
+			free(cell_name);
         }
     }
 
@@ -274,8 +301,16 @@ populate_board (void)
 
 			if ( cell_value.compare("0") != 0) cell -> set_text(cell_value);
 
-			if (reserved_cell) cell -> set_editable(false);
-			else cell -> set_editable(true);
+			if (reserved_cell) {
+				cell -> set_editable(false);
+				cell -> set_sensitive(false);
+				cell -> get_style_context() -> add_class("reserved");
+
+			} else {
+				cell -> set_editable(true);
+				cell -> set_sensitive(true);
+				cell -> get_style_context() -> remove_class("reserved");
+			}
 
 		}
 	}
@@ -387,6 +422,7 @@ on_inserted (guint position, const gchar* chars, guint n_chars,
 	char inserted = *chars;
 	if ( check_if_number(inserted, buffer)) {
 		insert_to_board (inserted, outer, inner);
+
 	}
 
 	return;
@@ -545,12 +581,71 @@ hide_dialog (Glib::ustring dialog)
 	return;
 }
 
+void
+undo (void)
+{
+	if (user_actions.user_stack.empty()) return;
+
+	std::vector< std::string> action = user_actions.user_stack.top();
+	user_actions.user_stack.pop();
+
+	std::string widgetName = action[0];
+	std::string restoreValue = action[1];
+
+	Gtk::Entry* cell;
+	builder -> get_widget(widgetName, cell);
+	cell -> set_text(restoreValue);
+
+	user_actions.undone_stack.push(action);
+
+	return;
+}
+
+void
+redo (void)
+{
+	if (user_actions.undone_stack.empty()) return;
+
+	std::vector< std::string> action = user_actions.undone_stack.top();
+	user_actions.undone_stack.pop();
+
+	std::string widgetName = action[0];
+	std::string restoreValue = action[1];
+
+	Gtk::Entry* cell;
+	builder -> get_widget(widgetName, cell);
+	cell -> set_text(restoreValue);
+
+	user_actions.user_stack.push(action);
+
+	return;
+}
+
+// Grabs the old value in the entry before the user changes for undo functionality
+gboolean
+grab_old (GdkEventButton* event, std::string name)
+{
+	Gtk::Entry* cell;
+	builder -> get_widget(name, cell);
+	std::string restoreValue = cell -> get_text();
+
+	std::vector< std::string> action = {name, restoreValue};
+	user_actions.user_stack.push(action);
+
+	return false;
+}
+
+// Build the toolbar, create the action group, assign actions
+void
+build_toolbar (void)
+{
+
+}
 
 /*
  *	TODO
- *		- Save internal board state when a user hits finish_later
- *		- Load saved state when a user resumes game
- *			- Populate game board
+ *		- Undo / redo
+ *		- Color for reserved squares?
  */
 
 int
@@ -564,10 +659,7 @@ main(int argc, char **argv)
      */
 
     // Window pointers
-    Gtk::Window* window;
-
-    // Dialog pointers
-    Gtk::Dialog* sorry_dialog;
+    Gtk::ApplicationWindow* window;
 
     // Button pointers
     Gtk::Button* begin_button;
@@ -587,9 +679,43 @@ main(int argc, char **argv)
 
     // Grid pointers
     Gtk::Grid* board_container_grid;
+	Gtk::Grid* player_info_grid;
+	Gtk::Grid* menu_grid;
 
 	// Entry pointers
 	Gtk::Entry* username_entry;
+
+	// Box pointers
+	Gtk::Box* menu_screen_box;
+	Gtk::Box* username_entry_box;
+	Gtk::Box* button_box_box;
+
+	// Stack pointers
+	Gtk::Stack* application_stack;
+
+	// Label pointers
+	Gtk::Label* welcome_label;
+	Gtk::Label* game_title_label;
+	Gtk::Label* source_code_label;
+	Gtk::Label* username_label;
+	Gtk::Label* player_info_title_label;
+	Gtk::Label* current_time_header_label;
+	Gtk::Label* current_time_time_label;
+	Gtk::Label* fastest_time_header_label;
+	Gtk::Label* fastest_time_time_label;
+	Gtk::Label* note_label;
+	Gtk::Label* you_won_label;
+	Gtk::Label* you_won_info_label;
+	Gtk::Label* almost_there_label;
+	Gtk::Label* almost_there_info_label;
+	Gtk::Label* instructions_label;
+
+	// Dialog pointers
+	Gtk::Dialog* sorry_dialog;
+	Gtk::Dialog* congratulations_dialog;
+	Gtk::Dialog* how_to_play_dialog;
+
+
 
     /* Create builder from Glade file. Load necessary widgets.
      *
@@ -598,9 +724,6 @@ main(int argc, char **argv)
     // Window widgets
     builder  = Gtk::Builder::create_from_file ("res/GUI.glade");
     builder -> get_widget ("application_window", window);
-
-    // Dialog widgets
-    builder -> get_widget ("sorry_dialog", sorry_dialog);
 
     // Button widgets
     builder -> get_widget ("begin_button", begin_button);
@@ -620,9 +743,43 @@ main(int argc, char **argv)
 
     // Grid widgets
     builder -> get_widget ("board_container_grid", board_container_grid);
+	builder -> get_widget ("player_info_grid", player_info_grid);
+	builder -> get_widget ("menu_grid", menu_grid);
 
 	// Entry widgets
 	builder -> get_widget ("username_entry", username_entry);
+
+	// Box widgets
+	builder -> get_widget("menu_screen_box", menu_screen_box);
+	builder -> get_widget("username_entry_box", username_entry_box);
+	builder -> get_widget("button_box_box", button_box_box);
+
+	// Stack widgets
+	builder -> get_widget("application_stack", application_stack);
+
+	// Label widgets
+	builder -> get_widget("welcome_label", welcome_label);
+	builder -> get_widget("game_title_label", game_title_label);
+	builder -> get_widget("source_code_label", source_code_label);
+	builder -> get_widget("username_label", username_label);
+	builder -> get_widget("player_info_title_label", player_info_title_label);
+	builder -> get_widget("current_time_header_label", current_time_header_label);
+	builder -> get_widget("current_time_time_label", current_time_time_label);
+	builder -> get_widget("fastest_time_header_label", fastest_time_header_label);
+	builder -> get_widget("fastest_time_time_label", fastest_time_time_label);
+	builder -> get_widget("note_label", note_label);
+	builder -> get_widget("you_won_label", you_won_label);
+	builder -> get_widget("you_won_info_label", you_won_info_label);
+	builder -> get_widget("almost_there_label", almost_there_label);
+	builder -> get_widget("almost_there_info_label", almost_there_info_label);
+	builder -> get_widget("instructions_label", instructions_label);
+
+	// Dialog widgets
+	builder -> get_widget("sorry_dialog", sorry_dialog);
+	builder -> get_widget("how_to_play_dialog", how_to_play_dialog);
+	builder -> get_widget("congratulations_dialog", congratulations_dialog);
+
+
 
     /* Connect signals. sigc::ptr_fun() creates a slot/function object/functor.
      * Helps with compatibility
@@ -699,11 +856,24 @@ main(int argc, char **argv)
 		sigc::bind<bool>( sigc::ptr_fun(&close_game), true)
 	);
 
+	continue_button  -> signal_leave().connect(  // Cursor normal
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "continue_button")
+    );
+    continue_button  -> signal_enter().connect(  // Cursor clickable
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "continue_button")
+    );
     continue_button -> signal_clicked().connect(  // Close 'almost there' dialog
       sigc::ptr_fun(&close_sorry)
     );
     continue_button -> signal_clicked().connect(  // Start time when back to game
       sigc::mem_fun(board, &Board::start)
+    );
+
+	hint_button  -> signal_leave().connect(  // Cursor normal
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&restore_pointer), "hint_button")
+    );
+    hint_button  -> signal_enter().connect(  // Cursor clickable
+      sigc::bind<Glib::ustring>( sigc::ptr_fun(&set_pointer), "hint_button")
     );
 
 	lets_go_button -> signal_clicked().connect(  // After username, main menu
@@ -806,6 +976,12 @@ main(int argc, char **argv)
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	winning_new_game_button -> get_style_context() ->
 		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	got_it_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	hint_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	continue_button -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     // Add stylesheet to windows
     window -> get_style_context() ->
@@ -814,6 +990,65 @@ main(int argc, char **argv)
     // Add stylesheet to grids
     board_container_grid -> get_style_context() ->
         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	player_info_grid -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	menu_grid -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to boxes
+	menu_screen_box -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	username_entry_box -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	button_box_box -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to stacks
+	application_stack -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to labels
+	welcome_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	game_title_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	source_code_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	username_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	player_info_title_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	current_time_header_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	current_time_time_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	fastest_time_header_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	fastest_time_time_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	note_label -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	you_won_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	you_won_info_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	almost_there_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	almost_there_info_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	instructions_label -> get_style_context() ->
+		add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	// Add stylesheet to dialogs
+	sorry_dialog -> get_style_context() ->
+	   add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	congratulations_dialog -> get_style_context() ->
+         add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	how_to_play_dialog -> get_style_context() ->
+        add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+
+	gtk_widget_set_events(GTK_WIDGET(window->gobj()), GDK_BUTTON_PRESS_MASK);
 
     /* Initial setup
      *

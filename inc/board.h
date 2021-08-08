@@ -1,5 +1,5 @@
 /*
-* Last Modified: 01/12/21
+* Last Modified: 01/19/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
 * Summary: Board class with function prototypes and intializer.
@@ -11,7 +11,7 @@
 #include <glibmm/ustring.h>
 #include <glibmm/keyfile.h>
 
-#define RESERVED 7
+#define RESERVED 12
 
 class Board {
 

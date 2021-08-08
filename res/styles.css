@@ -1,7 +1,8 @@
 /*
-* Last Modified: 09/24/2020
+* Last Modified: 01/30/21
 * Author: Alex Eastman
 * Contact: alexeast@buffalo.edu
+* File: res/styles.css
 */
 
 window {
@@ -15,53 +16,94 @@ entry {
     font-size: 30px;
 }
 
-
-
-.primary_button {
-    border-radius: 6px;
-    border: none;
-    box-shadow: 3px 3px 3px gray;
-    background: #6666ff;
-    color: white;
+.button {
+	border-radius: 6px;
+	border: 1px solid #4f4f4f;
+	font-size: 18px;
 }
 
-.secondary_button {
-    border-radius: 6px;
-    border: 1px solid #b3b3b3;
-    box-shadow: 1px 1px 3px gray;
-    color: #4d4d4d;
-    background: #F1F2F6;
+.menu_text {
+	font-family: Montserrat;
+	color: #232323;
 }
 
-.danger_button {
-    background: #ff4d4d;
-    border: none;
-    box-shadow: 1px 1px 3px gray;
-    color: white;
+.background {
+	/* background-image: url("plant.jpg"); */
+	background: #ebe7e4;
+}
+
+.label {
+	background: white;
+}
+
+.reserved {
+	color: black;
+	background: white;
+}
+
+.top_middle_left {
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	border-top: none;
+	border-left: none;
+}
+
+.top_middle_middle {
+	border-bottom: 1px solid black;
+	border-top: none;
+	border-right: none;
+	border-left: none;
+}
+
+.top_middle_right {
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	border-right: none;
+	border-top: none;
+}
+
+.bottom_left {
+	border-right: 1px solid black;
+	border-left: none;
+	border-bottom: none;
+	border-top: none;
+}
+
+.bottom_right {
+	border-left: 1px solid black;
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+}
+
+.bottom_middle {
+	border: none;
 }
 
 
-
-#begin_button {
-    font-size: 18px;
-}
-
-#how_to_play_button {
-    font-size: 14px;
-}
-
-#done_button {
-    font-size: 18px;
-}
-
-#finish_later_button {
-    font-size: 14px;
-}
-
-#reset_button {
-    font-size: 14px;
-}
 
 #board_container_grid {
     margin: 0;
+}
+
+#welcome_label {
+	font-size: 18px;
+}
+
+#source_code_label {
+	font-size: 14px;
+}
+
+#current_time_header_label, #fastest_time_header_label {
+	border-radius: 6px 6px 0 0;
+	border-left: 1px solid #818181;
+	border-top: 1px solid #818181;
+	border-right: 1px solid #818181;
+}
+
+#current_time_time_label, #fastest_time_time_label {
+	border-radius: 0 0 6px 6px;
+	border-left: 1px solid #818181;
+	border-bottom: 1px solid #818181;
+	border-right: 1px solid #818181;
 }
