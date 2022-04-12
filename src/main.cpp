@@ -5,6 +5,8 @@
 * Summary: Main program file for Sudoku
 */
 
+/* Comment inserted for commenting purposes. */
+
 #include <gtkmm.h>
 #include <iostream>
 #include <time.h>
